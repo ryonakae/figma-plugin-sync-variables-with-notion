@@ -1,0 +1,56 @@
+{
+  "name": "figma-plugin-sync-variables-with-notion",
+  "version": "1.0.0",
+  "description": "MIT",
+  "author": "Ryo Nakae",
+  "scripts": {
+    "build": "concurrently -P 'npm:build:* -- {*}'",
+    "build:css": "npx @tailwindcss/cli -i ./src/ui/styles/globals.css -o ./src/ui/styles/output.css",
+    "build:js": "build-figma-plugin --typecheck",
+    "check": "biome check",
+    "prepare": "husky",
+    "watch": "npm run build:css && concurrently -P 'npm:build:* -- {*}' -- --watch"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs,json}": ["biome check --apply"]
+  },
+  "dependencies": {
+    "@create-figma-plugin/ui": "3.2.1",
+    "@create-figma-plugin/utilities": "3.2.1",
+    "@tailwindcss/postcss": "4.0.13",
+    "@tanstack/react-virtual": "3.13.3",
+    "postcss": "8.5.3",
+    "preact": "10.26.4",
+    "react-use": "17.6.0",
+    "tailwind-merge": "3.0.2",
+    "tailwindcss": "4.0.13",
+    "zustand": "5.0.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@create-figma-plugin/build": "3.2.1",
+    "@create-figma-plugin/tsconfig": "3.2.1",
+    "@figma/plugin-typings": "1.108.0",
+    "@tailwindcss/cli": "4.0.13",
+    "concurrently": "9.1.2",
+    "husky": "9.1.7",
+    "lint-staged": "15.5.0",
+    "typescript": "5.8.2"
+  },
+  "figma-plugin": {
+    "editorType": ["figma"],
+    "id": "sync-variables-with-notion",
+    "name": "Sync Variables with Notion",
+    "main": "src/main/index.ts",
+    "ui": "src/ui/index.tsx",
+    "relaunchButtons": {
+      "open": {
+        "name": "Sync Variables with Notion",
+        "main": "src/main/index.ts",
+        "ui": "src/ui/index.tsx"
+      }
+    },
+    "documentAccess": "dynamic-page",
+    "permissions": ["teamlibrary"]
+  }
+}
