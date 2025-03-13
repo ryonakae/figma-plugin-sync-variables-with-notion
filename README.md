@@ -1,1 +1,1 @@
-# figma-plugin-sync-variables-with-notion-
+# figma-plugin-sync-variables-with-notion
