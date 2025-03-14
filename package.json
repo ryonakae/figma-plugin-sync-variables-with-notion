@@ -5,7 +5,7 @@
   "author": "Ryo Nakae",
   "scripts": {
     "build": "concurrently -P 'npm:build:* -- {*}'",
-    "build:css": "npx @tailwindcss/cli -i ./src/ui/styles/globals.css -o ./src/ui/styles/output.css",
+    "build:css": "npx @tailwindcss/cli -i ./src/ui/styles/input.css -o ./src/ui/styles/output.css",
     "build:js": "build-figma-plugin --typecheck",
     "check": "biome check",
     "prepare": "husky",
