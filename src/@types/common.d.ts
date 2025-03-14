@@ -28,28 +28,26 @@ declare global {
     scopes: VariableScope[]
   }
 
-  type CommonState = {
+  type Settings = {
+    // common
     selectedTabKey: SelectedTabKey
-  }
 
-  type CollectionState = {
+    // collection
     notionIntegrationToken: string
     notionDatabaseId: string
     notionKeyPropertyName: string
     collectionName: string
     languages: string[]
-  }
 
-  type ListState = {
+    // list
     filterString: string
     sortValue: SortValue
     sortOrder: SortOrder
     selectedListItemId: string | null
     displayModeId: string | null
     scrollPosition: number
-  }
 
-  type UtilitiesState = {
+    // utilities
     targetCollection:
       | 'all'
       | LocalVariableCollectionForUI
@@ -58,10 +56,13 @@ declare global {
     isIncludeComponents: boolean
     isIncludeInstances: boolean
     includeKeyPropertyName: string
+
+    // settings
+    pluginLanguage: PluginLanguage
   }
 
-  type SettingsState = {
-    pluginLanguage: PluginLanguage
+  type TmpSettings = {
+    loading: boolean
   }
 
   type NotionTitle = {
