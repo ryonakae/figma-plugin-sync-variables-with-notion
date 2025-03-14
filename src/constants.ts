@@ -1,4 +1,6 @@
-export const SETTINGS_KEY = 'sync-variables-with-notion'
+export const SETTINGS_KEY = 'sync-variables-with-notion-settings'
+export const CACHE_KEY = 'sync-variables-with-notion-cache'
+export const GROUP_ID_KEY = 'sync-variables-with-notion-group-id'
 
 export const DEFAULT_WIDTH = 400
 

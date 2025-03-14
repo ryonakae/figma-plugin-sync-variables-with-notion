@@ -12,6 +12,8 @@ export default function Collection() {
   useMount(() => {
     console.log('Collection: mounted')
     window.requestAnimationFrame(resizeWindow)
+
+    console.log(process.env.PROXY_URL)
   })
 
   useUnmount(() => {
