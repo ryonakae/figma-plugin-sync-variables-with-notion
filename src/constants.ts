@@ -4,7 +4,7 @@ export const DEFAULT_WIDTH = 400
 
 export const DEFAULT_SETTINGS: Settings = {
   // common
-  selectedTabKey: 'collection',
+  selectedTab: 'Create/Update Collection',
 
   // collection
   notionIntegrationToken: '',
@@ -27,9 +27,6 @@ export const DEFAULT_SETTINGS: Settings = {
   isIncludeComponents: true,
   isIncludeInstances: false,
   includeKeyPropertyName: '',
-
-  // settings
-  pluginLanguage: 'en',
 }
 
 export const DEFAULT_TMP_SETTINGS: TmpSettings = {

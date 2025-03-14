@@ -1,9 +1,5 @@
 declare global {
-  type Tab = {
-    key: string
-    value: string
-  }
-  type SelectedTabKey = 'collection' | 'list' | 'utilities' | 'settings'
+  type SelectedTab = 'Create/Update Collection' | 'List' | 'Utilities'
 
   type SortValue = 'key' | 'value' | 'created_time' | 'last_edited_time'
   type SortOrder = 'ascending' | 'descending'
@@ -30,7 +26,7 @@ declare global {
 
   type Settings = {
     // common
-    selectedTabKey: SelectedTabKey
+    selectedTab: SelectedTab
 
     // collection
     notionIntegrationToken: string
@@ -56,9 +52,6 @@ declare global {
     isIncludeComponents: boolean
     isIncludeInstances: boolean
     includeKeyPropertyName: string
-
-    // settings
-    pluginLanguage: PluginLanguage
   }
 
   type TmpSettings = {
