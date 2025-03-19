@@ -11,6 +11,8 @@ export default function useResizeWindow() {
       width: DEFAULT_WIDTH,
       height,
     })
+
+    console.log('resizeWindow', { width: DEFAULT_WIDTH, height })
   }
 
   return { resizeWindow }

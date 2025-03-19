@@ -4,16 +4,18 @@ export const GROUP_ID_KEY = 'sync-variables-with-notion-group-id'
 
 export const DEFAULT_WIDTH = 400
 
-export const DEFAULT_SETTINGS: Settings = {
-  // common
-  selectedTab: 'Create/Update Collection',
-
+export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
   // collection
-  notionIntegrationToken: '',
   notionDatabaseId: '',
+  notionIntegrationToken: '',
   notionKeyPropertyName: '',
   collectionName: '',
   languages: [],
+}
+
+export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
+  // common
+  selectedTab: 'Create/Update Collection',
 
   // list
   filterString: '',

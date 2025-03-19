@@ -6,16 +6,14 @@ import { Tabs, type TabsOption } from '@create-figma-plugin/ui'
 import { emit, on, once } from '@create-figma-plugin/utilities'
 import { useMount, useUpdateEffect } from 'react-use'
 
-import { useSettingsStore } from '@/store'
 import Collection from '@/ui/components/tabs/Collection'
 import List from '@/ui/components/tabs/List'
 import Utilities from '@/ui/components/tabs/Utilities'
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
-import useSettings from '@/ui/hooks/useStore'
+import useSettings from '@/ui/hooks/useSettings'
 
 export default function App() {
-  const settings = useSettingsStore()
-  const { updateSettings, updateTmpSettings } = useSettings()
+  const { settings, updateSettings, updateTmpSettings } = useSettings()
   const { resizeWindow } = useResizeWindow()
   const [settingsLoaded, setSettingsLoaded] = useState(false)
 
@@ -43,6 +41,7 @@ export default function App() {
     })
   }
 
+  // マウントされたらイベント監視を開始
   useMount(() => {
     once<LoadSettingsFromMain>(
       'LOAD_SETTINGS_FROM_MAIN',
@@ -67,7 +66,7 @@ export default function App() {
   // タブ切り替え時のリサイズは、各タブのuseMountで実行
   useUpdateEffect(() => {
     window.requestAnimationFrame(resizeWindow)
-  }, [settings.collectionName, settings.languages])
+  }, [settings])
 
   if (!settingsLoaded) return null
 

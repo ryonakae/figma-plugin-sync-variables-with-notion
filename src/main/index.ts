@@ -1,13 +1,8 @@
-import {
-  emit,
-  loadSettingsAsync,
-  on,
-  saveSettingsAsync,
-  setRelaunchButton,
-  showUI,
-} from '@create-figma-plugin/utilities'
+import { on, setRelaunchButton, showUI } from '@create-figma-plugin/utilities'
 
-import { DEFAULT_SETTINGS, DEFAULT_WIDTH, SETTINGS_KEY } from '@/constants'
+import { DEFAULT_WIDTH } from '@/constants'
+import loadSettings from '@/main/loadSettings'
+import saveSettings from '@/main/saveSettings'
 
 export default async function () {
   // set relaunch button
@@ -20,9 +15,7 @@ export default async function () {
   })
 
   // register event handlers
-  on<SaveSettingsFromUI>('SAVE_SETTINGS_FROM_UI', async settings => {
-    await saveSettingsAsync<Settings>(settings, SETTINGS_KEY)
-  })
+  on<SaveSettingsFromUI>('SAVE_SETTINGS_FROM_UI', saveSettings)
 
   on<NotifyFromUI>('NOTIFY_FROM_UI', options => {
     figma.notify(options.message, options.options)
@@ -32,14 +25,8 @@ export default async function () {
     figma.ui.resize(windowSize.width, windowSize.height)
   })
 
-  // load options from clientStorage
-  const settings = await loadSettingsAsync<Settings>(
-    DEFAULT_SETTINGS,
-    SETTINGS_KEY,
-  )
-
   // ちょっとdelayさせてからUI側にsettingsを送る（たまにエラーが出るので）
   setTimeout(() => {
-    emit<LoadSettingsFromMain>('LOAD_SETTINGS_FROM_MAIN', settings)
+    loadSettings()
   }, 100)
 }

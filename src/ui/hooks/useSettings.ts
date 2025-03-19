@@ -3,11 +3,13 @@ import { emit } from '@create-figma-plugin/utilities'
 import { useSettingsStore, useTmpSettingsStore } from '@/store'
 
 export default function useSettings() {
+  const settings = useSettingsStore()
+  const tmpSettings = useTmpSettingsStore()
+
   function updateSettings(
     newSettings: { [T in keyof Settings]?: Settings[T] },
   ) {
     const currentSettings = useSettingsStore.getState()
-
     console.log('updateSettings', { ...currentSettings, ...newSettings })
 
     // storeに保存
@@ -28,5 +30,5 @@ export default function useSettings() {
     useTmpSettingsStore.setState({ ...currentSettings, ...newSettings })
   }
 
-  return { updateSettings, updateTmpSettings }
+  return { settings, tmpSettings, updateSettings, updateTmpSettings }
 }

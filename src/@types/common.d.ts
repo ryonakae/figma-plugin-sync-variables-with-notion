@@ -24,16 +24,18 @@ declare global {
     scopes: VariableScope[]
   }
 
-  type Settings = {
-    // common
-    selectedTab: SelectedTab
-
+  type DocumentSettings = {
     // collection
-    notionIntegrationToken: string
     notionDatabaseId: string
+    notionIntegrationToken: string
     notionKeyPropertyName: string
     collectionName: string
     languages: string[]
+  }
+
+  type ClientStorageSettings = {
+    // common
+    selectedTab: SelectedTab
 
     // list
     filterString: string
@@ -53,6 +55,8 @@ declare global {
     isIncludeInstances: boolean
     includeKeyPropertyName: string
   }
+
+  type Settings = DocumentSettings & ClientStorageSettings
 
   type TmpSettings = {
     loading: boolean
