@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@create-figma-plugin/ui':
-        specifier: 3.2.1
-        version: 3.2.1(preact@10.26.4)
+        specifier: 4.0.0-alpha.0
+        version: 4.0.0-alpha.0(preact@10.26.4)
       '@create-figma-plugin/utilities':
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 4.0.0-alpha.0
+        version: 4.0.0-alpha.0
       '@fortawesome/fontawesome-svg-core':
         specifier: 6.7.2
         version: 6.7.2
@@ -52,11 +52,11 @@ importers:
         specifier: 1.9.4
         version: 1.9.4
       '@create-figma-plugin/build':
-        specifier: 3.2.1
-        version: 3.2.1(@figma/plugin-typings@1.108.0)(typescript@5.8.2)
+        specifier: 4.0.0-alpha.0
+        version: 4.0.0-alpha.0(@figma/plugin-typings@1.108.0)(typescript@5.8.2)
       '@create-figma-plugin/tsconfig':
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 4.0.0-alpha.0
+        version: 4.0.0-alpha.0
       '@figma/plugin-typings':
         specifier: 1.108.0
         version: 1.108.0
@@ -145,29 +145,29 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@create-figma-plugin/build@3.2.1':
-    resolution: {integrity: sha512-AOTrz6bH71FZa1S2j4zCGwqisOWlafOFyv2r04wFAIDtS8S6zFdmX3143kkYC5tSu20/h6a8yj8VrYM4aqtzaw==}
+  '@create-figma-plugin/build@4.0.0-alpha.0':
+    resolution: {integrity: sha512-FraOBvbmXndGhLxDbmAlr9bw7489j48uODMbZ6/Ag2/OkrwS/JvH0bl/10BRmsTtfWHqG7rc98j8Z9uRcuteHw==}
     engines: {node: '>=20'}
     hasBin: true
     peerDependencies:
       '@figma/plugin-typings': '>=1'
       typescript: '>=4'
 
-  '@create-figma-plugin/common@3.2.1':
-    resolution: {integrity: sha512-jf7c0F2p2GFrj2d2xJY539flMlF/grUa2IY6mdLugHTDqFdcy7NlxIAY36TMtd1A3zG1pRFG7V0j0JttiwdIaw==}
+  '@create-figma-plugin/common@4.0.0-alpha.0':
+    resolution: {integrity: sha512-H6F1T/jj6/TYMibroUg5WGp5hByt7e+jCR3uWT9+SXMAKcae4DkmPNXFYpPknIo1QcHtW4BXazyaUf7+c1uz6w==}
     engines: {node: '>=20'}
 
-  '@create-figma-plugin/tsconfig@3.2.1':
-    resolution: {integrity: sha512-jayhlYYTUAlGvDeL2GXuWZSWZE9xkYG9qU8Uy6EQMKcUHW4bFW9G1xoDGGoSh8rtvjxmUGpQM0BaKdJGzaI2DQ==}
+  '@create-figma-plugin/tsconfig@4.0.0-alpha.0':
+    resolution: {integrity: sha512-MvvjtE0enEvhPAhv4TJBXMwwUos60lqGVHyUfxjXhvFZIrHCmmceHi5iJmivr0ZQ6gAOEsiTvl2bs4wMZ/Rb+g==}
 
-  '@create-figma-plugin/ui@3.2.1':
-    resolution: {integrity: sha512-x2bUyu0gyUiupLpvbM2CCSV//FZjasR3YVWear6DYV4o95BzyV7NnMjr/4cDfuokFMgSSI7rclioRTGUn2Lu5Q==}
+  '@create-figma-plugin/ui@4.0.0-alpha.0':
+    resolution: {integrity: sha512-eJrMBtXl18g1nXF301SACuqTqresUoyOnynwWMxPKvxDLOvuMxG2i+pGZIY/0ZU/+Huw+ckSSamiLi7ENyVpGw==}
     engines: {node: '>=20'}
     peerDependencies:
       preact: '>=10'
 
-  '@create-figma-plugin/utilities@3.2.1':
-    resolution: {integrity: sha512-p32DEIv8VVakT9DBOk+QGDWMx9DtX/VKpuAcvo8B3zcqVRmL2DYPVkOLrC8UNmWySTm8I7rR3ztRG790UdACUg==}
+  '@create-figma-plugin/utilities@4.0.0-alpha.0':
+    resolution: {integrity: sha512-5cggQ5Vr6Du5fjxYwGsS1qOBq3kgw7jvECkV+TcLpT46m2VJdct9sf+FUMiwaxOlrbWhs+ZfFWGBpmWkLz4pWA==}
     engines: {node: '>=20'}
 
   '@esbuild/aix-ppc64@0.23.0':
@@ -1803,9 +1803,9 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
-  '@create-figma-plugin/build@3.2.1(@figma/plugin-typings@1.108.0)(typescript@5.8.2)':
+  '@create-figma-plugin/build@4.0.0-alpha.0(@figma/plugin-typings@1.108.0)(typescript@5.8.2)':
     dependencies:
-      '@create-figma-plugin/common': 3.2.1
+      '@create-figma-plugin/common': 4.0.0-alpha.0
       '@figma/plugin-typings': 1.108.0
       chokidar: 3.6.0
       cssnano: 7.0.6(postcss@8.5.3)
@@ -1824,20 +1824,20 @@ snapshots:
       typed-css-modules: 0.9.1
       typescript: 5.8.2
 
-  '@create-figma-plugin/common@3.2.1':
+  '@create-figma-plugin/common@4.0.0-alpha.0':
     dependencies:
       '@sindresorhus/slugify': 2.2.1
       kleur: 4.1.5
       path-exists: 5.0.0
 
-  '@create-figma-plugin/tsconfig@3.2.1': {}
+  '@create-figma-plugin/tsconfig@4.0.0-alpha.0': {}
 
-  '@create-figma-plugin/ui@3.2.1(preact@10.26.4)':
+  '@create-figma-plugin/ui@4.0.0-alpha.0(preact@10.26.4)':
     dependencies:
-      '@create-figma-plugin/utilities': 3.2.1
+      '@create-figma-plugin/utilities': 4.0.0-alpha.0
       preact: 10.26.4
 
-  '@create-figma-plugin/utilities@3.2.1':
+  '@create-figma-plugin/utilities@4.0.0-alpha.0':
     dependencies:
       hex-rgb: 5.0.0
       natural-compare-lite: 1.4.0

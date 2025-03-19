@@ -7,11 +7,11 @@ import { emit, on, once } from '@create-figma-plugin/utilities'
 import { useMount, useUpdateEffect } from 'react-use'
 
 import { useSettingsStore } from '@/store'
+import Collection from '@/ui/components/tabs/Collection'
+import List from '@/ui/components/tabs/List'
+import Utilities from '@/ui/components/tabs/Utilities'
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 import useSettings from '@/ui/hooks/useStore'
-import Collection from '@/ui/tabs/Collection'
-import List from '@/ui/tabs/List'
-import Utilities from '@/ui/tabs/Utilities'
 
 export default function App() {
   const settings = useSettingsStore()
