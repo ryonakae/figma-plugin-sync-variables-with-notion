@@ -9,8 +9,8 @@ export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
   notionDatabaseId: '',
   notionIntegrationToken: '',
   notionKeyPropertyName: '',
+  notionValuePropertyNames: [],
   collectionName: '',
-  languages: [],
 }
 
 export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
