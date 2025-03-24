@@ -30,7 +30,7 @@ declare global {
   type NotionKeyValue = {
     id: string
     key: string
-    value: string
+    values: Record<string, string>
     created_time: string
     last_edited_time: string
     url: string

@@ -16,7 +16,7 @@ export default function Collection() {
     databaseId: settings.notionDatabaseId,
     integrationToken: settings.notionIntegrationToken,
     keyPropertyName: settings.notionKeyPropertyName,
-    valuePropertyName: 'ja',
+    valuePropertyNames: ['ja', 'en'],
     collectionName: settings.collectionName,
   })
   const [isFetching, setIsFetching] = useState(false)
