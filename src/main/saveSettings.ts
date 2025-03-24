@@ -9,8 +9,8 @@ export default async function saveSettings(settings: Settings) {
     notionIntegrationToken: settings.notionIntegrationToken,
     notionDatabaseId: settings.notionDatabaseId,
     notionKeyPropertyName: settings.notionKeyPropertyName,
-    collectionName: settings.collectionName,
-    languages: settings.languages,
+    notionValuePropertyNames: settings.notionValuePropertyNames,
+    figmaCollectionName: settings.figmaCollectionName,
   }
   const newClientStorageSettings: ClientStorageSettings = {
     selectedTab: settings.selectedTab,

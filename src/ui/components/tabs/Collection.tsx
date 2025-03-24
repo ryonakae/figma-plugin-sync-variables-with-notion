@@ -17,7 +17,7 @@ export default function Collection() {
     integrationToken: settings.notionIntegrationToken,
     keyPropertyName: settings.notionKeyPropertyName,
     valuePropertyNames: ['ja', 'en'],
-    collectionName: settings.collectionName,
+    figmaCollectionName: settings.figmaCollectionName,
   })
   const [isFetching, setIsFetching] = useState(false)
   const keyValuesRef = useRef<NotionKeyValue[]>([])
@@ -74,6 +74,8 @@ export default function Collection() {
   return (
     <TabItem>
       <Stack space="small">
+        <div className="font-bold">Notion settings</div>
+
         <div className="flex flex-col gap-1">
           <div>Database ID</div>
           <Textbox
@@ -104,6 +106,21 @@ export default function Collection() {
 
       <VerticalSpace space="large" />
 
+      <Stack space="small">
+        <div className="font-bold">Figma variable collection settings</div>
+
+        <div className="flex flex-col gap-1">
+          <div>Collection name to create or update</div>
+          <Textbox
+            onInput={handleInput('figmaCollectionName')}
+            value={settings.figmaCollectionName}
+            disabled={tmpSettings.loading}
+          />
+        </div>
+      </Stack>
+
+      <VerticalSpace space="large" />
+
       <Button
         fullWidth
         onClick={handleCreateClick}
@@ -111,6 +128,7 @@ export default function Collection() {
           !settings.notionDatabaseId ||
           !settings.notionIntegrationToken ||
           !settings.notionKeyPropertyName ||
+          !settings.figmaCollectionName ||
           isFetching
         }
         loading={isFetching}

@@ -3,7 +3,7 @@ type useNotionProps = {
   integrationToken: string
   keyPropertyName: string
   valuePropertyNames: string[]
-  collectionName: string
+  figmaCollectionName: string
 }
 
 // NotionのプロパティタイプをUnion型として定義

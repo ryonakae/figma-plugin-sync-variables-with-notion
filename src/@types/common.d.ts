@@ -30,7 +30,7 @@ declare global {
     notionIntegrationToken: string
     notionKeyPropertyName: string
     notionValuePropertyNames: string[]
-    collectionName: string
+    figmaCollectionName: string
   }
 
   type ClientStorageSettings = {

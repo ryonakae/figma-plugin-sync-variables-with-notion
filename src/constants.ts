@@ -10,7 +10,7 @@ export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
   notionIntegrationToken: '',
   notionKeyPropertyName: '',
   notionValuePropertyNames: [],
-  collectionName: '',
+  figmaCollectionName: '',
 }
 
 export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
