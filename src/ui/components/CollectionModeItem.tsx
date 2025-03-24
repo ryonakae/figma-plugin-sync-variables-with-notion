@@ -26,7 +26,7 @@ export default function CollectionModeItem({ id, value, onRemove }: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-2 rounded bg-bg-selected hover:bg-bg-selected-hover"
+      className="flex items-center gap-2 rounded-4 bg-bg-selected hover:bg-bg-selected-hover"
     >
       <div
         className="flex flex-1 items-center gap-2 px-2 py-2"

@@ -18,8 +18,9 @@
   --color-border-primary: var(--figma-color-border);
   --color-border-onselected: var(--figma-color-border-onselected);
 
-  --border-radius-2: var(--border-radius-2);
-  --border-radius-6: var(--border-radius-6);
+  --radius-2: var(--border-radius-2);
+  --radius-4: var(--border-radius-4);
+  --radius-6: var(--border-radius-6);
 
   --spacing-0_5: 2px;
   --spacing-1_5: 6px;
