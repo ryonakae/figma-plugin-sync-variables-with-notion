@@ -155,6 +155,7 @@ export default function Collection() {
           isFetching
         }
         loading={isFetching}
+        className="!h-8"
       >
         Create or update variable collection from Notion database
       </Button>
