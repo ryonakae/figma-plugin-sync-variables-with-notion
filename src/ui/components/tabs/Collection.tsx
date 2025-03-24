@@ -6,6 +6,7 @@ import { Button, Stack, Textbox, VerticalSpace } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
 import { useMount, useUnmount } from 'react-use'
 
+import CollectionModesList from '@/ui/components/CollectionModesList'
 import TabItem from '@/ui/components/TabItem'
 import useNotion from '@/ui/hooks/useNotion'
 import useSettings from '@/ui/hooks/useSettings'
@@ -16,7 +17,7 @@ export default function Collection() {
     databaseId: settings.notionDatabaseId,
     integrationToken: settings.notionIntegrationToken,
     keyPropertyName: settings.notionKeyPropertyName,
-    valuePropertyNames: ['ja', 'en'],
+    valuePropertyNames: settings.notionValuePropertyNames,
     figmaCollectionName: settings.figmaCollectionName,
   })
   const [isFetching, setIsFetching] = useState(false)
@@ -28,6 +29,12 @@ export default function Collection() {
         [key]: event.currentTarget.value,
       })
     }
+  }
+
+  function handleModesChange(modes: string[]) {
+    updateSettings({
+      notionValuePropertyNames: modes,
+    })
   }
 
   async function handleCreateClick() {
@@ -117,6 +124,21 @@ export default function Collection() {
             disabled={tmpSettings.loading}
           />
         </div>
+
+        <div className="flex flex-col gap-2">
+          <div>Add or reorder modes</div>
+
+          <CollectionModesList
+            values={settings.notionValuePropertyNames}
+            onChange={handleModesChange}
+          />
+
+          <p className="text-text-secondary">
+            Set the language to be added as a mode. Please add and reorder the
+            property names corresponding to each language in Notion (e.g., ja,
+            en).
+          </p>
+        </div>
       </Stack>
 
       <VerticalSpace space="large" />
@@ -129,11 +151,12 @@ export default function Collection() {
           !settings.notionIntegrationToken ||
           !settings.notionKeyPropertyName ||
           !settings.figmaCollectionName ||
+          !settings.notionValuePropertyNames.length ||
           isFetching
         }
         loading={isFetching}
       >
-        Create/Update variable collection from Notion database
+        Create or update variable collection from Notion database
       </Button>
     </TabItem>
   )

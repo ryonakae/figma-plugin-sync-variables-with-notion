@@ -3,6 +3,7 @@
 @theme inline {
   --color-text-primary: var(--figma-color-text);
   --color-text-secondary: var(--figma-color-text-secondary);
+  --color-text-tertiary: var(--figma-color-text-tertiary);
   --color-text-link: var(--figma-color-text-brand);
 
   --color-bg-primary: var(--figma-color-bg);
@@ -12,6 +13,7 @@
   --color-bg-selected-secondary: var(--figma-color-bg-selected-secondary);
   --color-bg-selected-tertiary: var(--figma-color-bg-selected-tertiary);
   --color-bg-hover: var(--figma-color-bg-hover);
+  --color-bg-selected-hover: var(--figma-color-bg-selected-hover);
 
   --color-border-primary: var(--figma-color-border);
   --color-border-onselected: var(--figma-color-border-onselected);
