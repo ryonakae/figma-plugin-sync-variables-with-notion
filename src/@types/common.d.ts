@@ -89,6 +89,15 @@ declare global {
     last_edited_time: string
     url: string
   }
+
+  type NotionKeyValue = {
+    id: string
+    key: string
+    value: string
+    created_time: string
+    last_edited_time: string
+    url: string
+  }
 }
 
 export {}

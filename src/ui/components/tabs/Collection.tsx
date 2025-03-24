@@ -1,14 +1,27 @@
 /** @jsx h */
 import { type JSX, h } from 'preact'
+import { useRef, useState } from 'preact/hooks'
 
+import { Button, Stack, Textbox, VerticalSpace } from '@create-figma-plugin/ui'
+import { emit } from '@create-figma-plugin/utilities'
 import { useMount, useUnmount } from 'react-use'
 
 import TabItem from '@/ui/components/TabItem'
+import useNotion from '@/ui/hooks/useNotion'
 import useSettings from '@/ui/hooks/useSettings'
-import { Stack, Textbox } from '@create-figma-plugin/ui'
 
 export default function Collection() {
   const { settings, tmpSettings, updateSettings } = useSettings()
+  const { fetchNotion } = useNotion({
+    databaseId: settings.notionDatabaseId,
+    integrationToken: settings.notionIntegrationToken,
+    keyPropertyName: settings.notionKeyPropertyName,
+    valuePropertyName: 'ja',
+    collectionName: settings.collectionName,
+    languages: settings.languages,
+  })
+  const [isFetching, setIsFetching] = useState(false)
+  const keyValuesRef = useRef<NotionKeyValue[]>([])
 
   function handleInput(key: keyof Settings) {
     return (event: JSX.TargetedEvent<HTMLInputElement>) => {
@@ -16,6 +29,38 @@ export default function Collection() {
         [key]: event.currentTarget.value,
       })
     }
+  }
+
+  async function handleCreateClick() {
+    setIsFetching(true)
+
+    emit<NotifyFromUI>('NOTIFY_FROM_UI', {
+      message: 'Please wait a moment.',
+    })
+
+    // keyValuesRefをクリア
+    keyValuesRef.current = []
+
+    await fetchNotion({
+      keyValuesArray: keyValuesRef.current,
+    }).catch((error: Error) => {
+      emit<NotifyFromUI>('NOTIFY_FROM_UI', {
+        message: error.message,
+        options: {
+          error: true,
+        },
+      })
+      setIsFetching(false)
+      throw new Error(error.message)
+    })
+
+    console.log('fetch done', keyValuesRef.current)
+
+    setIsFetching(false)
+
+    emit<NotifyFromUI>('NOTIFY_FROM_UI', {
+      message: 'Create/Update collection done.',
+    })
   }
 
   useMount(() => {
@@ -57,6 +102,22 @@ export default function Collection() {
           />
         </div>
       </Stack>
+
+      <VerticalSpace space="large" />
+
+      <Button
+        fullWidth
+        onClick={handleCreateClick}
+        disabled={
+          !settings.notionDatabaseId ||
+          !settings.notionIntegrationToken ||
+          !settings.notionKeyPropertyName ||
+          isFetching
+        }
+        loading={isFetching}
+      >
+        Create/Update variable collection from Notion database
+      </Button>
     </TabItem>
   )
 }
