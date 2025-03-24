@@ -18,7 +18,6 @@ export default function Collection() {
     keyPropertyName: settings.notionKeyPropertyName,
     valuePropertyName: 'ja',
     collectionName: settings.collectionName,
-    languages: settings.languages,
   })
   const [isFetching, setIsFetching] = useState(false)
   const keyValuesRef = useRef<NotionKeyValue[]>([])

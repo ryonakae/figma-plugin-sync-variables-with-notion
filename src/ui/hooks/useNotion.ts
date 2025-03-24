@@ -4,7 +4,6 @@ type useNotionProps = {
   keyPropertyName: string
   valuePropertyName: string
   collectionName: string
-  languages: string[]
 }
 
 export default function useNotion(props: useNotionProps) {
