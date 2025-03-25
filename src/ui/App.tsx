@@ -58,6 +58,7 @@ export default function App() {
 
       emit<NotifyFromUI>('NOTIFY_FROM_UI', {
         message: options.message,
+        options: options.options,
       })
     })
   })

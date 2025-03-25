@@ -12,7 +12,8 @@ import useNotion from '@/ui/hooks/useNotion'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function Collection() {
-  const { settings, tmpSettings, updateSettings } = useSettings()
+  const { settings, tmpSettings, updateSettings, updateTmpSettings } =
+    useSettings()
   const { fetchNotion } = useNotion({
     databaseId: settings.notionDatabaseId,
     integrationToken: settings.notionIntegrationToken,
@@ -20,7 +21,6 @@ export default function Collection() {
     valuePropertyNames: settings.notionValuePropertyNames,
     figmaCollectionName: settings.figmaCollectionName,
   })
-  const [isFetching, setIsFetching] = useState(false)
   const keyValuesRef = useRef<NotionKeyValue[]>([])
 
   function handleInput(key: keyof Settings) {
@@ -37,8 +37,10 @@ export default function Collection() {
     })
   }
 
-  async function handleCreateClick() {
-    setIsFetching(true)
+  async function handleCreateOrUpdateCollectionClick() {
+    updateTmpSettings({
+      loading: true,
+    })
 
     emit<NotifyFromUI>('NOTIFY_FROM_UI', {
       message: 'Please wait a moment.',
@@ -56,17 +58,22 @@ export default function Collection() {
           error: true,
         },
       })
-      setIsFetching(false)
+      updateTmpSettings({
+        loading: false,
+      })
       throw new Error(error.message)
     })
 
     console.log('fetch done', keyValuesRef.current)
 
-    setIsFetching(false)
-
-    emit<NotifyFromUI>('NOTIFY_FROM_UI', {
-      message: 'Create/Update collection done.',
-    })
+    emit<CreateOrUpdateCollectionFromUI>(
+      'CREATE_OR_UPDATE_COLLECTION_FROM_UI',
+      {
+        collectionName: settings.figmaCollectionName,
+        notionKeyValues: keyValuesRef.current,
+        notionValuePropertyNames: settings.notionValuePropertyNames,
+      },
+    )
   }
 
   useMount(() => {
@@ -145,16 +152,16 @@ export default function Collection() {
 
       <Button
         fullWidth
-        onClick={handleCreateClick}
+        onClick={handleCreateOrUpdateCollectionClick}
         disabled={
           !settings.notionDatabaseId ||
           !settings.notionIntegrationToken ||
           !settings.notionKeyPropertyName ||
           !settings.figmaCollectionName ||
           !settings.notionValuePropertyNames.length ||
-          isFetching
+          tmpSettings.loading
         }
-        loading={isFetching}
+        loading={tmpSettings.loading}
         className="!h-8"
       >
         Create or update variable collection from Notion database

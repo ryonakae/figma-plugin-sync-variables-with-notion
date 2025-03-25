@@ -31,4 +31,13 @@ declare global {
     name: 'RESIZE_WINDOW_FROM_UI'
     handler: (windowSize: { width: number; height: number }) => void
   }
+
+  interface CreateOrUpdateCollectionFromUI extends EventHandler {
+    name: 'CREATE_OR_UPDATE_COLLECTION_FROM_UI'
+    handler: (options: {
+      collectionName: string
+      notionKeyValues: NotionKeyValue[]
+      notionValuePropertyNames: string[]
+    }) => void
+  }
 }
