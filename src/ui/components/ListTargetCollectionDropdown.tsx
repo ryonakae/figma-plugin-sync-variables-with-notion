@@ -1,17 +1,14 @@
 /** @jsx h */
 import { Fragment, type JSX, h } from 'preact'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 
 import { Dropdown, Textbox } from '@create-figma-plugin/ui'
-import { useMount, useUpdateEffect } from 'react-use'
 
-import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function ListTargetCollectionDropdown() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
-  const { getCollections } = useCollection()
   const [isDropdownReady, setIsDropdownReady] = useState(false)
   const [dropdownOptions, setDropdownOptions] = useState<
     ListTargetCollectionDropdownOption[]
@@ -117,19 +114,8 @@ export default function ListTargetCollectionDropdown() {
     setIsDropdownReady(true)
   }
 
-  useMount(async () => {
-    console.log('List: mounted')
-
-    // コレクションを取得してtmpSettingsに追加
-    const collections = await getCollections()
-    updateTmpSettings({
-      localCollections: collections.localCollections,
-      libraryCollections: collections.libraryCollections,
-    })
-  })
-
   // localCollectionとlibraryCollectionが変更されるたびにupdateDropdownOptionsを実行する
-  useUpdateEffect(() => {
+  useEffect(() => {
     updateDropdownOptions({
       localCollections: tmpSettings.localCollections,
       libraryCollections: tmpSettings.libraryCollections,

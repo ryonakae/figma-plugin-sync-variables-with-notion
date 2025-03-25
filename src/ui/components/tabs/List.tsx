@@ -11,19 +11,41 @@ import { useMount, useUnmount } from 'react-use'
 
 import ListTargetCollectionDropdown from '@/ui/components/ListTargetCollectionDropdown'
 import TabItem from '@/ui/components/TabItem'
+import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function List() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
+  const { getCollections } = useCollection()
 
   useMount(async () => {
     console.log('List: mounted')
+
+    // コレクションを取得してtmpSettingsに追加
+    const collections = await getCollections()
+    updateTmpSettings({
+      localCollections: collections.localCollections,
+      libraryCollections: collections.libraryCollections,
+    })
   })
 
   useUnmount(() => {
     console.log('List: unmounted')
   })
+
+  if (
+    !tmpSettings.localCollections.length &&
+    !tmpSettings.libraryCollections.length
+  ) {
+    return (
+      <div className="flex h-60 items-center justify-center">
+        <div className="text-text-secondary">
+          No collection in this document
+        </div>
+      </div>
+    )
+  }
 
   return (
     <TabItem space="none">
