@@ -1,17 +1,22 @@
 /** @jsx h */
-import { h } from 'preact'
+import { Fragment, h } from 'preact'
 import type { ReactNode } from 'preact/compat'
 
-import { Container, VerticalSpace } from '@create-figma-plugin/ui'
+import {
+  Container,
+  type ContainerSpace,
+  VerticalSpace,
+} from '@create-figma-plugin/ui'
 import { useMount } from 'react-use'
 
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 
 type TabItemProps = {
+  space?: ContainerSpace | 'none'
   children: ReactNode
 }
 
-export default function TabItem({ children }: TabItemProps) {
+export default function TabItem({ space = 'medium', children }: TabItemProps) {
   const { resizeWindow } = useResizeWindow()
 
   useMount(() => {
@@ -19,10 +24,16 @@ export default function TabItem({ children }: TabItemProps) {
   })
 
   return (
-    <Container space="medium">
-      <VerticalSpace space="medium" />
-      {children}
-      <VerticalSpace space="medium" />
-    </Container>
+    <Fragment>
+      {space === 'none' ? (
+        <div>{children}</div>
+      ) : (
+        <Container space={space}>
+          <VerticalSpace space={space} />
+          {children}
+          <VerticalSpace space={space} />
+        </Container>
+      )}
+    </Fragment>
   )
 }

@@ -7,6 +7,7 @@ import {
 
 import { DEFAULT_WIDTH } from '@/constants'
 import createOrUpdateCollection from '@/main/createOrUpdateCollection'
+import getCollections from '@/main/getCollections'
 import loadSettings from '@/main/loadSettings'
 import saveSettings from '@/main/saveSettings'
 
@@ -45,6 +46,8 @@ export default async function () {
       })
     },
   )
+
+  on<GetCollectionsFromUI>('GET_COLLECTIONS_FROM_UI', getCollections)
 
   // ちょっとdelayさせてからUI側にsettingsを送る（たまにエラーが出るので）
   setTimeout(() => {

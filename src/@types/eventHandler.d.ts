@@ -40,4 +40,17 @@ declare global {
       notionValuePropertyNames: string[]
     }) => void
   }
+
+  interface GetCollectionsFromUI extends EventHandler {
+    name: 'GET_COLLECTIONS_FROM_UI'
+    handler: () => void
+  }
+
+  interface SetCollectionsFromMain extends EventHandler {
+    name: 'SET_COLLECTIONS_FROM_MAIN'
+    handler: (options: {
+      localCollections: LocalVariableCollectionForUI[]
+      libraryCollections: LibraryVariableCollection[]
+    }) => void
+  }
 }

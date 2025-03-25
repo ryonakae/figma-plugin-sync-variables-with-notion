@@ -13,10 +13,9 @@ export default async function saveSettings(settings: Settings) {
     figmaCollectionName: settings.figmaCollectionName,
   }
   const newClientStorageSettings: ClientStorageSettings = {
+    listTargetCollection: settings.listTargetCollection,
     selectedTab: settings.selectedTab,
     filterString: settings.filterString,
-    sortValue: settings.sortValue,
-    sortOrder: settings.sortOrder,
     selectedListItemId: settings.selectedListItemId,
     displayModeId: settings.displayModeId,
     scrollPosition: settings.scrollPosition,

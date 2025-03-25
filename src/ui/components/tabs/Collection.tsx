@@ -2,7 +2,13 @@
 import { type JSX, h } from 'preact'
 import { useRef, useState } from 'preact/hooks'
 
-import { Button, Stack, Textbox, VerticalSpace } from '@create-figma-plugin/ui'
+import {
+  Button,
+  Stack,
+  Textbox,
+  TextboxAutocomplete,
+  VerticalSpace,
+} from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
 import { useMount, useUnmount } from 'react-use'
 
@@ -125,9 +131,13 @@ export default function Collection() {
 
         <div className="flex flex-col gap-1">
           <div>Collection name to create or update</div>
-          <Textbox
+          <TextboxAutocomplete
+            filter
             onInput={handleInput('figmaCollectionName')}
             value={settings.figmaCollectionName}
+            options={tmpSettings.localCollections.map(collection => ({
+              value: collection.name,
+            }))}
             disabled={tmpSettings.loading}
           />
         </div>

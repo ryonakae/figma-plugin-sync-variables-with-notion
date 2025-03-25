@@ -18,9 +18,8 @@ export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
   selectedTab: 'Create/Update Collection',
 
   // list
+  listTargetCollection: null,
   filterString: '',
-  sortValue: 'created_time',
-  sortOrder: 'descending',
   selectedListItemId: null,
   displayModeId: null,
   scrollPosition: 0,
@@ -35,4 +34,6 @@ export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
 
 export const DEFAULT_TMP_SETTINGS: TmpSettings = {
   loading: false,
+  localCollections: [],
+  libraryCollections: [],
 }

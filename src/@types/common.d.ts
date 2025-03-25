@@ -1,3 +1,5 @@
+import type { DropdownOptionValue } from '@create-figma-plugin/ui'
+
 declare global {
   type SelectedTab = 'Create/Update Collection' | 'List' | 'Utilities'
 
@@ -38,9 +40,11 @@ declare global {
     selectedTab: SelectedTab
 
     // list
+    listTargetCollection:
+      | LocalVariableCollectionForUI
+      | LibraryVariableCollection
+      | null
     filterString: string
-    sortValue: SortValue
-    sortOrder: SortOrder
     selectedListItemId: string | null
     displayModeId: string | null
     scrollPosition: number
@@ -60,7 +64,15 @@ declare global {
 
   type TmpSettings = {
     loading: boolean
+    localCollections: LocalVariableCollectionForUI[]
+    libraryCollections: LibraryVariableCollection[]
   }
-}
 
-export {}
+  type ListTargetCollectionDropdownOptionValue = DropdownOptionValue & {
+    value: string | null
+  }
+  type ListTargetCollectionDropdownOption =
+    | DropdownOptionHeader
+    | DropdownOptionSeparator
+    | ListTargetCollectionDropdownOptionValue
+}
