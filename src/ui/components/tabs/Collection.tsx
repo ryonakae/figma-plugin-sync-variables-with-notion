@@ -1,6 +1,6 @@
 /** @jsx h */
 import { type JSX, h } from 'preact'
-import { useRef, useState } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 
 import {
   Button,

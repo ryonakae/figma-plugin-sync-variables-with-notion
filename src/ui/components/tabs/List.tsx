@@ -9,6 +9,7 @@ import {
 } from '@create-figma-plugin/ui'
 import { useMount, useUnmount } from 'react-use'
 
+import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import ListTargetCollectionDropdown from '@/ui/components/ListTargetCollectionDropdown'
 import TabItem from '@/ui/components/TabItem'
 import useCollection from '@/ui/hooks/useCollection'
@@ -59,6 +60,14 @@ export default function List() {
 
             <ListTargetCollectionDropdown />
           </div>
+
+          {settings.listTargetCollection && (
+            <div className="flex flex-col gap-1">
+              <div>表示するモード</div>
+
+              <ListDisplayModeDropdown />
+            </div>
+          )}
         </Stack>
 
         <VerticalSpace space="medium" />

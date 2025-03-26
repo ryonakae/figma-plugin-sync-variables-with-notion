@@ -20,8 +20,10 @@ declare global {
     id: string
     name: string
     description: string
+    remote: boolean
     variableCollectionId: string
     key: string
+    resolvedType: VariableResolvedDataType
     valuesByMode: { [modeId: string]: VariableValue }
     scopes: VariableScope[]
   }

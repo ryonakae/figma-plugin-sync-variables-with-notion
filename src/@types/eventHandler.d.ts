@@ -53,4 +53,14 @@ declare global {
       libraryCollections: LibraryVariableCollection[]
     }) => void
   }
+
+  interface GetVariablesInLibraryCollectionFromUI extends EventHandler {
+    name: 'GET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_UI'
+    handler: (targetCollection: LibraryVariableCollection) => void
+  }
+
+  interface SetVariablesInLibraryCollectionFromMain extends EventHandler {
+    name: 'SET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_MAIN'
+    handler: (variables: VariableForUI[]) => void
+  }
 }

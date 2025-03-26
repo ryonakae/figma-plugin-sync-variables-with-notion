@@ -5,11 +5,18 @@ export default function useCollection() {
     localCollections: LocalVariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
   }> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       once<SetCollectionsFromMain>('SET_COLLECTIONS_FROM_MAIN', resolve)
       emit<GetCollectionsFromUI>('GET_COLLECTIONS_FROM_UI')
     })
   }
 
-  return { getCollections }
+  function isLocalVariableCollection(
+    collection: LocalVariableCollectionForUI | LibraryVariableCollection,
+  ): collection is LocalVariableCollectionForUI {
+    // LocalVariableCollectionForUIには'id'があり、LibraryVariableCollectionには'key'がある
+    return 'id' in collection && !('libraryName' in collection)
+  }
+
+  return { getCollections, isLocalVariableCollection }
 }

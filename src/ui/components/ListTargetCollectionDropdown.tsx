@@ -7,18 +7,15 @@ import { Dropdown, Textbox } from '@create-figma-plugin/ui'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function ListTargetCollectionDropdown() {
-  const { settings, tmpSettings, updateSettings, updateTmpSettings } =
-    useSettings()
+  const { settings, tmpSettings, updateSettings } = useSettings()
   const [isDropdownReady, setIsDropdownReady] = useState(false)
   const [dropdownOptions, setDropdownOptions] = useState<
     ListTargetCollectionDropdownOption[]
   >([])
 
-  async function handleDropdownChange(
-    event: JSX.TargetedEvent<HTMLInputElement>,
-  ) {
+  async function handleChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value as string | null
-    console.log('handleDropdownChange', newValue)
+    console.log('handleChange', newValue)
 
     if (newValue === null) {
       // 選択値がnullの場合、targetCollectionをnullに設定
@@ -111,7 +108,10 @@ export default function ListTargetCollectionDropdown() {
 
     // 新しいdropdownOptionsをstateに入れて、Dropdownコンポーネントをマウントする
     setDropdownOptions(newDropdownOptions)
-    setIsDropdownReady(true)
+
+    window.requestAnimationFrame(() => {
+      setIsDropdownReady(true)
+    })
   }
 
   // localCollectionとlibraryCollectionが変更されるたびにupdateDropdownOptionsを実行する
@@ -126,7 +126,7 @@ export default function ListTargetCollectionDropdown() {
     <Fragment>
       {isDropdownReady ? (
         <Dropdown
-          onChange={handleDropdownChange}
+          onChange={handleChange}
           options={dropdownOptions}
           value={
             settings.listTargetCollection === null
