@@ -14,12 +14,14 @@ import { useMount, useUnmount } from 'react-use'
 
 import CollectionModesList from '@/ui/components/CollectionModesList'
 import TabItem from '@/ui/components/TabItem'
+import useCollection from '@/ui/hooks/useCollection'
 import useNotion from '@/ui/hooks/useNotion'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function Collection() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
+  const { getCollections } = useCollection()
   const { fetchNotion } = useNotion({
     databaseId: settings.notionDatabaseId,
     integrationToken: settings.notionIntegrationToken,
@@ -82,9 +84,16 @@ export default function Collection() {
     )
   }
 
-  useMount(() => {
+  useMount(async () => {
     console.log('Collection: mounted')
     console.log(process.env.PROXY_URL)
+
+    // コレクションを取得してtmpSettingsに追加
+    const collections = await getCollections()
+    updateTmpSettings({
+      localCollections: collections.localCollections,
+      libraryCollections: collections.libraryCollections,
+    })
   })
 
   useUnmount(() => {
