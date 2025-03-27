@@ -12,6 +12,7 @@ import { useMount, useUnmount } from 'react-use'
 import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import ListTargetCollectionDropdown from '@/ui/components/ListTargetCollectionDropdown'
 import TabItem from '@/ui/components/TabItem'
+import VariableList from '@/ui/components/VariableList'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
@@ -76,7 +77,7 @@ export default function List() {
       <Divider />
 
       {/* list */}
-      <div>list</div>
+      <VariableList />
     </TabItem>
   )
 }

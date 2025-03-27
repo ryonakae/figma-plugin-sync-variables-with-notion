@@ -16,7 +16,7 @@ export default function ListDisplayModeDropdown() {
 
   function handleChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
-    updateSettings({ displayModeId: newValue })
+    updateSettings({ listDisplayModeId: newValue })
   }
 
   async function updateDropdownOptions(
@@ -36,15 +36,15 @@ export default function ListDisplayModeDropdown() {
         value: mode.modeId,
       }))
 
-      // settings.displayModeIdがnullではなく、かつtargetCollection.modesに存在する場合は、settings.displayModeIdをセット
+      // settings.listDisplayModeIdがnullではなく、かつtargetCollection.modesに存在する場合は、settings.listDisplayModeIdをセット
       // そうではない場合は、最初のモードidをセット
       if (
-        settings.displayModeId &&
+        settings.listDisplayModeId &&
         targetCollection.modes.some(
-          mode => mode.modeId === settings.displayModeId,
+          mode => mode.modeId === settings.listDisplayModeId,
         )
       ) {
-        displayModeId = settings.displayModeId
+        displayModeId = settings.listDisplayModeId
       } else {
         displayModeId = targetCollection.modes[0].modeId
       }
@@ -76,13 +76,13 @@ export default function ListDisplayModeDropdown() {
         value: modeId,
       }))
 
-      // settings.displayModeIdがnullではなく、かつnewDropdownOptionsに存在する場合は、settings.displayModeIdをセット
+      // settings.listDisplayModeIdがnullではなく、かつnewDropdownOptionsに存在する場合は、settings.listDisplayModeIdをセット
       // そうではない場合は、最初のモードidをセット
       if (
-        settings.displayModeId &&
-        modeIds.some(modeId => modeId === settings.displayModeId)
+        settings.listDisplayModeId &&
+        modeIds.some(modeId => modeId === settings.listDisplayModeId)
       ) {
-        displayModeId = settings.displayModeId
+        displayModeId = settings.listDisplayModeId
       } else {
         displayModeId = modeIds[0]
       }
@@ -93,7 +93,7 @@ export default function ListDisplayModeDropdown() {
 
     setDropdownOptions(newDropdownOptions)
     updateSettings({
-      displayModeId,
+      listDisplayModeId: displayModeId,
     })
 
     window.requestAnimationFrame(() => {
@@ -114,7 +114,7 @@ export default function ListDisplayModeDropdown() {
         <Dropdown
           onChange={handleChange}
           options={dropdownOptions}
-          value={settings.displayModeId}
+          value={settings.listDisplayModeId}
         />
       ) : (
         <Textbox disabled value="" />

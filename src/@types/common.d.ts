@@ -46,9 +46,9 @@ declare global {
       | LocalVariableCollectionForUI
       | LibraryVariableCollection
       | null
+    listDisplayModeId: string | null
     filterString: string
     selectedListItemId: string | null
-    displayModeId: string | null
     scrollPosition: number
 
     // utilities
