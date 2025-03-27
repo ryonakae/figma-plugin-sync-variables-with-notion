@@ -1,6 +1,6 @@
 /** @jsx h */
 import { type JSX, h } from 'preact'
-import { useCallback, useRef } from 'preact/hooks'
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 
 import {
   Button,
@@ -12,8 +12,15 @@ import {
 import { faCircleInfo, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useList, useMount, useUnmount, useUpdateEffect } from 'react-use'
+import {
+  useDebounce,
+  useList,
+  useMount,
+  useUnmount,
+  useUpdateEffect,
+} from 'react-use'
 
+import Empty from '@/ui/components/Empty'
 import VariableListItem from '@/ui/components/VariableListItem'
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 import useSettings from '@/ui/hooks/useSettings'
@@ -28,6 +35,8 @@ export default function VariableList({ variables }: VariableListProps) {
   const listWrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const [listItems, { filter, reset }] = useList<VariableForUI>(variables)
+  const [tmpScrollPosition, setTmpScrollPosition] = useState(0)
+  const [scrollPositionRestored, setScrollPositionRestored] = useState(false)
 
   const virtualizer = useVirtualizer({
     count: listItems.length,
@@ -53,22 +62,6 @@ export default function VariableList({ variables }: VariableListProps) {
     // リストをリセット
     reset()
   }
-
-  // itemをクリックした時に実行する関数
-  const handleItemClick = useCallback(
-    (id: string) => {
-      console.log('handleItemClick', id, settings.selectedListItemId)
-
-      // 選択されてなければ選択済みにする
-      // すでに選択済みだったら選択解除
-      if (id !== settings.selectedListItemId) {
-        updateSettings({ selectedListItemId: id })
-      } else {
-        updateSettings({ selectedListItemId: null })
-      }
-    },
-    [settings.selectedListItemId],
-  )
 
   function filterList(filterString: string) {
     console.log('filterList', filterString)
@@ -96,6 +89,42 @@ export default function VariableList({ variables }: VariableListProps) {
     })
   }
 
+  // itemをクリックした時に実行する関数
+  const handleItemClick = useCallback(
+    (id: string) => {
+      console.log('handleItemClick', id, settings.selectedListItemId)
+
+      // 選択されてなければ選択済みにする
+      // すでに選択済みだったら選択解除
+      if (id !== settings.selectedListItemId) {
+        updateSettings({ selectedListItemId: id })
+      } else {
+        updateSettings({ selectedListItemId: null })
+      }
+    },
+    [settings.selectedListItemId],
+  )
+
+  // スクロール時にscrollPositionを更新する関数
+  const handleScroll = useCallback(() => {
+    if (listWrapperRef.current) {
+      setTmpScrollPosition(listWrapperRef.current.scrollTop)
+    }
+  }, [])
+
+  // tmpScrollPositionが更新されたらdebounceさせてからStoreに保存
+  // scrollPositionRestoredがtrueのときだけ
+  useDebounce(
+    () => {
+      if (scrollPositionRestored) {
+        console.log('scrollPosition update (debounced)', tmpScrollPosition)
+        updateSettings({ scrollPosition: tmpScrollPosition })
+      }
+    },
+    100,
+    [tmpScrollPosition],
+  )
+
   useMount(() => {
     console.log('VariableList mounted', variables)
 
@@ -118,6 +147,42 @@ export default function VariableList({ variables }: VariableListProps) {
     filterList(settings.filterString)
   }, [settings.filterString])
 
+  // virtualizerが変更されたら(listItemsが更新されたら)
+  // スクロール位置が復元されていない→スクロール位置を復元
+  // スクロール位置が復元済み（フィルター or ソート時）→スクロール位置を0にする
+  useEffect(() => {
+    console.log(
+      'items updated',
+      `scrollPositionRestored: ${scrollPositionRestored}`,
+    )
+
+    if (!scrollPositionRestored) {
+      console.log('restore scroll position', settings.scrollPosition)
+      virtualizer.scrollToOffset(settings.scrollPosition)
+      setTmpScrollPosition(settings.scrollPosition)
+      setScrollPositionRestored(true)
+    } else {
+      console.log('reset scroll position to top')
+      virtualizer.scrollToOffset(0)
+      setTmpScrollPosition(0)
+    }
+  }, [virtualizer])
+
+  // listItemsが変更される度にスクロールにイベントリスナを再設定
+  useEffect(() => {
+    const listElement = listWrapperRef.current
+
+    if (listElement) {
+      listElement.addEventListener('scroll', handleScroll)
+    }
+
+    return () => {
+      if (listElement) {
+        listElement.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [listItems])
+
   return (
     <div className="flex h-full flex-col">
       {/* filter */}
@@ -127,7 +192,7 @@ export default function VariableList({ variables }: VariableListProps) {
         <div className="flex items-center gap-2">
           <FontAwesomeIcon icon={faFilter} />
 
-          <div className="flex-1">
+          <div className="ml-1 flex-1">
             <Textbox
               onInput={handleInput}
               value={settings.filterString}
@@ -151,35 +216,39 @@ export default function VariableList({ variables }: VariableListProps) {
         ref={listWrapperRef}
         className="flex-1 overflow-y-auto overflow-x-hidden"
       >
-        <ul
-          ref={listRef}
-          className="relative"
-          style={{
-            height: `${virtualizer.getTotalSize()}px`,
-          }}
-        >
-          {virtualizer.getVirtualItems().map(virtualItem => (
-            <div
-              data-index={virtualItem.index}
-              key={virtualItem.key}
-              ref={virtualizer.measureElement}
-              className="absolute top-0 left-0 w-full"
-              style={{
-                // height: `${virtualItem.size}px`,
-                transform: `translateY(${virtualItem.start}px)`,
-              }}
-            >
-              <VariableListItem
-                variable={listItems[virtualItem.index]}
-                onClick={handleItemClick}
-                selected={
-                  listItems[virtualItem.index].id ===
-                  settings.selectedListItemId
-                }
-              />
-            </div>
-          ))}
-        </ul>
+        {listItems.length > 0 ? (
+          <ul
+            ref={listRef}
+            className="relative"
+            style={{
+              height: `${virtualizer.getTotalSize()}px`,
+            }}
+          >
+            {virtualizer.getVirtualItems().map(virtualItem => (
+              <div
+                data-index={virtualItem.index}
+                key={virtualItem.key}
+                ref={virtualizer.measureElement}
+                className="absolute top-0 left-0 w-full"
+                style={{
+                  // height: `${virtualItem.size}px`,
+                  transform: `translateY(${virtualItem.start}px)`,
+                }}
+              >
+                <VariableListItem
+                  variable={listItems[virtualItem.index]}
+                  onClick={handleItemClick}
+                  selected={
+                    listItems[virtualItem.index].id ===
+                    settings.selectedListItemId
+                  }
+                />
+              </div>
+            ))}
+          </ul>
+        ) : (
+          <Empty>No variables available</Empty>
+        )}
       </div>
 
       <Divider />

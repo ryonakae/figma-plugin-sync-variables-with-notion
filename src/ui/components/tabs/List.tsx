@@ -9,6 +9,7 @@ import {
 } from '@create-figma-plugin/ui'
 import { useMount, useUnmount, useUpdateEffect } from 'react-use'
 
+import Empty from '@/ui/components/Empty'
 import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import ListTargetCollectionDropdown from '@/ui/components/ListTargetCollectionDropdown'
 import TabItem from '@/ui/components/TabItem'
@@ -117,17 +118,13 @@ export default function List() {
       {/* list */}
       <div className="h-[450px]">
         {!settings.listTargetCollection ? (
-          <div className="flex h-full flex-col items-center justify-center text-secondary">
-            Please select the collection
-          </div>
+          <Empty>Please select the collection</Empty>
         ) : (
           <Fragment>
             {variables.length > 0 ? (
               <VariableList variables={variables} />
             ) : (
-              <div className="flex h-full flex-col items-center justify-center text-secondary">
-                No variables available
-              </div>
+              <Empty>No string variables available</Empty>
             )}
           </Fragment>
         )}

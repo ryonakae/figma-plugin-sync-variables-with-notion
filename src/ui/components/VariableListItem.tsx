@@ -49,7 +49,7 @@ function CopyButton({ text, selected, className }: CopyButtonProps) {
       <button
         type="button"
         className={twMerge(
-          'flex h-5 w-5 items-center justify-center rounded-2 !bg-bg-primary hover:!bg-bg-tertiary active:!bg-bg-primary',
+          '!bg-bg-primary hover:!bg-bg-tertiary active:!bg-bg-primary flex h-5 w-5 items-center justify-center rounded-2',
           selected &&
             '!bg-bg-selected hover:!bg-bg-selected-tertiary active:!bg-bg-selected',
         )}
@@ -72,7 +72,7 @@ function ValueWithCopyButton({
       <div className="w-10 py-1 text-text-secondary">{label}</div>
       <div
         className={twMerge(
-          'group flex-1 rounded-2 p-1 hover:bg-bg-hover',
+          'group flex-1 rounded-4 p-1 hover:bg-bg-hover',
           selected && 'hover:bg-bg-selected-secondary',
         )}
       >
