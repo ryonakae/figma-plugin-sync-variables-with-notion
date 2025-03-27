@@ -1,5 +1,5 @@
 /** @jsx h */
-import { h } from 'preact'
+import { Fragment, h } from 'preact'
 
 import {
   Container,
@@ -115,19 +115,21 @@ export default function List() {
       <Divider />
 
       {/* list */}
-      <div className="h-[400px]">
-        {!settings.listTargetCollection && (
+      <div className="h-[450px]">
+        {!settings.listTargetCollection ? (
           <div className="flex h-full flex-col items-center justify-center text-secondary">
             Please select the collection
           </div>
-        )}
-
-        {variables.length > 0 ? (
-          <VariableList variables={variables} />
         ) : (
-          <div className="flex h-full flex-col items-center justify-center text-secondary">
-            No variables available
-          </div>
+          <Fragment>
+            {variables.length > 0 ? (
+              <VariableList variables={variables} />
+            ) : (
+              <div className="flex h-full flex-col items-center justify-center text-secondary">
+                No variables available
+              </div>
+            )}
+          </Fragment>
         )}
       </div>
     </TabItem>
