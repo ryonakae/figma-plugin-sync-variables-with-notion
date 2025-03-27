@@ -9,10 +9,10 @@
   --color-bg-primary: var(--figma-color-bg);
   --color-bg-secondary: var(--figma-color-bg-secondary);
   --color-bg-tertiary: var(--figma-color-bg-tertiary);
+  --color-bg-hover: var(--figma-color-bg-hover);
   --color-bg-selected: var(--figma-color-bg-selected);
   --color-bg-selected-secondary: var(--figma-color-bg-selected-secondary);
   --color-bg-selected-tertiary: var(--figma-color-bg-selected-tertiary);
-  --color-bg-hover: var(--figma-color-bg-hover);
   --color-bg-selected-hover: var(--figma-color-bg-selected-hover);
 
   --color-border-primary: var(--figma-color-border);

@@ -1,6 +1,6 @@
 /** @jsx h */
-import { Fragment, type JSX, h } from 'preact'
-import { useRef, useState } from 'preact/hooks'
+import { type JSX, h } from 'preact'
+import { useCallback, useRef } from 'preact/hooks'
 
 import {
   Button,
@@ -9,19 +9,25 @@ import {
   Textbox,
   VerticalSpace,
 } from '@create-figma-plugin/ui'
-import { faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useList, useMount } from 'react-use'
+import { useList, useMount, useUnmount, useUpdateEffect } from 'react-use'
 
+import VariableListItem from '@/ui/components/VariableListItem'
+import useResizeWindow from '@/ui/hooks/useResizeWindow'
 import useSettings from '@/ui/hooks/useSettings'
 
-export default function VariableList() {
+type VariableListProps = {
+  variables: VariableForUI[]
+}
+
+export default function VariableList({ variables }: VariableListProps) {
   const { settings, updateSettings } = useSettings()
-  const [variables, setVariables] = useState<VariableForUI[]>([])
-  const [listItems, { filter, reset }] = useList<VariableForUI>(variables)
+  const { resizeWindow } = useResizeWindow()
   const listWrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
+  const [listItems, { filter, reset }] = useList<VariableForUI>(variables)
 
   const virtualizer = useVirtualizer({
     count: listItems.length,
@@ -47,6 +53,22 @@ export default function VariableList() {
     // リストをリセット
     reset()
   }
+
+  // itemをクリックした時に実行する関数
+  const handleItemClick = useCallback(
+    (id: string) => {
+      console.log('handleItemClick', id, settings.selectedListItemId)
+
+      // 選択されてなければ選択済みにする
+      // すでに選択済みだったら選択解除
+      if (id !== settings.selectedListItemId) {
+        updateSettings({ selectedListItemId: id })
+      } else {
+        updateSettings({ selectedListItemId: null })
+      }
+    },
+    [settings.selectedListItemId],
+  )
 
   function filterList(filterString: string) {
     console.log('filterList', filterString)
@@ -74,16 +96,30 @@ export default function VariableList() {
     })
   }
 
-  // マウント時にfilterStringが入力されていたらリストをフィルター
   useMount(() => {
-    console.log('VariableList mounted')
+    console.log('VariableList mounted', variables)
+
+    // ウインドウをリサイズ
+    window.requestAnimationFrame(resizeWindow)
+
+    // マウント時にfilterStringが入力されていたらリストをフィルター
     if (settings.filterString.length > 0) {
       filterList(settings.filterString)
     }
   })
 
+  useUnmount(() => {
+    console.log('VariableList unmounted')
+  })
+
+  // filterStringがアップデートされたら配列をフィルター
+  useUpdateEffect(() => {
+    console.log('filterString update', settings.filterString)
+    filterList(settings.filterString)
+  }, [settings.filterString])
+
   return (
-    <div>
+    <div className="flex h-full flex-col">
       {/* filter */}
       <Container space="medium">
         <VerticalSpace space="extraSmall" />
@@ -113,46 +149,48 @@ export default function VariableList() {
       {/* list */}
       <div
         ref={listWrapperRef}
-        className="h-[500px] overflow-y-auto overflow-x-hidden"
+        className="flex-1 overflow-y-auto overflow-x-hidden"
       >
-        {listItems.length > 0 ? (
-          <ul
-            ref={listRef}
-            className="relative"
-            style={{
-              height: `${virtualizer.getTotalSize()}px`,
-            }}
-          >
-            {virtualizer.getVirtualItems().map(virtualItem => (
-              <div
-                data-index={virtualItem.index}
-                key={virtualItem.key}
-                ref={virtualizer.measureElement}
-                className="absolute top-0 left-0 w-full"
-                style={{
-                  // height: `${virtualItem.size}px`,
-                  transform: `translateY(${virtualItem.start}px)`,
-                }}
-              >
-                {/* <VariableListItem
-                  variable={items[virtualItem.index]}
-                  onClick={onRowClick}
-                  selected={
-                    items[virtualItem.index].id === settings.selectedListItemId
-                  }
-                /> */}
-                <div>
-                  <div>{virtualItem.index}</div>
-                </div>
-              </div>
-            ))}
-          </ul>
-        ) : (
-          // empty
-          <div className="flex h-full flex-col items-center justify-center text-secondary">
-            No variables available
-          </div>
-        )}
+        <ul
+          ref={listRef}
+          className="relative"
+          style={{
+            height: `${virtualizer.getTotalSize()}px`,
+          }}
+        >
+          {virtualizer.getVirtualItems().map(virtualItem => (
+            <div
+              data-index={virtualItem.index}
+              key={virtualItem.key}
+              ref={virtualizer.measureElement}
+              className="absolute top-0 left-0 w-full"
+              style={{
+                // height: `${virtualItem.size}px`,
+                transform: `translateY(${virtualItem.start}px)`,
+              }}
+            >
+              <VariableListItem
+                variable={listItems[virtualItem.index]}
+                onClick={handleItemClick}
+                selected={
+                  listItems[virtualItem.index].id ===
+                  settings.selectedListItemId
+                }
+              />
+            </div>
+          ))}
+        </ul>
+      </div>
+
+      <Divider />
+
+      {/* bottom status */}
+      <div className="flex h-8 items-center justify-between px-2 text-secondary">
+        <div className="flex items-center gap-1">
+          <FontAwesomeIcon icon={faCircleInfo} />
+          <span>Click a row to assign or copy the variable to the text</span>
+        </div>
+        <span>{listItems.length} items</span>
       </div>
     </div>
   )

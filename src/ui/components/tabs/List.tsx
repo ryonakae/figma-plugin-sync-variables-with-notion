@@ -7,7 +7,7 @@ import {
   Stack,
   VerticalSpace,
 } from '@create-figma-plugin/ui'
-import { useMount, useUnmount } from 'react-use'
+import { useMount, useUnmount, useUpdateEffect } from 'react-use'
 
 import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import ListTargetCollectionDropdown from '@/ui/components/ListTargetCollectionDropdown'
@@ -15,11 +15,44 @@ import TabItem from '@/ui/components/TabItem'
 import VariableList from '@/ui/components/VariableList'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
+import { useEffect, useState } from 'preact/hooks'
 
 export default function List() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
-  const { getCollections } = useCollection()
+  const {
+    getCollections,
+    isLocalVariableCollection,
+    getLocalVariables,
+    getLibraryVariables,
+  } = useCollection()
+  const [variables, setVariables] = useState<VariableForUI[]>([])
+
+  async function updateVariables(
+    targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
+  ) {
+    console.log('updateVariables', targetCollection)
+
+    // いったんvariableを空にする
+    setVariables([])
+
+    let newVariables: VariableForUI[] = []
+
+    if (isLocalVariableCollection(targetCollection)) {
+      newVariables = await getLocalVariables(targetCollection)
+    } else {
+      newVariables = await getLibraryVariables(targetCollection)
+    }
+
+    // newVariablesを、resolvedTypeがstringのものだけに絞り込む
+    newVariables = newVariables.filter(
+      variable => variable.resolvedType === 'STRING',
+    )
+
+    console.log('newVariables', newVariables, newVariables.length)
+
+    setVariables(newVariables)
+  }
 
   useMount(async () => {
     console.log('List: mounted')
@@ -35,6 +68,11 @@ export default function List() {
   useUnmount(() => {
     console.log('List: unmounted')
   })
+
+  useEffect(() => {
+    if (!settings.listTargetCollection) return
+    updateVariables(settings.listTargetCollection)
+  }, [settings.listTargetCollection])
 
   if (
     !tmpSettings.localCollections.length &&
@@ -77,7 +115,21 @@ export default function List() {
       <Divider />
 
       {/* list */}
-      <VariableList />
+      <div className="h-[400px]">
+        {!settings.listTargetCollection && (
+          <div className="flex h-full flex-col items-center justify-center text-secondary">
+            Please select the collection
+          </div>
+        )}
+
+        {variables.length > 0 ? (
+          <VariableList variables={variables} />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center text-secondary">
+            No variables available
+          </div>
+        )}
+      </div>
     </TabItem>
   )
 }

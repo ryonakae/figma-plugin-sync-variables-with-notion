@@ -54,13 +54,23 @@ declare global {
     }) => void
   }
 
-  interface GetVariablesInLibraryCollectionFromUI extends EventHandler {
-    name: 'GET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_UI'
+  interface GetLocalVariablesFromUI extends EventHandler {
+    name: 'GET_LOCAL_VARIABLES_FROM_UI'
+    handler: (targetCollection: LocalVariableCollectionForUI) => void
+  }
+
+  interface SetLocalVariablesFromMain extends EventHandler {
+    name: 'SET_LOCAL_VARIABLES_FROM_MAIN'
+    handler: (variables: VariableForUI[]) => void
+  }
+
+  interface GetLibraryVariablesFromUI extends EventHandler {
+    name: 'GET_LIBRARY_VARIABLES_FROM_UI'
     handler: (targetCollection: LibraryVariableCollection) => void
   }
 
-  interface SetVariablesInLibraryCollectionFromMain extends EventHandler {
-    name: 'SET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_MAIN'
+  interface SetLibraryVariablesFromMain extends EventHandler {
+    name: 'SET_LIBRARY_VARIABLES_FROM_MAIN'
     handler: (variables: VariableForUI[]) => void
   }
 }

@@ -1,22 +1,22 @@
 import { emit } from '@create-figma-plugin/utilities'
 
-export default async function getVariablesInLibraryCollection(
+export default async function getLibraryVariables(
   targetCollection: LibraryVariableCollection,
 ) {
   // Variablesを取得
-  const variables =
+  const libraryVariables =
     await figma.teamLibrary.getVariablesInLibraryCollectionAsync(
       targetCollection.key,
     )
 
-  const importedVariables: VariableForUI[] = []
+  const variables: VariableForUI[] = []
 
-  // Variableをインポート
-  for (const variable of variables) {
+  // Variableをインポートして、variablesに追加
+  for (const libraryVariable of libraryVariables) {
     const importedVariable = await figma.variables.importVariableByKeyAsync(
-      variable.key,
+      libraryVariable.key,
     )
-    importedVariables.push({
+    variables.push({
       id: importedVariable.id,
       name: importedVariable.name,
       description: importedVariable.description,
@@ -29,9 +29,9 @@ export default async function getVariablesInLibraryCollection(
     })
   }
 
-  // variableの配列をUIに送る
-  emit<SetVariablesInLibraryCollectionFromMain>(
-    'SET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_MAIN',
-    importedVariables,
+  // variablesをUIに送る
+  emit<SetLibraryVariablesFromMain>(
+    'SET_LIBRARY_VARIABLES_FROM_MAIN',
+    variables,
   )
 }

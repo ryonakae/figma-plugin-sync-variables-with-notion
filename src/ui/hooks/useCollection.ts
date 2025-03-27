@@ -18,5 +18,42 @@ export default function useCollection() {
     return 'id' in collection && !('libraryName' in collection)
   }
 
-  return { getCollections, isLocalVariableCollection }
+  function getLocalVariables(
+    targetCollection: LocalVariableCollectionForUI,
+  ): Promise<VariableForUI[]> {
+    return new Promise((resolve, _reject) => {
+      once<SetLocalVariablesFromMain>(
+        'SET_LOCAL_VARIABLES_FROM_MAIN',
+        variables => resolve(variables),
+      )
+
+      emit<GetLocalVariablesFromUI>(
+        'GET_LOCAL_VARIABLES_FROM_UI',
+        targetCollection,
+      )
+    })
+  }
+
+  function getLibraryVariables(
+    targetCollection: LibraryVariableCollection,
+  ): Promise<VariableForUI[]> {
+    return new Promise((resolve, _reject) => {
+      once<SetLibraryVariablesFromMain>(
+        'SET_LIBRARY_VARIABLES_FROM_MAIN',
+        variables => resolve(variables),
+      )
+
+      emit<GetLibraryVariablesFromUI>(
+        'GET_LIBRARY_VARIABLES_FROM_UI',
+        targetCollection,
+      )
+    })
+  }
+
+  return {
+    getCollections,
+    isLocalVariableCollection,
+    getLocalVariables,
+    getLibraryVariables,
+  }
 }

@@ -54,12 +54,12 @@ export default function ListDisplayModeDropdown() {
     else {
       const variablesInLibraryCollection = await new Promise<VariableForUI[]>(
         (resolve, _reject) => {
-          once<SetVariablesInLibraryCollectionFromMain>(
-            'SET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_MAIN',
+          once<SetLibraryVariablesFromMain>(
+            'SET_LIBRARY_VARIABLES_FROM_MAIN',
             resolve,
           )
-          emit<GetVariablesInLibraryCollectionFromUI>(
-            'GET_VARIABLES_IN_LIBRARY_COLLECTION_FROM_UI',
+          emit<GetLibraryVariablesFromUI>(
+            'GET_LIBRARY_VARIABLES_FROM_UI',
             targetCollection,
           )
         },
