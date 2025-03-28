@@ -15,15 +15,15 @@ export default async function saveSettings(settings: Settings) {
   const newClientStorageSettings: ClientStorageSettings = {
     listTargetCollection: settings.listTargetCollection,
     selectedTab: settings.selectedTab,
-    filterString: settings.filterString,
-    selectedListItems: settings.selectedListItems,
+    listFilterString: settings.listFilterString,
+    listSelectedListItems: settings.listSelectedListItems,
     listDisplayModeId: settings.listDisplayModeId,
-    scrollPositions: settings.scrollPositions,
-    targetCollection: settings.targetCollection,
-    targetTextRange: settings.targetTextRange,
-    isIncludeComponents: settings.isIncludeComponents,
-    isIncludeInstances: settings.isIncludeInstances,
-    includeKeyPropertyName: settings.includeKeyPropertyName,
+    listScrollPositions: settings.listScrollPositions,
+    utilitiesTargetCollection: settings.utilitiesTargetCollection,
+    utilitiesTargetTextRange: settings.utilitiesTargetTextRange,
+    utilitiesIsIncludeComponents: settings.utilitiesIsIncludeComponents,
+    utilitiesIsIncludeInstances: settings.utilitiesIsIncludeInstances,
+    utilitiesIncludeKeyPropertyName: settings.utilitiesIncludeKeyPropertyName,
   }
 
   // newDocumentSettingsをDocumentに保存

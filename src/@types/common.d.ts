@@ -47,19 +47,19 @@ declare global {
       | LibraryVariableCollection
       | null
     listDisplayModeId: string | null
-    filterString: string
-    selectedListItems: { [collectionId: string]: string | null }
-    scrollPositions: { [collectionId: string]: number }
+    listFilterString: string
+    listSelectedListItems: { [collectionId: string]: string | null }
+    listScrollPositions: { [collectionId: string]: number }
 
     // utilities
-    targetCollection:
+    utilitiesTargetCollection:
       | 'all'
       | LocalVariableCollectionForUI
       | LibraryVariableCollection
-    targetTextRange: TargetTextRange
-    isIncludeComponents: boolean
-    isIncludeInstances: boolean
-    includeKeyPropertyName: string
+    utilitiesTargetTextRange: TargetTextRange
+    utilitiesIsIncludeComponents: boolean
+    utilitiesIsIncludeInstances: boolean
+    utilitiesIncludeKeyPropertyName: string
   }
 
   type Settings = DocumentSettings & ClientStorageSettings

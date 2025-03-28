@@ -20,16 +20,16 @@ export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
   // list
   listTargetCollection: null,
   listDisplayModeId: null,
-  filterString: '',
-  selectedListItems: {},
-  scrollPositions: {},
+  listFilterString: '',
+  listSelectedListItems: {},
+  listScrollPositions: {},
 
   // utilities
-  targetCollection: 'all',
-  targetTextRange: 'currentPage',
-  isIncludeComponents: true,
-  isIncludeInstances: false,
-  includeKeyPropertyName: '',
+  utilitiesTargetCollection: 'all',
+  utilitiesTargetTextRange: 'currentPage',
+  utilitiesIsIncludeComponents: true,
+  utilitiesIsIncludeInstances: false,
+  utilitiesIncludeKeyPropertyName: '',
 }
 
 export const DEFAULT_TMP_SETTINGS: TmpSettings = {

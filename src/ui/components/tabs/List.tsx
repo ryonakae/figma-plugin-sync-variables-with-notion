@@ -1,5 +1,5 @@
 /** @jsx h */
-import { Fragment, h } from 'preact'
+import { h } from 'preact'
 
 import {
   Container,
@@ -7,7 +7,7 @@ import {
   Stack,
   VerticalSpace,
 } from '@create-figma-plugin/ui'
-import { useMount, useUnmount, useUpdateEffect } from 'react-use'
+import { useMount, useUnmount } from 'react-use'
 
 import Empty from '@/ui/components/Empty'
 import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
@@ -120,19 +120,19 @@ export default function List() {
       <Divider />
 
       {/* list */}
-      <div className="h-[450px]">
-        {!settings.listTargetCollection ? (
+      {!settings.listTargetCollection ? (
+        <div className="h-[200px]">
           <Empty>Please select the collection</Empty>
-        ) : (
-          <Fragment>
-            {variables.length > 0 ? (
-              <VariableList variables={variables} />
-            ) : (
-              <Empty>No string variables available</Empty>
-            )}
-          </Fragment>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="h-[450px]">
+          {variables.length > 0 ? (
+            <VariableList variables={variables} />
+          ) : (
+            <Empty>No string variables available</Empty>
+          )}
+        </div>
+      )}
     </TabItem>
   )
 }

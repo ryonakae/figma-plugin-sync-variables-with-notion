@@ -50,26 +50,26 @@ export default function VariableList({ variables }: VariableListProps) {
     const inputValue = event.currentTarget.value
     console.log('handleInput', inputValue)
     updateSettings({
-      filterString: inputValue,
+      listFilterString: inputValue,
     })
   }
 
   function handleClear() {
     console.log('handleClear')
     updateSettings({
-      filterString: '',
+      listFilterString: '',
     })
     // リストをリセット
     reset()
   }
 
-  function filterList(filterString: string) {
-    console.log('filterList', filterString)
+  function filterList(listFilterString: string) {
+    console.log('filterList', listFilterString)
 
     // リストをリセット
     reset()
 
-    // filterStringがkeyもしくはvalue propertyを含んでいたらそれに絞り込む
+    // listFilterStringがkeyもしくはvalue propertyを含んでいたらそれに絞り込む
     filter(listItems => {
       const nameProperty = listItems.name.toLowerCase()
 
@@ -83,8 +83,8 @@ export default function VariableList({ variables }: VariableListProps) {
       }
 
       return (
-        nameProperty.includes(filterString.toLowerCase()) ||
-        valueProperty.includes(filterString.toLowerCase())
+        nameProperty.includes(listFilterString.toLowerCase()) ||
+        valueProperty.includes(listFilterString.toLowerCase())
       )
     })
   }
@@ -92,7 +92,7 @@ export default function VariableList({ variables }: VariableListProps) {
   // itemをクリックした時に実行する関数
   const handleItemClick = useCallback(
     (id: string) => {
-      console.log('handleItemClick', id, settings.selectedListItems)
+      console.log('handleItemClick', id, settings.listSelectedListItems)
 
       const targetCollection = settings.listTargetCollection
       if (!targetCollection) return
@@ -100,27 +100,27 @@ export default function VariableList({ variables }: VariableListProps) {
       const collectionId = isLocalVariableCollection(targetCollection)
         ? targetCollection.id
         : targetCollection.key
-      const selectedListItemId = settings.selectedListItems[collectionId]
+      const selectedListItemId = settings.listSelectedListItems[collectionId]
 
       // 選択されてなければ選択済みにする
       // すでに選択済みだったら選択解除
       if (id !== selectedListItemId) {
         updateSettings({
-          selectedListItems: {
-            ...settings.selectedListItems,
+          listSelectedListItems: {
+            ...settings.listSelectedListItems,
             [collectionId]: id,
           },
         })
       } else {
         updateSettings({
-          selectedListItems: {
-            ...settings.selectedListItems,
+          listSelectedListItems: {
+            ...settings.listSelectedListItems,
             [collectionId]: null,
           },
         })
       }
     },
-    [settings.selectedListItems, settings.listTargetCollection],
+    [settings.listSelectedListItems, settings.listTargetCollection],
   )
 
   // スクロール時にscrollPositionを更新する関数
@@ -139,7 +139,7 @@ export default function VariableList({ variables }: VariableListProps) {
       ? targetCollection.id
       : targetCollection.key
 
-    return settings.selectedListItems[collectionId] === listItems[index].id
+    return settings.listSelectedListItems[collectionId] === listItems[index].id
   }
 
   // tmpScrollPositionが更新されたらdebounceさせてからStoreに保存
@@ -157,8 +157,8 @@ export default function VariableList({ variables }: VariableListProps) {
           : targetCollection.key
 
         updateSettings({
-          scrollPositions: {
-            ...settings.scrollPositions,
+          listScrollPositions: {
+            ...settings.listScrollPositions,
             [collectionId]: tmpScrollPosition,
           },
         })
@@ -171,9 +171,9 @@ export default function VariableList({ variables }: VariableListProps) {
   useMount(() => {
     console.log('VariableList mounted', variables)
 
-    // マウント時にfilterStringが入力されていたらリストをフィルター
-    if (settings.filterString.length > 0) {
-      filterList(settings.filterString)
+    // マウント時にlistFilterStringが入力されていたらリストをフィルター
+    if (settings.listFilterString.length > 0) {
+      filterList(settings.listFilterString)
     }
   })
 
@@ -181,11 +181,11 @@ export default function VariableList({ variables }: VariableListProps) {
     console.log('VariableList unmounted')
   })
 
-  // filterStringがアップデートされたら配列をフィルター
+  // listFilterStringがアップデートされたら配列をフィルター
   useUpdateEffect(() => {
-    console.log('filterString update', settings.filterString)
-    filterList(settings.filterString)
-  }, [settings.filterString])
+    console.log('listFilterString update', settings.listFilterString)
+    filterList(settings.listFilterString)
+  }, [settings.listFilterString])
 
   // virtualizerが変更されたら(listItemsが更新されたら)
   // スクロール位置が復元されていない→スクロール位置を復元
@@ -203,7 +203,7 @@ export default function VariableList({ variables }: VariableListProps) {
       const collectionId = isLocalVariableCollection(targetCollection)
         ? targetCollection.id
         : targetCollection.key
-      const savedPosition = settings.scrollPositions[collectionId] ?? 0
+      const savedPosition = settings.listScrollPositions[collectionId] ?? 0
 
       console.log('restore scroll position', savedPosition)
 
@@ -245,13 +245,13 @@ export default function VariableList({ variables }: VariableListProps) {
           <div className="ml-1 flex-1">
             <Textbox
               onInput={handleInput}
-              value={settings.filterString}
+              value={settings.listFilterString}
               placeholder="Filter by name or value"
             />
           </div>
 
           {/* clear button */}
-          {settings.filterString.length > 0 && (
+          {settings.listFilterString.length > 0 && (
             <Button onClick={handleClear}>Clear</Button>
           )}
         </div>
