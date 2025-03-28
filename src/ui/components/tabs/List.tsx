@@ -45,9 +45,13 @@ export default function List() {
       newVariables = await getLibraryVariables(targetCollection)
     }
 
-    // newVariablesを、resolvedTypeがstringのものだけに絞り込む
+    // newVariablesを、resolvedTypeがstringのもの &
+    // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
     newVariables = newVariables.filter(
-      variable => variable.resolvedType === 'STRING',
+      variable =>
+        variable.resolvedType === 'STRING' &&
+        (variable.scopes.includes('ALL_SCOPES') ||
+          variable.scopes.includes('TEXT_CONTENT')),
     )
 
     console.log('newVariables', newVariables, newVariables.length)
