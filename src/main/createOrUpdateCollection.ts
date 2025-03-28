@@ -136,6 +136,17 @@ export default async function createOrUpdateCollection(options: {
   )
   console.log('variablesInTargetCollection', variablesInTargetCollection)
 
+  // Notionに存在しない変数を削除
+  for (const variable of variablesInTargetCollection) {
+    const isExistsInNotion = options.notionKeyValues.some(
+      notionKeyValue => notionKeyValue.key === variable.name,
+    )
+    if (!isExistsInNotion) {
+      console.log('Remove variable not in Notion:', variable.name)
+      variable.remove()
+    }
+  }
+
   // notionKeyValuesの各要素に対して処理を実行
   for (const notionKeyValue of options.notionKeyValues) {
     // 対象のVariableを取得もしくは作成
