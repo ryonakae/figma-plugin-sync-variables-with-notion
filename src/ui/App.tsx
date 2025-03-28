@@ -12,6 +12,8 @@ import Utilities from '@/ui/components/tabs/Utilities'
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 import useSettings from '@/ui/hooks/useSettings'
 
+import '!./styles/output.css'
+
 export default function App() {
   const { settings, updateSettings, updateTmpSettings } = useSettings()
   const { resizeWindow } = useResizeWindow()

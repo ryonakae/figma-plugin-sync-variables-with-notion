@@ -55,7 +55,7 @@ function CopyButton({ text, selected, className }: CopyButtonProps) {
         )}
         onClick={onClick}
       >
-        <FontAwesomeIcon icon={faCopy} />
+        <FontAwesomeIcon icon={faCopy} className="text-text-secondary" />
       </button>
     </div>
   )

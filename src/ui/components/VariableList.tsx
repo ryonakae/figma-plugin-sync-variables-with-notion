@@ -22,7 +22,6 @@ import {
 
 import Empty from '@/ui/components/Empty'
 import VariableListItem from '@/ui/components/VariableListItem'
-import useResizeWindow from '@/ui/hooks/useResizeWindow'
 import useSettings from '@/ui/hooks/useSettings'
 
 type VariableListProps = {
@@ -31,7 +30,6 @@ type VariableListProps = {
 
 export default function VariableList({ variables }: VariableListProps) {
   const { settings, updateSettings } = useSettings()
-  const { resizeWindow } = useResizeWindow()
   const listWrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const [listItems, { filter, reset }] = useList<VariableForUI>(variables)
@@ -128,9 +126,6 @@ export default function VariableList({ variables }: VariableListProps) {
   useMount(() => {
     console.log('VariableList mounted', variables)
 
-    // ウインドウをリサイズ
-    window.requestAnimationFrame(resizeWindow)
-
     // マウント時にfilterStringが入力されていたらリストをフィルター
     if (settings.filterString.length > 0) {
       filterList(settings.filterString)
@@ -189,8 +184,8 @@ export default function VariableList({ variables }: VariableListProps) {
       <Container space="medium">
         <VerticalSpace space="extraSmall" />
 
-        <div className="flex items-center gap-2">
-          <FontAwesomeIcon icon={faFilter} />
+        <div className="flex items-center gap-1">
+          <FontAwesomeIcon icon={faFilter} className="text-text-secondary" />
 
           <div className="ml-1 flex-1">
             <Textbox
@@ -254,7 +249,7 @@ export default function VariableList({ variables }: VariableListProps) {
       <Divider />
 
       {/* bottom status */}
-      <div className="flex h-8 items-center justify-between px-2 text-secondary">
+      <div className="flex h-8 items-center justify-between px-2 text-text-secondary">
         <div className="flex items-center gap-1">
           <FontAwesomeIcon icon={faCircleInfo} />
           <span>Click a row to assign or copy the variable to the text</span>
