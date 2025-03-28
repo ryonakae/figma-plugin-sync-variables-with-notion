@@ -73,4 +73,9 @@ declare global {
     name: 'SET_LIBRARY_VARIABLES_FROM_MAIN'
     handler: (variables: VariableForUI[]) => void
   }
+
+  interface ApplyVariableFromUI extends EventHandler {
+    name: 'APPLY_VARIABLE_FROM_UI'
+    handler: (variable: VariableForUI) => void
+  }
 }

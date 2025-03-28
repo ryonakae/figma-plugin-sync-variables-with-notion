@@ -108,7 +108,7 @@ export default function VariableListItem({
     event.stopPropagation()
 
     console.log('handleApplyClick', variable)
-    // emit<ApplyVariableHandler>('APPLY_VARIABLE', variable)
+    emit<ApplyVariableFromUI>('APPLY_VARIABLE_FROM_UI', variable)
   }
 
   return (

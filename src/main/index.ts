@@ -6,6 +6,7 @@ import {
 } from '@create-figma-plugin/utilities'
 
 import { DEFAULT_WIDTH } from '@/constants'
+import applyVariable from '@/main/applyVariable'
 import createOrUpdateCollection from '@/main/createOrUpdateCollection'
 import getCollections from '@/main/getCollections'
 import getLibraryVariables from '@/main/getLibraryVariables'
@@ -57,6 +58,8 @@ export default async function () {
   )
 
   on<GetLocalVariablesFromUI>('GET_LOCAL_VARIABLES_FROM_UI', getLocalVariables)
+
+  on<ApplyVariableFromUI>('APPLY_VARIABLE_FROM_UI', applyVariable)
 
   // ちょっとdelayさせてからUI側にsettingsを送る（たまにエラーが出るので）
   setTimeout(() => {
