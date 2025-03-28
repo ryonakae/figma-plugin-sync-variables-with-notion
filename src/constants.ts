@@ -21,7 +21,7 @@ export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
   listTargetCollection: null,
   listDisplayModeId: null,
   filterString: '',
-  selectedListItemId: null,
+  selectedListItems: {},
   scrollPositions: {},
 
   // utilities

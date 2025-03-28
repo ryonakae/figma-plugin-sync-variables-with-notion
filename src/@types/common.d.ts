@@ -48,7 +48,7 @@ declare global {
       | null
     listDisplayModeId: string | null
     filterString: string
-    selectedListItemId: string | null
+    selectedListItems: { [collectionId: string]: string | null }
     scrollPositions: { [collectionId: string]: number }
 
     // utilities

@@ -92,17 +92,35 @@ export default function VariableList({ variables }: VariableListProps) {
   // itemをクリックした時に実行する関数
   const handleItemClick = useCallback(
     (id: string) => {
-      console.log('handleItemClick', id, settings.selectedListItemId)
+      console.log('handleItemClick', id, settings.selectedListItems)
+
+      const targetCollection = settings.listTargetCollection
+      if (!targetCollection) return
+
+      const collectionId = isLocalVariableCollection(targetCollection)
+        ? targetCollection.id
+        : targetCollection.key
+      const selectedListItemId = settings.selectedListItems[collectionId]
 
       // 選択されてなければ選択済みにする
       // すでに選択済みだったら選択解除
-      if (id !== settings.selectedListItemId) {
-        updateSettings({ selectedListItemId: id })
+      if (id !== selectedListItemId) {
+        updateSettings({
+          selectedListItems: {
+            ...settings.selectedListItems,
+            [collectionId]: id,
+          },
+        })
       } else {
-        updateSettings({ selectedListItemId: null })
+        updateSettings({
+          selectedListItems: {
+            ...settings.selectedListItems,
+            [collectionId]: null,
+          },
+        })
       }
     },
-    [settings.selectedListItemId],
+    [settings.selectedListItems, settings.listTargetCollection],
   )
 
   // スクロール時にscrollPositionを更新する関数
@@ -112,24 +130,38 @@ export default function VariableList({ variables }: VariableListProps) {
     }
   }, [])
 
+  // 選択状態を判定する関数
+  const isSelected = (index: number) => {
+    const targetCollection = settings.listTargetCollection
+    if (!targetCollection) return false
+
+    const collectionId = isLocalVariableCollection(targetCollection)
+      ? targetCollection.id
+      : targetCollection.key
+
+    return settings.selectedListItems[collectionId] === listItems[index].id
+  }
+
   // tmpScrollPositionが更新されたらdebounceさせてからStoreに保存
   // scrollPositionRestoredがtrueのときだけ
   useDebounce(
     () => {
       if (scrollPositionRestored) {
         const targetCollection = settings.listTargetCollection
+        if (!targetCollection) return
 
-        // コレクションが選択されている場合のみスクロール位置を保存
-        if (targetCollection && isLocalVariableCollection(targetCollection)) {
-          console.log('scrollPosition update (debounced)', tmpScrollPosition)
-          const collectionId = targetCollection.id
-          updateSettings({
-            scrollPositions: {
-              ...settings.scrollPositions,
-              [collectionId]: tmpScrollPosition,
-            },
-          })
-        }
+        console.log('scrollPosition update (debounced)', tmpScrollPosition)
+
+        const collectionId = isLocalVariableCollection(targetCollection)
+          ? targetCollection.id
+          : targetCollection.key
+
+        updateSettings({
+          scrollPositions: {
+            ...settings.scrollPositions,
+            [collectionId]: tmpScrollPosition,
+          },
+        })
       }
     },
     100,
@@ -166,17 +198,18 @@ export default function VariableList({ variables }: VariableListProps) {
 
     if (!scrollPositionRestored) {
       const targetCollection = settings.listTargetCollection
+      if (!targetCollection) return
 
-      // コレクションが選択されている場合、保存されたスクロール位置を復元
-      if (targetCollection && isLocalVariableCollection(targetCollection)) {
-        const collectionId = targetCollection.id
-        const savedPosition = settings.scrollPositions[collectionId] ?? 0
-        console.log('restore scroll position', savedPosition)
-        virtualizer.scrollToOffset(savedPosition)
-        setTmpScrollPosition(savedPosition)
-      } else {
-        console.log('no collection selected, scroll position set to 0')
-      }
+      const collectionId = isLocalVariableCollection(targetCollection)
+        ? targetCollection.id
+        : targetCollection.key
+      const savedPosition = settings.scrollPositions[collectionId] ?? 0
+
+      console.log('restore scroll position', savedPosition)
+
+      virtualizer.scrollToOffset(savedPosition)
+      setTmpScrollPosition(savedPosition)
+
       setScrollPositionRestored(true)
     } else {
       console.log('reset scroll position to top')
@@ -255,10 +288,7 @@ export default function VariableList({ variables }: VariableListProps) {
                 <VariableListItem
                   variable={listItems[virtualItem.index]}
                   onClick={handleItemClick}
-                  selected={
-                    listItems[virtualItem.index].id ===
-                    settings.selectedListItemId
-                  }
+                  selected={isSelected(virtualItem.index)}
                 />
               </div>
             ))}
