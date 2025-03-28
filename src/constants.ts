@@ -22,7 +22,7 @@ export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
   listDisplayModeId: null,
   filterString: '',
   selectedListItemId: null,
-  scrollPosition: 0,
+  scrollPositions: {},
 
   // utilities
   targetCollection: 'all',

@@ -22,6 +22,7 @@ import {
 
 import Empty from '@/ui/components/Empty'
 import VariableListItem from '@/ui/components/VariableListItem'
+import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
 type VariableListProps = {
@@ -30,6 +31,7 @@ type VariableListProps = {
 
 export default function VariableList({ variables }: VariableListProps) {
   const { settings, updateSettings } = useSettings()
+  const { isLocalVariableCollection } = useCollection()
   const listWrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const [listItems, { filter, reset }] = useList<VariableForUI>(variables)
@@ -115,8 +117,19 @@ export default function VariableList({ variables }: VariableListProps) {
   useDebounce(
     () => {
       if (scrollPositionRestored) {
-        console.log('scrollPosition update (debounced)', tmpScrollPosition)
-        updateSettings({ scrollPosition: tmpScrollPosition })
+        const targetCollection = settings.listTargetCollection
+
+        // コレクションが選択されている場合のみスクロール位置を保存
+        if (targetCollection && isLocalVariableCollection(targetCollection)) {
+          console.log('scrollPosition update (debounced)', tmpScrollPosition)
+          const collectionId = targetCollection.id
+          updateSettings({
+            scrollPositions: {
+              ...settings.scrollPositions,
+              [collectionId]: tmpScrollPosition,
+            },
+          })
+        }
       }
     },
     100,
@@ -152,9 +165,18 @@ export default function VariableList({ variables }: VariableListProps) {
     )
 
     if (!scrollPositionRestored) {
-      console.log('restore scroll position', settings.scrollPosition)
-      virtualizer.scrollToOffset(settings.scrollPosition)
-      setTmpScrollPosition(settings.scrollPosition)
+      const targetCollection = settings.listTargetCollection
+
+      // コレクションが選択されている場合、保存されたスクロール位置を復元
+      if (targetCollection && isLocalVariableCollection(targetCollection)) {
+        const collectionId = targetCollection.id
+        const savedPosition = settings.scrollPositions[collectionId] ?? 0
+        console.log('restore scroll position', savedPosition)
+        virtualizer.scrollToOffset(savedPosition)
+        setTmpScrollPosition(savedPosition)
+      } else {
+        console.log('no collection selected, scroll position set to 0')
+      }
       setScrollPositionRestored(true)
     } else {
       console.log('reset scroll position to top')

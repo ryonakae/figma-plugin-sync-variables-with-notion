@@ -18,7 +18,7 @@ export default async function saveSettings(settings: Settings) {
     filterString: settings.filterString,
     selectedListItemId: settings.selectedListItemId,
     listDisplayModeId: settings.listDisplayModeId,
-    scrollPosition: settings.scrollPosition,
+    scrollPositions: settings.scrollPositions,
     targetCollection: settings.targetCollection,
     targetTextRange: settings.targetTextRange,
     isIncludeComponents: settings.isIncludeComponents,
