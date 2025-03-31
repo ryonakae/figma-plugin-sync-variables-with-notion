@@ -73,8 +73,8 @@ export default function UtilitiesTargetCollectionDropdown() {
       })),
     ]
 
+    // libraryCollectionsが1つ以上ある場合、libraryCollectionsを配列に追加
     if (options.libraryCollections.length > 0) {
-      // libraryCollectionsが1つ以上ある場合、libraryCollectionsを配列に追加
       newDropdownOptions = [
         ...newDropdownOptions,
         '-',

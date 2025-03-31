@@ -1,5 +1,6 @@
 /** @jsx h */
 import { h } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 
 import {
   Container,
@@ -16,17 +17,11 @@ import TabItem from '@/ui/components/TabItem'
 import VariableList from '@/ui/components/VariableList'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
-import { useEffect, useState } from 'preact/hooks'
 
 export default function List() {
-  const { settings, tmpSettings, updateSettings, updateTmpSettings } =
-    useSettings()
-  const {
-    getCollections,
-    isLocalVariableCollection,
-    getLocalVariables,
-    getLibraryVariables,
-  } = useCollection()
+  const { settings, tmpSettings } = useSettings()
+  const { isLocalVariableCollection, getLocalVariables, getLibraryVariables } =
+    useCollection()
   const [variables, setVariables] = useState<VariableForUI[]>([])
 
   async function updateVariables(
@@ -61,13 +56,6 @@ export default function List() {
 
   useMount(async () => {
     console.log('List: mounted')
-
-    // コレクションを取得してtmpSettingsに追加
-    const collections = await getCollections()
-    updateTmpSettings({
-      localCollections: collections.localCollections,
-      libraryCollections: collections.libraryCollections,
-    })
   })
 
   useUnmount(() => {

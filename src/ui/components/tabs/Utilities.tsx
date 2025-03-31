@@ -8,7 +8,7 @@ import TabItem from '@/ui/components/TabItem'
 import UtilitiesTargetCollectionDropdown from '@/ui/components/UtilitiesTargetCollectionDropdown'
 
 export default function Utilities() {
-  useMount(() => {
+  useMount(async () => {
     console.log('Utilities: mounted')
   })
 
@@ -23,6 +23,8 @@ export default function Utilities() {
           <div>Target collection</div>
           <UtilitiesTargetCollectionDropdown />
         </div>
+
+        <div className="h-[300px] bg-gray-100" />
       </Stack>
     </TabItem>
   )

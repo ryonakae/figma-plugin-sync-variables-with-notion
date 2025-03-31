@@ -9,6 +9,7 @@ import { useMount, useUpdateEffect } from 'react-use'
 import Collection from '@/ui/components/tabs/Collection'
 import List from '@/ui/components/tabs/List'
 import Utilities from '@/ui/components/tabs/Utilities'
+import useCollection from '@/ui/hooks/useCollection'
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 import useSettings from '@/ui/hooks/useSettings'
 
@@ -17,6 +18,7 @@ import '!./styles/output.css'
 export default function App() {
   const { settings, updateSettings, updateTmpSettings } = useSettings()
   const { resizeWindow } = useResizeWindow()
+  const { getCollections } = useCollection()
   const [settingsLoaded, setSettingsLoaded] = useState(false)
 
   const tabOptions: TabsOption[] &
@@ -43,8 +45,8 @@ export default function App() {
     })
   }
 
-  // マウントされたらイベント監視を開始
   useMount(() => {
+    // マウントされたらイベント監視を開始
     once<LoadSettingsFromMain>(
       'LOAD_SETTINGS_FROM_MAIN',
       (settings: Settings) => {
@@ -70,6 +72,15 @@ export default function App() {
   useUpdateEffect(() => {
     window.requestAnimationFrame(resizeWindow)
   }, [settings])
+
+  // タブが更新されたらコレクションを取得してtmpSettingsに追加
+  useUpdateEffect(async () => {
+    const collections = await getCollections()
+    updateTmpSettings({
+      localCollections: collections.localCollections,
+      libraryCollections: collections.libraryCollections,
+    })
+  }, [settings.selectedTab])
 
   if (!settingsLoaded) return null
 
