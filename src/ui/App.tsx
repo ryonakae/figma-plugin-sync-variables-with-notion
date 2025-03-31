@@ -1,6 +1,6 @@
 /** @jsx h */
 import { type JSX, h } from 'preact'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 
 import { Tabs, type TabsOption } from '@create-figma-plugin/ui'
 import { emit, on, once } from '@create-figma-plugin/utilities'
@@ -45,6 +45,15 @@ export default function App() {
     })
   }
 
+  async function handleSelectedTabUpdate() {
+    // タブが変更されたらコレクションを取得してtmpSettingsに追加
+    const collections = await getCollections()
+    updateTmpSettings({
+      localCollections: collections.localCollections,
+      libraryCollections: collections.libraryCollections,
+    })
+  }
+
   useMount(() => {
     // マウントされたらイベント監視を開始
     once<LoadSettingsFromMain>(
@@ -74,12 +83,8 @@ export default function App() {
   }, [settings])
 
   // タブが更新されたらコレクションを取得してtmpSettingsに追加
-  useUpdateEffect(async () => {
-    const collections = await getCollections()
-    updateTmpSettings({
-      localCollections: collections.localCollections,
-      libraryCollections: collections.libraryCollections,
-    })
+  useEffect(() => {
+    handleSelectedTabUpdate()
   }, [settings.selectedTab])
 
   if (!settingsLoaded) return null

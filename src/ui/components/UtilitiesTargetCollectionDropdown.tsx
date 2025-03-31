@@ -1,8 +1,9 @@
 /** @jsx h */
 import { Fragment, type JSX, h } from 'preact'
-import { useEffect, useState } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 
 import { Dropdown, type DropdownOption, Textbox } from '@create-figma-plugin/ui'
+import { useUpdateEffect } from 'react-use'
 
 import useSettings from '@/ui/hooks/useSettings'
 
@@ -118,7 +119,7 @@ export default function UtilitiesTargetCollectionDropdown() {
   }
 
   // localCollectionとlibraryCollectionが変更されるたびにupdateDropdownOptionsを実行する
-  useEffect(() => {
+  useUpdateEffect(() => {
     updateDropdownOptions({
       localCollections: tmpSettings.localCollections,
       libraryCollections: tmpSettings.libraryCollections,

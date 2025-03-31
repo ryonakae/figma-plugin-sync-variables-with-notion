@@ -7,7 +7,7 @@ import {
   type ContainerSpace,
   VerticalSpace,
 } from '@create-figma-plugin/ui'
-import { useMount } from 'react-use'
+import { useMount, useUnmount } from 'react-use'
 
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 
@@ -19,8 +19,15 @@ type TabItemProps = {
 export default function TabItem({ space = 'medium', children }: TabItemProps) {
   const { resizeWindow } = useResizeWindow()
 
-  useMount(() => {
+  useMount(async () => {
+    console.log('TabItem useMount')
+
+    // ウインドウをリサイズ
     window.requestAnimationFrame(resizeWindow)
+  })
+
+  useUnmount(() => {
+    console.log('TabItem useUnmount')
   })
 
   return (
