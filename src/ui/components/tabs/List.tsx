@@ -12,8 +12,8 @@ import { useMount, useUnmount } from 'react-use'
 
 import Empty from '@/ui/components/Empty'
 import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
-import ListTargetCollectionDropdown from '@/ui/components/ListTargetCollectionDropdown'
 import TabItem from '@/ui/components/TabItem'
+import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import VariableList from '@/ui/components/VariableList'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
@@ -90,7 +90,11 @@ export default function List() {
           <div className="flex flex-col gap-1">
             <div>Target collection</div>
 
-            <ListTargetCollectionDropdown />
+            <TargetCollectionDropdown
+              settingKey="listTargetCollection"
+              value={settings.listTargetCollection}
+              defaultValue={null}
+            />
           </div>
 
           {settings.listTargetCollection && (
