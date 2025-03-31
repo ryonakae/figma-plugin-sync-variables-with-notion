@@ -100,14 +100,14 @@ export default function List() {
 
         <Stack space="small">
           <div className="flex flex-col gap-1">
-            <div>参照するコレクション</div>
+            <div>Target collection</div>
 
             <ListTargetCollectionDropdown />
           </div>
 
           {settings.listTargetCollection && (
             <div className="flex flex-col gap-1">
-              <div>表示するモード</div>
+              <div>Display mode</div>
 
               <ListDisplayModeDropdown />
             </div>
