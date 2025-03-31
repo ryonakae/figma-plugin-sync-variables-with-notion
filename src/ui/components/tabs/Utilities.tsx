@@ -2,11 +2,13 @@
 import { type JSX, h } from 'preact'
 
 import {
+  Button,
   Checkbox,
   Dropdown,
   type DropdownOption,
   Stack,
   Text,
+  Textbox,
 } from '@create-figma-plugin/ui'
 import { useMount, useUnmount } from 'react-use'
 
@@ -50,6 +52,20 @@ export default function Utilities() {
         [key]: event.currentTarget.checked,
       })
     }
+  }
+
+  function handleIncludeKeyPropertyNameInput(
+    event: JSX.TargetedEvent<HTMLInputElement>,
+  ) {
+    updateSettings({
+      utilitiesIncludeKeyPropertyName: event.currentTarget.value,
+    })
+  }
+
+  function handleIncludeKeyPropertyNameClear() {
+    updateSettings({
+      utilitiesIncludeKeyPropertyName: '',
+    })
   }
 
   useMount(async () => {
@@ -104,7 +120,28 @@ export default function Utilities() {
           <Text>Include text within instances</Text>
         </Checkbox>
 
-        <div className="h-[200px] bg-gray-100" />
+        <div className="flex flex-col gap-1">
+          <div>Limit variable name</div>
+
+          <div className="flex gap-1">
+            <div className="flex-1">
+              <Textbox
+                value={settings.utilitiesIncludeKeyPropertyName}
+                onInput={handleIncludeKeyPropertyNameInput}
+              />
+            </div>
+
+            {/* clear button */}
+            {settings.utilitiesIncludeKeyPropertyName.length > 0 && (
+              <Button onClick={handleIncludeKeyPropertyNameClear}>Clear</Button>
+            )}
+          </div>
+
+          <p className="text-text-secondary">
+            Filters variables for bulk assignment to only those whose names
+            contain the entered value.
+          </p>
+        </div>
       </Stack>
     </TabItem>
   )
