@@ -1,7 +1,13 @@
 /** @jsx h */
-import { h } from 'preact'
+import { type JSX, h } from 'preact'
 
-import { Stack } from '@create-figma-plugin/ui'
+import {
+  Checkbox,
+  Dropdown,
+  type DropdownOption,
+  Stack,
+  Text,
+} from '@create-figma-plugin/ui'
 import { useMount, useUnmount } from 'react-use'
 
 import TabItem from '@/ui/components/TabItem'
@@ -9,7 +15,42 @@ import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function Utilities() {
-  const { settings } = useSettings()
+  const { settings, updateSettings } = useSettings()
+
+  const targetTextRangeDropdownOptions: DropdownOption[] &
+    {
+      value: TargetTextRange
+    }[] = [
+    {
+      text: 'Current page',
+      value: 'currentPage',
+    },
+    {
+      text: 'Selection',
+      value: 'selection',
+    },
+    {
+      text: 'All pages',
+      value: 'allPages',
+    },
+  ]
+
+  function handleTargetTextRangeChange(
+    event: JSX.TargetedEvent<HTMLInputElement>,
+  ) {
+    const targetTextRange = event.currentTarget.value as TargetTextRange
+    updateSettings({
+      utilitiesTargetTextRange: targetTextRange,
+    })
+  }
+
+  function handleCheckboxChange(key: keyof Settings) {
+    return (event: JSX.TargetedEvent<HTMLInputElement>) => {
+      updateSettings({
+        [key]: event.currentTarget.checked,
+      })
+    }
+  }
 
   useMount(async () => {
     console.log('Utilities: mounted')
@@ -35,7 +76,35 @@ export default function Utilities() {
           />
         </div>
 
-        <div className="h-[300px] bg-gray-100" />
+        <div className="flex flex-col gap-1">
+          <div>Target text range</div>
+          <Dropdown
+            onChange={handleTargetTextRangeChange}
+            options={targetTextRangeDropdownOptions}
+            value={settings.utilitiesTargetTextRange}
+          />
+          <p className="text-text-secondary">
+            Applies actions to text layers within the specified range
+          </p>
+        </div>
+
+        <Checkbox
+          onChange={handleCheckboxChange('utilitiesIsIncludeComponents')}
+          value={settings.utilitiesIsIncludeComponents}
+        >
+          {/* チェックボックスのラベル */}
+          <Text>Include text within components</Text>
+        </Checkbox>
+
+        <Checkbox
+          onChange={handleCheckboxChange('utilitiesIsIncludeInstances')}
+          value={settings.utilitiesIsIncludeInstances}
+        >
+          {/* チェックボックスのラベル */}
+          <Text>Include text within instances</Text>
+        </Checkbox>
+
+        <div className="h-[200px] bg-gray-100" />
       </Stack>
     </TabItem>
   )
