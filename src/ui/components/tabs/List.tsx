@@ -11,6 +11,7 @@ import {
 import { useMount, useUnmount } from 'react-use'
 
 import Empty from '@/ui/components/Empty'
+import FormItem from '@/ui/components/FormItem'
 import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import TabItem from '@/ui/components/TabItem'
 import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
@@ -87,22 +88,18 @@ export default function List() {
         <VerticalSpace space="medium" />
 
         <Stack space="small">
-          <div className="flex flex-col gap-1">
-            <div>Target collection</div>
-
+          <FormItem title="Target collection">
             <TargetCollectionDropdown
               settingKey="listTargetCollection"
               value={settings.listTargetCollection}
               defaultValue={null}
             />
-          </div>
+          </FormItem>
 
           {settings.listTargetCollection && (
-            <div className="flex flex-col gap-1">
-              <div>Display mode</div>
-
+            <FormItem title="Display mode">
               <ListDisplayModeDropdown />
-            </div>
+            </FormItem>
           )}
         </Stack>
 

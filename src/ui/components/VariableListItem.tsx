@@ -133,7 +133,7 @@ export default function VariableListItem({
       />
 
       {selected && (
-        <div className="mt-1 flex flex-col gap-1">
+        <div className="mt-1">
           <Button secondary fullWidth onClick={handleApplyClick}>
             Assign the selected variable to the text
           </Button>

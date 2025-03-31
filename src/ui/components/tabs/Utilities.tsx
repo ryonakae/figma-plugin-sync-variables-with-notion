@@ -12,6 +12,7 @@ import {
 } from '@create-figma-plugin/ui'
 import { useMount, useUnmount } from 'react-use'
 
+import FormItem from '@/ui/components/FormItem'
 import TabItem from '@/ui/components/TabItem'
 import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import useSettings from '@/ui/hooks/useSettings'
@@ -79,8 +80,7 @@ export default function Utilities() {
   return (
     <TabItem>
       <Stack space="small">
-        <div className="flex flex-col gap-1">
-          <div>Target collection</div>
+        <FormItem title="Target collection">
           <TargetCollectionDropdown
             settingKey="utilitiesTargetCollection"
             value={settings.utilitiesTargetCollection}
@@ -90,19 +90,18 @@ export default function Utilities() {
             }}
             defaultValue="all"
           />
-        </div>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
-          <div>Target text range</div>
+        <FormItem
+          title="Target text range"
+          description="Applies actions to text layers within the specified range"
+        >
           <Dropdown
             onChange={handleTargetTextRangeChange}
             options={targetTextRangeDropdownOptions}
             value={settings.utilitiesTargetTextRange}
           />
-          <p className="text-text-secondary">
-            Applies actions to text layers within the specified range
-          </p>
-        </div>
+        </FormItem>
 
         <Checkbox
           onChange={handleCheckboxChange('utilitiesIsIncludeComponents')}
@@ -120,9 +119,11 @@ export default function Utilities() {
           <Text>Include text within instances</Text>
         </Checkbox>
 
-        <div className="flex flex-col gap-1">
-          <div>Limit variable name</div>
-
+        <FormItem
+          title="Limit variable name"
+          description="Filters variables for bulk assignment to only those whose names
+            contain the entered value."
+        >
           <div className="flex gap-1">
             <div className="flex-1">
               <Textbox
@@ -136,12 +137,7 @@ export default function Utilities() {
               <Button onClick={handleIncludeKeyPropertyNameClear}>Clear</Button>
             )}
           </div>
-
-          <p className="text-text-secondary">
-            Filters variables for bulk assignment to only those whose names
-            contain the entered value.
-          </p>
-        </div>
+        </FormItem>
       </Stack>
     </TabItem>
   )

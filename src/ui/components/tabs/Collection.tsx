@@ -13,6 +13,7 @@ import { emit } from '@create-figma-plugin/utilities'
 import { useMount, useUnmount } from 'react-use'
 
 import CollectionModesList from '@/ui/components/CollectionModesList'
+import FormItem from '@/ui/components/FormItem'
 import TabItem from '@/ui/components/TabItem'
 import useNotion from '@/ui/hooks/useNotion'
 import useSettings from '@/ui/hooks/useSettings'
@@ -96,32 +97,29 @@ export default function Collection() {
       <Stack space="small">
         <div className="font-bold">Notion settings</div>
 
-        <div className="flex flex-col gap-1">
-          <div>Database ID</div>
+        <FormItem title="Database ID">
           <Textbox
             onInput={handleInput('notionDatabaseId')}
             value={settings.notionDatabaseId}
             disabled={tmpSettings.loading}
           />
-        </div>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
-          <div>Integration token</div>
+        <FormItem title="Integration token">
           <Textbox
             onInput={handleInput('notionIntegrationToken')}
             value={settings.notionIntegrationToken}
             disabled={tmpSettings.loading}
           />
-        </div>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
-          <div>Key property name</div>
+        <FormItem title="Key property name">
           <Textbox
             onInput={handleInput('notionKeyPropertyName')}
             value={settings.notionKeyPropertyName}
             disabled={tmpSettings.loading}
           />
-        </div>
+        </FormItem>
       </Stack>
 
       <VerticalSpace space="large" />
@@ -129,8 +127,7 @@ export default function Collection() {
       <Stack space="small">
         <div className="font-bold">Figma variable collection settings</div>
 
-        <div className="flex flex-col gap-1">
-          <div>Collection name to create or update</div>
+        <FormItem title="Collection name to create or update">
           <TextboxAutocomplete
             filter
             onInput={handleInput('figmaCollectionName')}
@@ -140,22 +137,19 @@ export default function Collection() {
             }))}
             disabled={tmpSettings.loading}
           />
-        </div>
+        </FormItem>
 
-        <div className="flex flex-col gap-2">
-          <div>Add or reorder modes</div>
-
+        <FormItem
+          title="Add or reorder modes"
+          description="Set the language to be added as a mode. Please add and reorder the
+            property names corresponding to each language in Notion (e.g., ja,
+            en)."
+        >
           <CollectionModesList
             values={settings.notionValuePropertyNames}
             onChange={handleModesChange}
           />
-
-          <p className="text-text-secondary">
-            Set the language to be added as a mode. Please add and reorder the
-            property names corresponding to each language in Notion (e.g., ja,
-            en).
-          </p>
-        </div>
+        </FormItem>
       </Stack>
 
       <VerticalSpace space="large" />
