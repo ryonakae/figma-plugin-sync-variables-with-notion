@@ -1,5 +1,5 @@
 import {
-  DEFAULT_CLIENT_STORSGE_SETTINGS,
+  DEFAULT_CLIENT_STORAGE_SETTINGS,
   DEFAULT_DOCUMENT_SETTINGS,
   SETTINGS_KEY,
 } from '@/constants'
@@ -18,7 +18,7 @@ export default async function loadSettings() {
 
   // clientStorageSettingsを取得
   const clientStorageSettings = await loadSettingsAsync<ClientStorageSettings>(
-    DEFAULT_CLIENT_STORSGE_SETTINGS,
+    DEFAULT_CLIENT_STORAGE_SETTINGS,
     SETTINGS_KEY,
   )
   console.log('clientStorageSettings', clientStorageSettings)

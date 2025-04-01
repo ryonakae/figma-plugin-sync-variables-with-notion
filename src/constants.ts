@@ -13,7 +13,7 @@ export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
   figmaCollectionName: '',
 }
 
-export const DEFAULT_CLIENT_STORSGE_SETTINGS: ClientStorageSettings = {
+export const DEFAULT_CLIENT_STORAGE_SETTINGS: ClientStorageSettings = {
   // common
   selectedTab: 'Create/Update Collection',
 
