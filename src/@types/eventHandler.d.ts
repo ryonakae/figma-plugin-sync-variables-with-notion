@@ -32,8 +32,8 @@ declare global {
     handler: (windowSize: { width: number; height: number }) => void
   }
 
-  interface CreateOrUpdateCollectionFromUI extends EventHandler {
-    name: 'CREATE_OR_UPDATE_COLLECTION_FROM_UI'
+  interface SyncCollectionFromUI extends EventHandler {
+    name: 'SYNC_COLLECTION_FROM_UI'
     handler: (options: {
       collectionName: string
       notionKeyValues: NotionKeyValue[]

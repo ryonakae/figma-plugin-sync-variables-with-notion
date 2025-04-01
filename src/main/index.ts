@@ -7,12 +7,12 @@ import {
 
 import { DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
-import createOrUpdateCollection from '@/main/createOrUpdateCollection'
 import getCollections from '@/main/getCollections'
 import getLibraryVariables from '@/main/getLibraryVariables'
 import getLocalVariables from '@/main/getLocalVariables'
 import loadSettings from '@/main/loadSettings'
 import saveSettings from '@/main/saveSettings'
+import syncCollection from '@/main/syncCollection'
 
 export default async function () {
   // set relaunch button
@@ -35,20 +35,17 @@ export default async function () {
     figma.ui.resize(windowSize.width, windowSize.height)
   })
 
-  on<CreateOrUpdateCollectionFromUI>(
-    'CREATE_OR_UPDATE_COLLECTION_FROM_UI',
-    options => {
-      createOrUpdateCollection(options).catch((error: Error) => {
-        emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-          message: error.message,
-          options: {
-            error: true,
-          },
-        })
-        throw new Error(error.message)
+  on<SyncCollectionFromUI>('SYNC_COLLECTION_FROM_UI', options => {
+    syncCollection(options).catch((error: Error) => {
+      emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
+        message: error.message,
+        options: {
+          error: true,
+        },
       })
-    },
-  )
+      throw new Error(error.message)
+    })
+  })
 
   on<GetCollectionsFromUI>('GET_COLLECTIONS_FROM_UI', getCollections)
 

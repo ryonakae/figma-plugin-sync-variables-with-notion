@@ -121,8 +121,7 @@ export default function Utilities() {
 
         <FormItem
           title="Limit variable name"
-          description="Filters variables for bulk assignment to only those whose names
-            contain the entered value."
+          description="Only variables with names containing this text will be used for bulk assignment."
         >
           <div className="flex gap-1">
             <div className="flex-1">

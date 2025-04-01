@@ -111,12 +111,12 @@ function getOrCreateTargetVariable(
   return targetVariable
 }
 
-export default async function createOrUpdateCollection(options: {
+export default async function syncCollection(options: {
   collectionName: string
   notionKeyValues: NotionKeyValue[]
   notionValuePropertyNames: string[]
 }) {
-  console.log('createOrUpdateCollection', options)
+  console.log('syncCollection', options)
 
   // コレクションを取得
   const targetCollection = await getTargetCollection(options.collectionName)

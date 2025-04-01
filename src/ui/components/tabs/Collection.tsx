@@ -44,13 +44,13 @@ export default function Collection() {
     })
   }
 
-  async function handleCreateOrUpdateCollectionClick() {
+  async function handleSyncClick() {
     updateTmpSettings({
       loading: true,
     })
 
     emit<NotifyFromUI>('NOTIFY_FROM_UI', {
-      message: 'Please wait a moment.',
+      message: 'Syncing...',
     })
 
     // keyValuesRefをクリア
@@ -73,14 +73,11 @@ export default function Collection() {
 
     console.log('fetch done', keyValuesRef.current)
 
-    emit<CreateOrUpdateCollectionFromUI>(
-      'CREATE_OR_UPDATE_COLLECTION_FROM_UI',
-      {
-        collectionName: settings.figmaCollectionName,
-        notionKeyValues: keyValuesRef.current,
-        notionValuePropertyNames: settings.notionValuePropertyNames,
-      },
-    )
+    emit<SyncCollectionFromUI>('SYNC_COLLECTION_FROM_UI', {
+      collectionName: settings.figmaCollectionName,
+      notionKeyValues: keyValuesRef.current,
+      notionValuePropertyNames: settings.notionValuePropertyNames,
+    })
   }
 
   useMount(async () => {
@@ -141,9 +138,7 @@ export default function Collection() {
 
         <FormItem
           title="Add or reorder modes"
-          description="Set the language to be added as a mode. Please add and reorder the
-            property names corresponding to each language in Notion (e.g., ja,
-            en)."
+          description="Add and reorder language modes. Specify property names for each language in Notion (e.g., 'ja', 'en')."
         >
           <CollectionModesList
             values={settings.notionValuePropertyNames}
@@ -156,7 +151,7 @@ export default function Collection() {
 
       <Button
         fullWidth
-        onClick={handleCreateOrUpdateCollectionClick}
+        onClick={handleSyncClick}
         disabled={
           !settings.notionDatabaseId ||
           !settings.notionIntegrationToken ||
@@ -168,7 +163,7 @@ export default function Collection() {
         loading={tmpSettings.loading}
         className="!h-8"
       >
-        Create or update variable collection from Notion database
+        Sync variable collection with Notion
       </Button>
     </TabItem>
   )

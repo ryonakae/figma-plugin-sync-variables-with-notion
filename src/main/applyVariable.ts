@@ -3,7 +3,7 @@ export default async function applyVariable(variable: VariableForUI) {
 
   if (figma.currentPage.selection.length === 0) {
     // 何も選択していない場合は処理を終了
-    figma.notify('1つ以上の要素を選択してください')
+    figma.notify('Please select at least one element.')
     return
   }
 
@@ -22,7 +22,7 @@ export default async function applyVariable(variable: VariableForUI) {
 
   // textNodeが1つも無かったら処理を中断
   if (textNodes.length === 0) {
-    figma.notify('テキストが1つも選択されていません')
+    figma.notify('No text elements are selected.')
     return
   }
 
@@ -43,5 +43,5 @@ export default async function applyVariable(variable: VariableForUI) {
   }
 
   // 完了通知
-  figma.notify('選択したテキストにバリアブルを割り当てました')
+  figma.notify('Variable assigned to selected text.')
 }
