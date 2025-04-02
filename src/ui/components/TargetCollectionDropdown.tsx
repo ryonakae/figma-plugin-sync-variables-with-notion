@@ -3,7 +3,7 @@ import { Fragment, type JSX, h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import { Dropdown, type DropdownOption, Textbox } from '@create-figma-plugin/ui'
-import { useUpdateEffect } from 'react-use'
+import { useMount, useUnmount, useUpdateEffect } from 'react-use'
 
 import useSettings from '@/ui/hooks/useSettings'
 
@@ -162,6 +162,20 @@ export default function TargetCollectionDropdown({
       updateSettings({ [settingKey]: defaultValue })
     }
   }
+
+  useMount(() => {
+    console.log(
+      'TargetCollectionDropdown mounted',
+      settingKey,
+      value,
+      initialOption,
+      defaultValue,
+    )
+  })
+
+  useUnmount(() => {
+    console.log('TargetCollectionDropdown unmounted')
+  })
 
   // localCollections または libraryCollections が変更されたときにドロップダウンオプションを更新
   useUpdateEffect(() => {
