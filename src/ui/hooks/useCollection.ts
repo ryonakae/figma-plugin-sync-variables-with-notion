@@ -11,13 +11,6 @@ export default function useCollection() {
     })
   }
 
-  function isLocalVariableCollection(
-    collection: LocalVariableCollectionForUI | LibraryVariableCollection,
-  ): collection is LocalVariableCollectionForUI {
-    // LocalVariableCollectionForUIには'id'があり、LibraryVariableCollectionには'key'がある
-    return 'id' in collection && !('libraryName' in collection)
-  }
-
   function getLocalVariables(
     targetCollection: LocalVariableCollectionForUI,
   ): Promise<VariableForUI[]> {
@@ -26,7 +19,6 @@ export default function useCollection() {
         'SET_LOCAL_VARIABLES_FROM_MAIN',
         variables => resolve(variables),
       )
-
       emit<GetLocalVariablesFromUI>(
         'GET_LOCAL_VARIABLES_FROM_UI',
         targetCollection,
@@ -42,7 +34,6 @@ export default function useCollection() {
         'SET_LIBRARY_VARIABLES_FROM_MAIN',
         variables => resolve(variables),
       )
-
       emit<GetLibraryVariablesFromUI>(
         'GET_LIBRARY_VARIABLES_FROM_UI',
         targetCollection,
@@ -50,10 +41,17 @@ export default function useCollection() {
     })
   }
 
+  function isLocalVariableCollection(
+    collection: LocalVariableCollectionForUI | LibraryVariableCollection,
+  ): collection is LocalVariableCollectionForUI {
+    // LocalVariableCollectionForUIには'id'があり、LibraryVariableCollectionには'key'がある
+    return 'id' in collection && !('libraryName' in collection)
+  }
+
   return {
     getCollections,
-    isLocalVariableCollection,
     getLocalVariables,
     getLibraryVariables,
+    isLocalVariableCollection,
   }
 }
