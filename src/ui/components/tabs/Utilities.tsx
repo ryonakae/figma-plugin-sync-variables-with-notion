@@ -29,12 +29,12 @@ export default function Utilities() {
       value: TargetTextRange
     }[] = [
     {
-      text: 'Current page',
-      value: 'currentPage',
-    },
-    {
       text: 'Selection',
       value: 'selection',
+    },
+    {
+      text: 'Current page',
+      value: 'currentPage',
     },
     {
       text: 'All pages',

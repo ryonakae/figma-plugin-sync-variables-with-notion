@@ -26,7 +26,7 @@ export const DEFAULT_CLIENT_STORAGE_SETTINGS: ClientStorageSettings = {
 
   // utilities
   utilitiesTargetCollection: 'all',
-  utilitiesTargetTextRange: 'currentPage',
+  utilitiesTargetTextRange: 'selection',
   utilitiesIsIncludeComponents: true,
   utilitiesIsIncludeInstances: false,
   utilitiesIncludeKeyPropertyName: '',

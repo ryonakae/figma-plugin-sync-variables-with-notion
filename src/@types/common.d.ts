@@ -6,7 +6,7 @@ declare global {
   type SortValue = 'key' | 'value' | 'created_time' | 'last_edited_time'
   type SortOrder = 'ascending' | 'descending'
 
-  type TargetTextRange = 'currentPage' | 'selection' | 'allPages'
+  type TargetTextRange = 'selection' | 'currentPage' | 'allPages'
 
   type PluginLanguage = 'en' | 'ja'
 
