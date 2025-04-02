@@ -82,7 +82,7 @@ export default function Utilities() {
   return (
     <TabItem>
       <Stack space="small">
-        <div>Settings for actions</div>
+        <div className="font-bold">Settings for actions</div>
 
         <FormItem title="Target collection">
           <TargetCollectionDropdown
@@ -150,7 +150,7 @@ export default function Utilities() {
       <VerticalSpace space="medium" />
 
       <Stack space="small">
-        <div>Select an action</div>
+        <div className="font-bold">Select an action</div>
 
         {/* 一括適用アクション */}
         <FormItem description="Bulk apply variables to text. Applies variables when the text string matches the variable value. Searches across multiple modes if available.">
