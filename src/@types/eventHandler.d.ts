@@ -78,4 +78,23 @@ declare global {
     name: 'APPLY_VARIABLE_FROM_UI'
     handler: (variable: VariableForUI) => void
   }
+
+  interface BulkApplyVariablesFromUI extends EventHandler {
+    name: 'BULK_APPLY_VARIABLES_FROM_UI'
+    handler: (options: {
+      collection:
+        | 'all'
+        | LocalVariableCollectionForUI
+        | LibraryVariableCollection
+      targetTextRange: TargetTextRange
+      isIncludeComponents: boolean
+      isIncludeInstances: boolean
+      includeKeyPropertyName?: string
+    }) => void
+  }
+
+  interface HighlightTextFromUI extends EventHandler {
+    name: 'HIGHLIGHT_TEXT_FROM_UI'
+    handler: (targetTextRange: TargetTextRange) => void
+  }
 }

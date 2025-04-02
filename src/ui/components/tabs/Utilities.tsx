@@ -18,9 +18,11 @@ import FormItem from '@/ui/components/FormItem'
 import TabItem from '@/ui/components/TabItem'
 import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import useSettings from '@/ui/hooks/useSettings'
+import { emit } from '@create-figma-plugin/utilities'
 
 export default function Utilities() {
-  const { settings, updateSettings } = useSettings()
+  const { settings, tmpSettings, updateSettings, updateTmpSettings } =
+    useSettings()
 
   const targetTextRangeDropdownOptions: DropdownOption[] &
     {
@@ -69,6 +71,31 @@ export default function Utilities() {
     updateSettings({
       utilitiesIncludeKeyPropertyName: '',
     })
+  }
+
+  function handleBulkApplyVariablesClick() {
+    updateTmpSettings({
+      loading: true,
+    })
+
+    emit<BulkApplyVariablesFromUI>('BULK_APPLY_VARIABLES_FROM_UI', {
+      collection: settings.utilitiesTargetCollection,
+      targetTextRange: settings.utilitiesTargetTextRange,
+      isIncludeComponents: settings.utilitiesIsIncludeComponents,
+      isIncludeInstances: settings.utilitiesIsIncludeInstances,
+      includeKeyPropertyName: settings.utilitiesIncludeKeyPropertyName,
+    })
+  }
+
+  function handleHighlightTextClick() {
+    updateTmpSettings({
+      loading: true,
+    })
+
+    emit<HighlightTextFromUI>(
+      'HIGHLIGHT_TEXT_FROM_UI',
+      settings.utilitiesTargetTextRange,
+    )
   }
 
   useMount(async () => {
@@ -156,7 +183,10 @@ export default function Utilities() {
         <FormItem description="Bulk apply variables to text. Applies variables when the text string matches the variable value. Searches across multiple modes if available.">
           <Button
             fullWidth
-            disabled={!settings.utilitiesTargetCollection}
+            onClick={handleBulkApplyVariablesClick}
+            disabled={
+              !settings.utilitiesTargetCollection || tmpSettings.loading
+            }
             className="!h-8"
           >
             Bulk apply variables
@@ -165,7 +195,12 @@ export default function Utilities() {
 
         {/* ハイライトアクション */}
         <FormItem description="Visualize variable applications in text. Text with applied variables will be highlighted in blue, while text without applications will be highlighted in red.">
-          <Button fullWidth className="!h-8">
+          <Button
+            fullWidth
+            onClick={handleHighlightTextClick}
+            disabled={tmpSettings.loading}
+            className="!h-8"
+          >
             Highlight applied variables
           </Button>
         </FormItem>

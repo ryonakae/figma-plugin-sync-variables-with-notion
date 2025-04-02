@@ -7,9 +7,11 @@ import {
 
 import { DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
+import bulkApplyVariables from '@/main/bulkApplyVariables'
 import getCollections from '@/main/getCollections'
 import getLibraryVariables from '@/main/getLibraryVariables'
 import getLocalVariables from '@/main/getLocalVariables'
+import highlightText from '@/main/highlightText'
 import loadSettings from '@/main/loadSettings'
 import saveSettings from '@/main/saveSettings'
 import syncCollection from '@/main/syncCollection'
@@ -57,6 +59,13 @@ export default async function () {
   on<GetLocalVariablesFromUI>('GET_LOCAL_VARIABLES_FROM_UI', getLocalVariables)
 
   on<ApplyVariableFromUI>('APPLY_VARIABLE_FROM_UI', applyVariable)
+
+  on<BulkApplyVariablesFromUI>(
+    'BULK_APPLY_VARIABLES_FROM_UI',
+    bulkApplyVariables,
+  )
+
+  on<HighlightTextFromUI>('HIGHLIGHT_TEXT_FROM_UI', highlightText)
 
   // ちょっとdelayさせてからUI側にsettingsを送る（たまにエラーが出るので）
   setTimeout(() => {
