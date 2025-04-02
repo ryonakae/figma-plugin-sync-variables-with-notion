@@ -121,9 +121,13 @@ export default function useNotion(props: useNotionProps) {
         },
         body: JSON.stringify(reqParams),
       },
-    ).catch(() => {
-      throw new Error(errorMessages.fetchFailed)
+    ).catch((e: Error) => {
+      throw new Error(`${errorMessages.fetchFailed}: ${e.message}`)
     })
+
+    if (!res.ok) {
+      throw new Error(`${errorMessages.fetchFailed} (${res.status})`)
+    }
 
     const resJson = await res.json()
     console.log(resJson)

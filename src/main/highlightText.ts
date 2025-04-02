@@ -50,14 +50,15 @@ async function createHighlightRectOnPage(
           textNode.absoluteRenderBounds.height,
         )
 
-        console.log('boundVariables', textNode.boundVariables)
+        console.log(
+          'boundVariables',
+          textNode.boundVariables,
+          textNode.inferredVariables,
+        )
 
-        // boundVariables.characters またはinferredVariables.characters がある場合は、rectを青で塗りつぶす
+        // boundVariables.characters がある場合は、rectを青で塗りつぶす
         // ない場合は、rectを赤で塗りつぶす
-        if (
-          textNode.boundVariables?.characters ||
-          textNode.inferredVariables?.characters
-        ) {
+        if (textNode.boundVariables?.characters) {
           rect.fills = [
             { type: 'SOLID', color: { r: 0, g: 0, b: 1 }, opacity: 0.3 },
           ]
@@ -67,8 +68,6 @@ async function createHighlightRectOnPage(
 
           if (textNode.boundVariables?.characters) {
             variableId = textNode.boundVariables.characters.id
-          } else if (textNode.inferredVariables?.characters) {
-            variableId = textNode.inferredVariables?.characters[0].id
           }
 
           const variable =
