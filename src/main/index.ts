@@ -37,8 +37,8 @@ export default async function () {
     figma.ui.resize(windowSize.width, windowSize.height)
   })
 
-  on<SyncCollectionFromUI>('SYNC_COLLECTION_FROM_UI', options => {
-    syncCollection(options).catch((error: Error) => {
+  on<SyncCollectionFromUI>('SYNC_COLLECTION_FROM_UI', async options => {
+    await syncCollection(options).catch((error: Error) => {
       emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
         message: error.message,
         options: {
