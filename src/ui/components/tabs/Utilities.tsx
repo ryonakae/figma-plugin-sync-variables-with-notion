@@ -98,7 +98,7 @@ export default function Utilities() {
 
         <FormItem
           title="Target text range"
-          description="Applies actions to text layers within the specified range"
+          description="Applies actions to text layers within the specified range."
         >
           <Dropdown
             onChange={handleTargetTextRangeChange}
