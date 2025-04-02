@@ -112,8 +112,6 @@ export default function List() {
       <div className="h-[450px]">
         {!settings.listTargetCollection ? (
           <Empty>Please select the collection</Empty>
-        ) : tmpSettings.loadingVariables ? (
-          <Empty>Loading variables...</Empty>
         ) : variables.length === 0 ? (
           <Empty>No string variables available</Empty>
         ) : (
