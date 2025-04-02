@@ -1,6 +1,10 @@
 import { emit, once } from '@create-figma-plugin/utilities'
 
+import useSettings from '@/ui/hooks/useSettings'
+
 export default function useCollection() {
+  const { updateTmpSettings } = useSettings()
+
   function getCollections(): Promise<{
     localCollections: LocalVariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
@@ -30,6 +34,10 @@ export default function useCollection() {
     targetCollection: LibraryVariableCollection,
   ): Promise<VariableForUI[]> {
     return new Promise((resolve, _reject) => {
+      updateTmpSettings({
+        loadingVariables: true,
+      })
+
       once<SetLibraryVariablesFromMain>(
         'SET_LIBRARY_VARIABLES_FROM_MAIN',
         variables => resolve(variables),
@@ -38,6 +46,10 @@ export default function useCollection() {
         'GET_LIBRARY_VARIABLES_FROM_UI',
         targetCollection,
       )
+
+      updateTmpSettings({
+        loadingVariables: false,
+      })
     })
   }
 

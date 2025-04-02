@@ -109,19 +109,17 @@ export default function List() {
       <Divider />
 
       {/* list */}
-      {!settings.listTargetCollection ? (
-        <div className="h-[200px]">
+      <div className="h-[450px]">
+        {!settings.listTargetCollection ? (
           <Empty>Please select the collection</Empty>
-        </div>
-      ) : (
-        <div className="h-[450px]">
-          {variables.length > 0 ? (
-            <VariableList variables={variables} />
-          ) : (
-            <Empty>No string variables available</Empty>
-          )}
-        </div>
-      )}
+        ) : tmpSettings.loadingVariables ? (
+          <Empty>Loading variables...</Empty>
+        ) : variables.length === 0 ? (
+          <Empty>No string variables available</Empty>
+        ) : (
+          <VariableList variables={variables} />
+        )}
+      </div>
     </TabItem>
   )
 }

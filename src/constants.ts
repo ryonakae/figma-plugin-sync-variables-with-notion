@@ -3,6 +3,7 @@ export const CACHE_KEY = 'sync-variables-with-notion-cache'
 export const GROUP_ID_KEY = 'sync-variables-with-notion-group-id'
 
 export const DEFAULT_WIDTH = 400
+export const DEFAULT_HEIGHT = 400
 
 export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
   // collection
@@ -34,6 +35,7 @@ export const DEFAULT_CLIENT_STORAGE_SETTINGS: ClientStorageSettings = {
 
 export const DEFAULT_TMP_SETTINGS: TmpSettings = {
   loading: false,
+  loadingVariables: false,
   localCollections: [],
   libraryCollections: [],
 }

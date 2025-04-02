@@ -6,6 +6,7 @@ import { Tabs, type TabsOption } from '@create-figma-plugin/ui'
 import { emit, on, once } from '@create-figma-plugin/utilities'
 import { useMount, useUpdateEffect } from 'react-use'
 
+import Empty from '@/ui/components/Empty'
 import Collection from '@/ui/components/tabs/Collection'
 import List from '@/ui/components/tabs/List'
 import Utilities from '@/ui/components/tabs/Utilities'
@@ -87,7 +88,7 @@ export default function App() {
     handleSelectedTabUpdate()
   }, [settings.selectedTab])
 
-  if (!settingsLoaded) return null
+  if (!settingsLoaded) return <Empty>Loading...</Empty>
 
   return (
     <div id="wrapper">

@@ -6,11 +6,10 @@ import { Dropdown, type DropdownOption, Textbox } from '@create-figma-plugin/ui'
 
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
-import { emit, once } from '@create-figma-plugin/utilities'
 
 export default function ListDisplayModeDropdown() {
   const { settings, updateSettings } = useSettings()
-  const { isLocalVariableCollection } = useCollection()
+  const { getLibraryVariables, isLocalVariableCollection } = useCollection()
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([])
   const [isDropdownReady, setIsDropdownReady] = useState(false)
 
@@ -55,18 +54,8 @@ export default function ListDisplayModeDropdown() {
 
     // LibraryVariableCollectionの場合: variableを取得し、そのmodeの配列をdropdownOptionsに設定
     else {
-      const variablesInLibraryCollection = await new Promise<VariableForUI[]>(
-        (resolve, _reject) => {
-          once<SetLibraryVariablesFromMain>(
-            'SET_LIBRARY_VARIABLES_FROM_MAIN',
-            resolve,
-          )
-          emit<GetLibraryVariablesFromUI>(
-            'GET_LIBRARY_VARIABLES_FROM_UI',
-            targetCollection,
-          )
-        },
-      )
+      const variablesInLibraryCollection =
+        await getLibraryVariables(targetCollection)
       console.log('variablesInLibraryCollection', variablesInLibraryCollection)
 
       const valuesByMode = variablesInLibraryCollection[0].valuesByMode

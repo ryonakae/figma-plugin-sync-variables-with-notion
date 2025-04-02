@@ -5,7 +5,7 @@ import {
   showUI,
 } from '@create-figma-plugin/utilities'
 
-import { DEFAULT_WIDTH } from '@/constants'
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
 import bulkApplyVariables from '@/main/bulkApplyVariables'
 import getCollections from '@/main/getCollections'
@@ -23,7 +23,7 @@ export default async function () {
   // show ui
   showUI({
     width: DEFAULT_WIDTH,
-    height: 0,
+    height: DEFAULT_HEIGHT,
   })
 
   // register event handlers
