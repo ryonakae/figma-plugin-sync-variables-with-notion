@@ -43,5 +43,5 @@ export default async function applyVariable(variable: VariableForUI) {
   }
 
   // 完了通知
-  figma.notify('Variable assigned to selected text.')
+  figma.notify('Variable applied to selected text.')
 }

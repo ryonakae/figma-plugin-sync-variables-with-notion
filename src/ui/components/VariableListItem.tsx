@@ -135,7 +135,7 @@ export default function VariableListItem({
       {selected && (
         <div className="mt-1">
           <Button secondary fullWidth onClick={handleApplyClick}>
-            Assign variable to selected text
+            Apply variable to selected text
           </Button>
         </div>
       )}

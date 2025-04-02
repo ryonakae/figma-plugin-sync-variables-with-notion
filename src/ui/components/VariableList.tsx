@@ -304,7 +304,7 @@ export default function VariableList({ variables }: VariableListProps) {
       <div className="flex h-8 items-center justify-between px-2 text-text-secondary">
         <div className="flex items-center gap-1">
           <FontAwesomeIcon icon={faCircleInfo} />
-          <span>Click a row to assign or copy the variable to the text</span>
+          <span>Click a row to apply the variable to the text</span>
         </div>
         <span>{listItems.length} items</span>
       </div>
