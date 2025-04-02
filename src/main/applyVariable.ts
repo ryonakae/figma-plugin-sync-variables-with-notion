@@ -1,3 +1,5 @@
+import { emit } from '@create-figma-plugin/utilities'
+
 export default async function applyVariable(variable: VariableForUI) {
   console.log('applyVariable', applyVariable)
 
@@ -42,6 +44,8 @@ export default async function applyVariable(variable: VariableForUI) {
     textNode.setBoundVariable('characters', targetVariable)
   }
 
-  // 完了通知
-  figma.notify('Variable applied to selected text.')
+  // 処理終了
+  emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
+    message: 'Variables applied successfully.',
+  })
 }

@@ -166,6 +166,6 @@ export default async function syncCollection(options: {
 
   // 処理終了
   emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-    message: 'Create or update collection done.',
+    message: 'Collection synced successfully.',
   })
 }
