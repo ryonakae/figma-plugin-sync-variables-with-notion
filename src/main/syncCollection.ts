@@ -111,6 +111,26 @@ function getOrCreateTargetVariable(
   return targetVariable
 }
 
+// NotionKeyValueの配列を受け取り、keyが重複している場合にkey名を変更する関数
+function getUniqNotionKeyValues(
+  notionKeyValues: NotionKeyValue[],
+): NotionKeyValue[] {
+  const seenKeys = new Map<string, boolean>()
+  return notionKeyValues.map(item => {
+    if (seenKeys.has(item.key)) {
+      // 重複している場合はkey名を変更
+      const newKey = `[Duplicated] ${item.key} (${item.id})`
+      console.warn(
+        `Duplicate key found: "${item.key}". Renaming to "${newKey}" for item ID: ${item.id}`,
+      )
+      return { ...item, key: newKey }
+    }
+    // 初めて見るキーの場合はMapに追加
+    seenKeys.set(item.key, true)
+    return item
+  })
+}
+
 export default async function syncCollection(options: {
   collectionName: string
   notionKeyValues: NotionKeyValue[]
@@ -147,8 +167,11 @@ export default async function syncCollection(options: {
     }
   }
 
+  // Notionから取得したデータ内でKeyが重複している場合、バリアブルの作成に失敗するためユニークなキーに変更する
+  const uniqNotionKeyValues = getUniqNotionKeyValues(options.notionKeyValues)
+
   // notionKeyValuesの各要素に対して処理を実行
-  for (const notionKeyValue of options.notionKeyValues) {
+  for (const notionKeyValue of uniqNotionKeyValues) {
     // 対象のVariableを取得もしくは作成
     const targetVariable = getOrCreateTargetVariable(
       notionKeyValue.key,
