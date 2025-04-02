@@ -90,7 +90,7 @@ export default async function bulkApplyVariables(options: {
 
   if (!options.isIncludeComponents || !options.isIncludeInstances) {
     // isIncludeComponentsがfalse、またはisIncludeInstancesがfalseの場合、filterTextNodesを実行
-    textNodes = filterTextNodes(textNodes, {
+    textNodes = await filterTextNodes(textNodes, {
       isIncludeComponents: options.isIncludeComponents,
       isIncludeInstances: options.isIncludeInstances,
     })

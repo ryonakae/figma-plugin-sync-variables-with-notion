@@ -30,7 +30,11 @@ export default function TargetCollectionDropdown({
     localCollections: LocalVariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
   }) {
-    console.log('updateDropdownOptions Base', options, initialOption)
+    console.log(
+      'TargetCollectionDropdown: updateDropdownOptions',
+      options,
+      initialOption,
+    )
 
     // 基本となるドロップダウンオプションを初期化
     let newDropdownOptions: DropdownOption[] = []

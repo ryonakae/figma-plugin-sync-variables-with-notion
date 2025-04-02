@@ -23,32 +23,38 @@ export function getIsNodeParentComponentOrVariants(node: SceneNode) {
 }
 
 // nodeのidから先祖インスタンスの配列を返す関数（自分は含まない）
-export function getAncestorInstances(node: SceneNode) {
+export async function getAncestorInstances(node: SceneNode) {
   const instanceArray: InstanceNode[] = []
 
   // idをセミコロンで区切って配列にしたもの
   const idArray = node.id.split(';')
 
-  idArray.map((id, i) => {
-    if (i === idArray.length - 1) {
-      return
-    }
+  // 非同期処理を並列実行するためのPromise配列を生成
+  const promises = idArray.map(async (id, i) => {
+    // 最後のidは除外
+    if (i === idArray.length - 1) return
 
     // indexに応じてidを加工
-    let targetId = ''
-    if (i === 0) {
-      targetId = idArray[i]
-    } else {
-      const arr: string[] = []
-      times(i + 1).map(j => arr.push(idArray[j]))
-      targetId = arr.join(';')
+    const targetId =
+      i === 0
+        ? idArray[i]
+        : times(i + 1)
+            .map(j => idArray[j])
+            .join(';')
+
+    try {
+      // 加工したidを元にインスタンスを検索
+      const instance = await figma.getNodeByIdAsync(targetId)
+      if (instance && instance.type === 'INSTANCE') {
+        instanceArray.push(instance as InstanceNode)
+      }
+    } catch (error) {
+      console.error(`Failed to get instance with id: ${targetId}`, error)
     }
-
-    // 加工したidを元にインスタンスを検索
-    const instance = figma.getNodeById(targetId) as InstanceNode
-
-    instanceArray.push(instance)
   })
+
+  // すべての非同期処理が完了するのを待つ
+  await Promise.all(promises)
 
   return instanceArray
 }
@@ -112,7 +118,7 @@ export async function getTextNodes(targetTextRange: TargetTextRange) {
 }
 
 // textNodesをフィルタリングする関数
-export function filterTextNodes(
+export async function filterTextNodes(
   textNodes: TextNode[],
   options: {
     isIncludeComponents: boolean
@@ -145,15 +151,15 @@ export function filterTextNodes(
   // → インスタンスの子要素をtextNodesToRemoveに追加
   if (!options.isIncludeInstances) {
     console.log('textNodes', textNodes)
-    textNodes.forEach(textNode => {
+    for (const textNode of textNodes) {
       console.log('Checking textNode (instance child):', textNode.characters)
 
-      const ancestorInstances = getAncestorInstances(textNode)
+      const ancestorInstances = await getAncestorInstances(textNode)
       if (ancestorInstances.length > 0) {
         console.log('Removing textNode (instance child):', textNode.characters)
         textNodesToRemove.push(textNode)
       }
-    })
+    }
   }
 
   // textNodesToRemoveから重複を削除

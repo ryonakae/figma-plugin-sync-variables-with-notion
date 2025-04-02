@@ -22,7 +22,10 @@ export default function ListDisplayModeDropdown() {
   async function updateDropdownOptions(
     targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
   ) {
-    console.log('updateDropdownOptions', targetCollection)
+    console.log(
+      'ListDisplayModeDropdown: updateDropdownOptions',
+      targetCollection,
+    )
 
     setIsDropdownReady(false)
 
@@ -117,7 +120,7 @@ export default function ListDisplayModeDropdown() {
           value={settings.listDisplayModeId}
         />
       ) : (
-        <Textbox disabled value="" />
+        <Textbox disabled value="Loading modes..." />
       )}
     </Fragment>
   )
