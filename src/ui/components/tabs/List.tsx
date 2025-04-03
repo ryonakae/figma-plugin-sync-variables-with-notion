@@ -21,7 +21,7 @@ import useSettings from '@/ui/hooks/useSettings'
 
 export default function List() {
   const { settings, tmpSettings } = useSettings()
-  const { isLocalVariableCollection, getLocalVariables, getLibraryVariables } =
+  const { isLocalCollection, getLocalVariables, getLibraryVariables } =
     useCollection()
   const [variables, setVariables] = useState<VariableForUI[]>([])
 
@@ -35,7 +35,7 @@ export default function List() {
 
     let newVariables: VariableForUI[] = []
 
-    if (isLocalVariableCollection(targetCollection)) {
+    if (isLocalCollection(targetCollection)) {
       newVariables = await getLocalVariables(targetCollection)
     } else {
       newVariables = await getLibraryVariables(targetCollection)

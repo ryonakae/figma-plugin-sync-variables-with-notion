@@ -41,17 +41,23 @@ export default function useCollection() {
     })
   }
 
-  function isLocalVariableCollection(
+  function isLocalCollection(
     collection: LocalVariableCollectionForUI | LibraryVariableCollection,
   ): collection is LocalVariableCollectionForUI {
-    // LocalVariableCollectionForUIには'id'があり、LibraryVariableCollectionには'key'がある
     return 'id' in collection && !('libraryName' in collection)
+  }
+
+  function isLibraryCollection(
+    collection: LocalVariableCollectionForUI | LibraryVariableCollection,
+  ): collection is LibraryVariableCollection {
+    return 'key' in collection
   }
 
   return {
     getCollections,
     getLocalVariables,
     getLibraryVariables,
-    isLocalVariableCollection,
+    isLocalCollection,
+    isLibraryCollection,
   }
 }

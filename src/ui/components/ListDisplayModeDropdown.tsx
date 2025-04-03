@@ -9,7 +9,7 @@ import useSettings from '@/ui/hooks/useSettings'
 
 export default function ListDisplayModeDropdown() {
   const { settings, updateSettings } = useSettings()
-  const { getLibraryVariables, isLocalVariableCollection } = useCollection()
+  const { getLibraryVariables, isLocalCollection } = useCollection()
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([])
   const [isDropdownReady, setIsDropdownReady] = useState(false)
 
@@ -32,7 +32,7 @@ export default function ListDisplayModeDropdown() {
     let displayModeId = ''
 
     // LocalVariableCollectionの場合: modeの配列をdropdownOptionsに設定
-    if (isLocalVariableCollection(targetCollection)) {
+    if (isLocalCollection(targetCollection)) {
       newDropdownOptions = targetCollection.modes.map(mode => ({
         text: mode.name,
         value: mode.modeId,

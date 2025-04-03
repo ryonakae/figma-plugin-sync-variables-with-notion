@@ -31,7 +31,7 @@ type VariableListProps = {
 
 export default function VariableList({ variables }: VariableListProps) {
   const { settings, updateSettings } = useSettings()
-  const { isLocalVariableCollection } = useCollection()
+  const { isLocalCollection } = useCollection()
   const listWrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const [listItems, { filter, reset }] = useList<VariableForUI>(variables)
@@ -97,7 +97,7 @@ export default function VariableList({ variables }: VariableListProps) {
       const targetCollection = settings.listTargetCollection
       if (!targetCollection) return
 
-      const collectionId = isLocalVariableCollection(targetCollection)
+      const collectionId = isLocalCollection(targetCollection)
         ? targetCollection.id
         : targetCollection.key
       const selectedListItemId = settings.listSelectedListItems[collectionId]
@@ -135,7 +135,7 @@ export default function VariableList({ variables }: VariableListProps) {
     const targetCollection = settings.listTargetCollection
     if (!targetCollection) return false
 
-    const collectionId = isLocalVariableCollection(targetCollection)
+    const collectionId = isLocalCollection(targetCollection)
       ? targetCollection.id
       : targetCollection.key
 
@@ -152,7 +152,7 @@ export default function VariableList({ variables }: VariableListProps) {
 
         console.log('scrollPosition update (debounced)', tmpScrollPosition)
 
-        const collectionId = isLocalVariableCollection(targetCollection)
+        const collectionId = isLocalCollection(targetCollection)
           ? targetCollection.id
           : targetCollection.key
 
@@ -200,7 +200,7 @@ export default function VariableList({ variables }: VariableListProps) {
       const targetCollection = settings.listTargetCollection
       if (!targetCollection) return
 
-      const collectionId = isLocalVariableCollection(targetCollection)
+      const collectionId = isLocalCollection(targetCollection)
         ? targetCollection.id
         : targetCollection.key
       const savedPosition = settings.listScrollPositions[collectionId] ?? 0
