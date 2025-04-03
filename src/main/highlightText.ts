@@ -115,6 +115,7 @@ export default async function highlightText(targetTextRange: TargetTextRange) {
   console.log('highlightText', targetTextRange)
 
   // ハイライトを実行
+  // allPagesの場合、各ページごとに処理を実行
   if (targetTextRange === 'allPages') {
     for (const page of figma.root.children) {
       // まず対象のpageNodeに移動
@@ -127,6 +128,7 @@ export default async function highlightText(targetTextRange: TargetTextRange) {
       await createHighlightRectOnPage(textNodes, page)
     }
   } else {
+    // allPages以外の場合
     // targetTextRangeに基づいてテキストを取得
     const textNodes = await getTextNodes(targetTextRange)
 

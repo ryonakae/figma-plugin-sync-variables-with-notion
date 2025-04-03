@@ -39,7 +39,6 @@ export default function ListDisplayModeDropdown() {
       }))
 
       // settings.listDisplayModeIdがnullではなく、かつtargetCollection.modesに存在する場合は、settings.listDisplayModeIdをセット
-      // そうではない場合は、最初のモードidをセット
       if (
         settings.listDisplayModeId &&
         targetCollection.modes.some(
@@ -48,12 +47,11 @@ export default function ListDisplayModeDropdown() {
       ) {
         displayModeId = settings.listDisplayModeId
       } else {
+        // そうではない場合は、最初のモードidをセット
         displayModeId = targetCollection.modes[0].modeId
       }
-    }
-
-    // LibraryVariableCollectionの場合: variableを取得し、そのmodeの配列をdropdownOptionsに設定
-    else {
+    } else {
+      // LibraryVariableCollectionの場合: variableを取得し、そのmodeの配列をdropdownOptionsに設定
       const variablesInLibraryCollection =
         await getLibraryVariables(targetCollection)
       console.log('variablesInLibraryCollection', variablesInLibraryCollection)

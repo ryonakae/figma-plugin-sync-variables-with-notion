@@ -53,13 +53,12 @@ function updateModeFromValuePropertyNames(
       return
     }
 
-    // 1つめの言語の場合はmodeを追加せず、名前を変更する
     if (index === 0) {
+      // 1つめの言語の場合、modeを追加せず、名前を変更する
       const modeId = targetCollection.modes[0].modeId
       targetCollection.renameMode(modeId, valuePropertyName)
-    }
-    // それ以外の場合
-    else {
+    } else {
+      // それ以外の場合
       targetCollection.addMode(valuePropertyName)
     }
   })
@@ -99,9 +98,8 @@ function getOrCreateTargetVariable(
       targetCollection,
       'STRING',
     )
-  }
-  // 一致するものがある場合はそれを使う
-  else {
+  } else {
+    // 一致するものがある場合はそれを使う
     targetVariable = sameNameVariable
   }
 
@@ -116,6 +114,7 @@ function getUniqNotionKeyValues(
   notionKeyValues: NotionKeyValue[],
 ): NotionKeyValue[] {
   const seenKeys = new Map<string, boolean>()
+
   return notionKeyValues.map(item => {
     if (seenKeys.has(item.key)) {
       // 重複している場合はkey名を変更
@@ -125,6 +124,7 @@ function getUniqNotionKeyValues(
       )
       return { ...item, key: newKey }
     }
+
     // 初めて見るキーの場合はMapに追加
     seenKeys.set(item.key, true)
     return item
