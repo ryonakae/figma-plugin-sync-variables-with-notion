@@ -61,7 +61,7 @@ declare global {
 
   interface SetLocalVariablesFromMain extends EventHandler {
     name: 'SET_LOCAL_VARIABLES_FROM_MAIN'
-    handler: (variables: VariableForUI[]) => void
+    handler: (variablesForUI: VariableForUI[]) => void
   }
 
   interface GetLibraryVariablesFromUI extends EventHandler {
@@ -71,12 +71,12 @@ declare global {
 
   interface SetLibraryVariablesFromMain extends EventHandler {
     name: 'SET_LIBRARY_VARIABLES_FROM_MAIN'
-    handler: (variables: VariableForUI[]) => void
+    handler: (variablesForUI: VariableForUI[]) => void
   }
 
   interface ApplyVariableFromUI extends EventHandler {
     name: 'APPLY_VARIABLE_FROM_UI'
-    handler: (variable: VariableForUI) => void
+    handler: (variableForUI: VariableForUI) => void
   }
 
   interface BulkApplyVariablesFromUI extends EventHandler {

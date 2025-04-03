@@ -13,7 +13,7 @@ async function getLocalVariables(
 
   // コレクションがなかったらエラーを投げて処理を終了
   if (localCollections.length === 0) {
-    throw new Error('ローカルコレクションが見つかりませんでした')
+    throw new Error('No local collections found.')
   }
 
   // localCollectionsからidがoptions.collectionと同じものを探してtargetCollectionに設定
@@ -23,7 +23,7 @@ async function getLocalVariables(
 
   // targetCollectionが見つからなかったらエラーを投げて処理を終了
   if (!targetCollection) {
-    throw new Error('対象のローカルコレクションが見つかりませんでした')
+    throw new Error('Target local collection not found.')
   }
 
   // すべてのローカルVariablesを取得 (stringのみ)
@@ -31,7 +31,7 @@ async function getLocalVariables(
 
   // ローカルVariablesがなかったらエラーを投げて処理を終了
   if (localVariables.length === 0) {
-    throw new Error('ローカルバリアブルが見つかりませんでした')
+    throw new Error('No local variables found.')
   }
 
   // ローカルVariablesからvariableCollectionIdがtargetCollectionと同じものを探して、配列に格納
@@ -93,7 +93,7 @@ export default async function bulkApplyVariables(options: {
   if (textNodes.length === 0) {
     // textNodeが1つもなかったら処理を終了
     emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-      message: 'テキストが見つかりませんでした',
+      message: 'No text nodes found.',
     })
 
     return
@@ -121,7 +121,7 @@ export default async function bulkApplyVariables(options: {
             ]
           })
           .catch((error: Error) => {
-            console.error('Error fetching local variables:', error.message)
+            throw new Error(error.message)
           })
       }
     }
@@ -142,7 +142,7 @@ export default async function bulkApplyVariables(options: {
             ]
           })
           .catch((error: Error) => {
-            console.error('Error fetching library variables:', error.message)
+            throw new Error(error.message)
           })
       }
     }
@@ -152,9 +152,6 @@ export default async function bulkApplyVariables(options: {
     // ローカルコレクションにあるバリアブルを取得し、variablesInTargetCollectionに追加
     const localVariables = await getLocalVariables(options.collection).catch(
       (error: Error) => {
-        emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-          message: error.message,
-        })
         throw new Error(error.message)
       },
     )
@@ -169,9 +166,6 @@ export default async function bulkApplyVariables(options: {
     const libraryVariables = await getLibraryVariables(
       options.collection,
     ).catch((error: Error) => {
-      emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-        message: error.message,
-      })
       throw new Error(error.message)
     })
     variablesInTargetCollection = [
@@ -183,7 +177,7 @@ export default async function bulkApplyVariables(options: {
   if (variablesInTargetCollection.length === 0) {
     // variablesInTargetCollectionが空なら処理を終了
     emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-      message: 'コレクション内にバリアブルが見つかりませんでした',
+      message: 'No variables found in the collection.',
     })
     return
   }
@@ -228,6 +222,6 @@ export default async function bulkApplyVariables(options: {
 
   // 処理終了
   emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-    message: `${setBoundVariableCount}個のテキストにバリアブルを一括で割り当てました`,
+    message: `Bulk applied variables to ${setBoundVariableCount} text elements.`,
   })
 }

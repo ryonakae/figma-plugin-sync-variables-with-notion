@@ -9,8 +9,9 @@ import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
 import bulkApplyVariables from '@/main/bulkApplyVariables'
 import getCollections from '@/main/getCollections'
-import getLibraryVariables from '@/main/getLibraryVariables'
+import getLibraryVariablesForUI from '@/main/getLibraryVariablesForUI'
 import getLocalVariables from '@/main/getLocalVariables'
+import handleError from '@/main/handleError'
 import highlightText from '@/main/highlightText'
 import { loadSettings, saveSettings } from '@/main/settings'
 import syncCollection from '@/main/syncCollection'
@@ -38,30 +39,77 @@ export default async function () {
 
   on<SyncCollectionFromUI>('SYNC_COLLECTION_FROM_UI', async options => {
     await syncCollection(options).catch((error: Error) => {
-      emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-        message: error.message,
-        options: {
-          error: true,
-        },
-      })
+      handleError(error)
       throw new Error(error.message)
+    })
+
+    emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
+      message: 'Collection synced successfully.',
     })
   })
 
-  on<GetCollectionsFromUI>('GET_COLLECTIONS_FROM_UI', getCollections)
+  on<GetCollectionsFromUI>('GET_COLLECTIONS_FROM_UI', async () => {
+    const collections = await getCollections().catch((error: Error) => {
+      handleError(error)
+      throw new Error(error.message)
+    })
+
+    emit<SetCollectionsFromMain>('SET_COLLECTIONS_FROM_MAIN', collections)
+  })
 
   on<GetLibraryVariablesFromUI>(
     'GET_LIBRARY_VARIABLES_FROM_UI',
-    getLibraryVariables,
+    async targetCollection => {
+      const variablesForUI = await getLibraryVariablesForUI(
+        targetCollection,
+      ).catch((error: Error) => {
+        handleError(error)
+        throw new Error(error.message)
+      })
+
+      emit<SetLibraryVariablesFromMain>(
+        'SET_LIBRARY_VARIABLES_FROM_MAIN',
+        variablesForUI,
+      )
+    },
   )
 
-  on<GetLocalVariablesFromUI>('GET_LOCAL_VARIABLES_FROM_UI', getLocalVariables)
+  on<GetLocalVariablesFromUI>(
+    'GET_LOCAL_VARIABLES_FROM_UI',
+    async targetCollection => {
+      const variablesForUI = await getLocalVariables(targetCollection).catch(
+        (error: Error) => {
+          handleError(error)
+          throw new Error(error.message)
+        },
+      )
 
-  on<ApplyVariableFromUI>('APPLY_VARIABLE_FROM_UI', applyVariable)
+      emit<SetLocalVariablesFromMain>(
+        'SET_LOCAL_VARIABLES_FROM_MAIN',
+        variablesForUI,
+      )
+    },
+  )
+
+  on<ApplyVariableFromUI>('APPLY_VARIABLE_FROM_UI', async variable => {
+    await applyVariable(variable).catch((error: Error) => {
+      handleError(error)
+      throw new Error(error.message)
+    })
+
+    emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
+      message: 'Variable applied successfully.',
+    })
+  })
 
   on<BulkApplyVariablesFromUI>(
     'BULK_APPLY_VARIABLES_FROM_UI',
-    bulkApplyVariables,
+    async options => {
+      await bulkApplyVariables(options).catch((error: Error) => {
+        handleError(error)
+        throw new Error(error.message)
+      })
+    },
   )
 
   on<HighlightTextFromUI>('HIGHLIGHT_TEXT_FROM_UI', highlightText)

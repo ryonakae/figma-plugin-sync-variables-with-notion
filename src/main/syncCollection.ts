@@ -186,9 +186,4 @@ export default async function syncCollection(options: {
       targetVariable.setValueForMode(mode.modeId, value)
     }
   }
-
-  // 処理終了
-  emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-    message: 'Collection synced successfully.',
-  })
 }

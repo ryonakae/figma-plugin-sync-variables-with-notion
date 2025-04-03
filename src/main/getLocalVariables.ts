@@ -4,7 +4,7 @@ export default async function getLocalVariables(
   targetCollection: LocalVariableCollectionForUI,
 ) {
   // Variablesを定義
-  let variables: VariableForUI[] = []
+  let variablesForUI: VariableForUI[] = []
 
   // Variablesを絞り込むためのコレクションIDを定義
   let collectionId: string | null = null
@@ -30,7 +30,7 @@ export default async function getLocalVariables(
     const taretVariables = localVariables.filter(
       variable => variable.variableCollectionId === collectionId,
     )
-    variables = taretVariables.map(variable => ({
+    variablesForUI = taretVariables.map(variable => ({
       id: variable.id,
       name: variable.name,
       description: variable.description,
@@ -43,6 +43,5 @@ export default async function getLocalVariables(
     }))
   }
 
-  // Variableの配列をUIに送信
-  emit<SetLocalVariablesFromMain>('SET_LOCAL_VARIABLES_FROM_MAIN', variables)
+  return variablesForUI
 }

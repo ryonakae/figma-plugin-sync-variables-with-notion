@@ -36,8 +36,8 @@ export default async function applyVariable(variable: VariableForUI) {
         variable.id,
       )
 
+      // targetVariableが見つからなかったら処理をスキップ
       if (!targetVariable) {
-        // targetVariableが見つからなかったら処理をスキップ
         return
       }
 
@@ -45,9 +45,4 @@ export default async function applyVariable(variable: VariableForUI) {
       textNode.setBoundVariable('characters', targetVariable)
     }),
   )
-
-  // 処理終了
-  emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-    message: 'Variables applied successfully.',
-  })
 }

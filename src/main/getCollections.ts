@@ -1,5 +1,3 @@
-import { emit } from '@create-figma-plugin/utilities'
-
 export default async function getCollections() {
   const localCollections =
     await figma.variables.getLocalVariableCollectionsAsync()
@@ -14,8 +12,8 @@ export default async function getCollections() {
     await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync()
   console.log('libraryCollections', libraryCollections)
 
-  emit<SetCollectionsFromMain>('SET_COLLECTIONS_FROM_MAIN', {
+  return {
     localCollections: localCollectionsForUI,
     libraryCollections,
-  })
+  }
 }

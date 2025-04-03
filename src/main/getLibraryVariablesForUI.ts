@@ -1,8 +1,6 @@
-import { emit } from '@create-figma-plugin/utilities'
-
 import getLibraryVariablesWithCache from '@/main/getLibraryVariablesWithCache'
 
-export default async function getLibraryVariables(
+export default async function getLibraryVariablesForUI(
   targetCollection: LibraryVariableCollection,
 ) {
   const importedVariables = await getLibraryVariablesWithCache(
@@ -28,9 +26,5 @@ export default async function getLibraryVariables(
     }),
   )
 
-  // variablesForUIをUIに送る
-  emit<SetLibraryVariablesFromMain>(
-    'SET_LIBRARY_VARIABLES_FROM_MAIN',
-    variablesForUI,
-  )
+  return variablesForUI
 }
