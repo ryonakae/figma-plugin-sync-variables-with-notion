@@ -242,7 +242,7 @@ export default function VariableList({ variables }: VariableListProps) {
         <div className="flex items-center gap-1">
           <FontAwesomeIcon icon={faFilter} className="text-text-secondary" />
 
-          <div className="ml-1 flex-1">
+          <div className="[&>div]:!select-auto ml-1 flex-1">
             <Textbox
               onInput={handleInput}
               value={settings.listFilterString}
@@ -306,7 +306,7 @@ export default function VariableList({ variables }: VariableListProps) {
           <FontAwesomeIcon icon={faCircleInfo} />
           <span>Click a row to apply the variable to the text</span>
         </div>
-        <span>{listItems.length} items</span>
+        <span>{listItems.length} variables</span>
       </div>
     </div>
   )

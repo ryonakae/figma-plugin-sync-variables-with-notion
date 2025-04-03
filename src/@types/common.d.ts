@@ -66,6 +66,7 @@ declare global {
 
   type TmpSettings = {
     loading: boolean
+    loadingVariables: boolean
     localCollections: LocalVariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
   }

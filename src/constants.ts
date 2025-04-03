@@ -35,6 +35,7 @@ export const DEFAULT_CLIENT_STORAGE_SETTINGS: ClientStorageSettings = {
 
 export const DEFAULT_TMP_SETTINGS: TmpSettings = {
   loading: false,
+  loadingVariables: false,
   localCollections: [],
   libraryCollections: [],
 }

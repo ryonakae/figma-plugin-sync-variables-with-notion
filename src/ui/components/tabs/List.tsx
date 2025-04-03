@@ -1,5 +1,5 @@
 /** @jsx h */
-import { h } from 'preact'
+import { Fragment, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
 import {
@@ -21,7 +21,7 @@ import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
 export default function List() {
-  const { settings, tmpSettings } = useSettings()
+  const { settings, tmpSettings, updateTmpSettings } = useSettings()
   const {
     isLocalCollection,
     isLibraryCollection,
@@ -35,6 +35,10 @@ export default function List() {
     targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
   ) {
     console.log('updateVariables', targetCollection)
+
+    updateTmpSettings({
+      loadingVariables: true,
+    })
 
     // いったんvariableを空にする
     setVariables([])
@@ -59,6 +63,10 @@ export default function List() {
     console.log('newVariables', newVariables, newVariables.length)
 
     setVariables(newVariables)
+
+    updateTmpSettings({
+      loadingVariables: false,
+    })
   }
 
   function handleRefreshClick() {
@@ -117,14 +125,20 @@ export default function List() {
 
             {settings.listTargetCollection &&
               isLibraryCollection(settings.listTargetCollection) && (
-                <div className="flex items-center justify-between">
-                  <div className="text-text-secondary">
-                    This collection is cached.
-                  </div>
+                <div className="flex h-6 items-center justify-between">
+                  {tmpSettings.loadingVariables ? (
+                    <div>Updating...</div>
+                  ) : (
+                    <Fragment>
+                      <div className="text-text-secondary">
+                        This collection is cached.
+                      </div>
 
-                  <Button secondary onClick={handleRefreshClick}>
-                    Refresh
-                  </Button>
+                      <Button secondary onClick={handleRefreshClick}>
+                        Refresh
+                      </Button>
+                    </Fragment>
+                  )}
                 </div>
               )}
           </FormItem>
@@ -144,7 +158,15 @@ export default function List() {
       {/* list */}
       <div className="h-[450px]">
         {!settings.listTargetCollection ? (
-          <Empty>Please select the collection</Empty>
+          <Empty className="p-4">
+            <div>Please select the collection</div>
+            <div>
+              Initial loading might be slow for library collections with too
+              many variables.
+            </div>
+          </Empty>
+        ) : tmpSettings.loadingVariables ? (
+          <Empty>Loading variables...</Empty>
         ) : variables.length === 0 ? (
           <Empty>No string variables available</Empty>
         ) : (

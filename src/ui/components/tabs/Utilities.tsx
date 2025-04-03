@@ -155,7 +155,7 @@ export default function Utilities() {
           description="Only variables with names containing this text will be used for bulk apply."
         >
           <div className="flex gap-1">
-            <div className="flex-1">
+            <div className="[&>div]:!select-auto flex-1">
               <Textbox
                 value={settings.utilitiesIncludeKeyPropertyName}
                 onInput={handleIncludeKeyPropertyNameInput}
