@@ -53,11 +53,16 @@ export default function useCollection() {
     return 'key' in collection
   }
 
+  function clearCache(libraryCollectionKey: string) {
+    emit<clearCacheFromUI>('CLEAR_CACHE_FROM_UI', libraryCollectionKey)
+  }
+
   return {
     getCollections,
     getLocalVariables,
     getLibraryVariables,
     isLocalCollection,
     isLibraryCollection,
+    clearCache,
   }
 }

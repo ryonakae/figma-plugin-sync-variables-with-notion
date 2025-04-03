@@ -54,7 +54,7 @@ export async function loadCache(
 }
 
 export async function clearCache(libraryCollectionKey: string) {
-  console.log('clearCache: start')
+  console.log('clearCache: start', libraryCollectionKey)
 
   const currentCache = await loadSettingsAsync<ClientStorageCache>(
     {},

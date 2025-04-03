@@ -8,6 +8,7 @@ import {
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
 import bulkApplyVariables from '@/main/bulkApplyVariables'
+import { clearCache } from '@/main/cache'
 import getCollections from '@/main/getCollections'
 import getLibraryVariablesForUI from '@/main/getLibraryVariablesForUI'
 import getLocalVariables from '@/main/getLocalVariables'
@@ -113,6 +114,8 @@ export default async function () {
   )
 
   on<HighlightTextFromUI>('HIGHLIGHT_TEXT_FROM_UI', highlightText)
+
+  on<clearCacheFromUI>('CLEAR_CACHE_FROM_UI', clearCache)
 
   // ちょっとdelayさせてからUI側にsettingsを送る（たまにエラーが出るので）
   setTimeout(() => {

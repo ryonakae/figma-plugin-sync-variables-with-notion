@@ -97,4 +97,9 @@ declare global {
     name: 'HIGHLIGHT_TEXT_FROM_UI'
     handler: (targetTextRange: TargetTextRange) => void
   }
+
+  interface clearCacheFromUI extends EventHandler {
+    name: 'CLEAR_CACHE_FROM_UI'
+    handler: (libraryCollectionKey: string) => void
+  }
 }

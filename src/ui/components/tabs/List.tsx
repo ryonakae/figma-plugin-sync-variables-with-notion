@@ -3,6 +3,7 @@ import { h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
 import {
+  Button,
   Container,
   Divider,
   Stack,
@@ -21,8 +22,13 @@ import useSettings from '@/ui/hooks/useSettings'
 
 export default function List() {
   const { settings, tmpSettings } = useSettings()
-  const { isLocalCollection, getLocalVariables, getLibraryVariables } =
-    useCollection()
+  const {
+    isLocalCollection,
+    isLibraryCollection,
+    getLocalVariables,
+    getLibraryVariables,
+    clearCache,
+  } = useCollection()
   const [variables, setVariables] = useState<VariableForUI[]>([])
 
   async function updateVariables(
@@ -53,6 +59,20 @@ export default function List() {
     console.log('newVariables', newVariables, newVariables.length)
 
     setVariables(newVariables)
+  }
+
+  function handleRefreshClick() {
+    const targetCollection = settings.listTargetCollection
+
+    if (!targetCollection || !isLibraryCollection(targetCollection)) {
+      return
+    }
+
+    clearCache(targetCollection.key)
+
+    setTimeout(() => {
+      updateVariables(targetCollection)
+    }, 100)
   }
 
   useMount(async () => {
@@ -94,6 +114,19 @@ export default function List() {
               value={settings.listTargetCollection}
               defaultValue={null}
             />
+
+            {settings.listTargetCollection &&
+              isLibraryCollection(settings.listTargetCollection) && (
+                <div className="flex items-center justify-between">
+                  <div className="text-text-secondary">
+                    This collection is cached.
+                  </div>
+
+                  <Button secondary onClick={handleRefreshClick}>
+                    Refresh
+                  </Button>
+                </div>
+              )}
           </FormItem>
 
           {settings.listTargetCollection && (
