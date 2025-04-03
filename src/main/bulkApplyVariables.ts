@@ -1,6 +1,6 @@
 import { emit } from '@create-figma-plugin/utilities'
 
-import { loadCache, saveCache } from '@/main/cache'
+import getLibraryVariablesWithCache from '@/main/getLibraryVariablesWithCache'
 import { filterTextNodes, getTextNodes } from '@/main/util'
 
 // ローカルコレクションにあるバリアブルを取得する関数
@@ -48,34 +48,7 @@ async function getLocalVariables(
 async function getLibraryVariables(
   collection: LibraryVariableCollection,
 ): Promise<Variable[]> {
-  let importedVariables: Variable[] = []
-
-  // キャッシュを検索
-  const cachedVariables = await loadCache(collection.key)
-
-  // キャッシュがあればそれを使う
-  if (cachedVariables) {
-    importedVariables = cachedVariables
-  } else {
-    // キャッシュがなければ、Variablesを取得してインポート
-    const libraryVariables =
-      await figma.teamLibrary.getVariablesInLibraryCollectionAsync(
-        collection.key,
-      )
-
-    // バリアブルをロードして配列に追加
-    await Promise.all(
-      libraryVariables.map(async libraryVariable => {
-        const importedVariable = await figma.variables.importVariableByKeyAsync(
-          libraryVariable.key,
-        )
-        importedVariables.push(importedVariable)
-      }),
-    )
-
-    // importedVariablesをキャッシュに保存
-    await saveCache(collection.key, importedVariables)
-  }
+  let importedVariables = await getLibraryVariablesWithCache(collection.key)
 
   // importedVariablesを、resolvedTypeがstringのもの &
   // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
