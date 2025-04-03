@@ -88,7 +88,7 @@ export default function App() {
     handleSelectedTabUpdate()
   }, [settings.selectedTab])
 
-  if (!settingsLoaded) return <Empty>Loading...</Empty>
+  if (!settingsLoaded) return null
 
   return (
     <div id="wrapper">

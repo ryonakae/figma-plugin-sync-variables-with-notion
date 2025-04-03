@@ -143,11 +143,9 @@ export default function List() {
               )}
           </FormItem>
 
-          {settings.listTargetCollection && (
-            <FormItem title="Display mode">
-              <ListDisplayModeDropdown />
-            </FormItem>
-          )}
+          <FormItem title="Display mode">
+            <ListDisplayModeDropdown />
+          </FormItem>
         </Stack>
 
         <VerticalSpace space="medium" />

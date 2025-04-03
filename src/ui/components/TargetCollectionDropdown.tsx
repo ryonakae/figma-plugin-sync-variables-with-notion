@@ -185,7 +185,6 @@ export default function TargetCollectionDropdown({
     })
   }, [tmpSettings.localCollections, tmpSettings.libraryCollections])
 
-  // レンダリング
   return (
     <Fragment>
       {isDropdownReady ? (

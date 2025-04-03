@@ -3,7 +3,7 @@ export const CACHE_KEY = 'sync-variables-with-notion-cache'
 export const GROUP_ID_KEY = 'sync-variables-with-notion-group-id'
 
 export const DEFAULT_WIDTH = 400
-export const DEFAULT_HEIGHT = 400
+export const DEFAULT_HEIGHT = 0
 
 export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
   // collection

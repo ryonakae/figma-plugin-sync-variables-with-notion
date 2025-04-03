@@ -106,6 +106,8 @@ export default function ListDisplayModeDropdown() {
           options={dropdownOptions}
           value={settings.listDisplayModeId}
         />
+      ) : !settings.listTargetCollection ? (
+        <Textbox disabled value="" />
       ) : (
         <Textbox disabled value="Loading modes..." />
       )}
