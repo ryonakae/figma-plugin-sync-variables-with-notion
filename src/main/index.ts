@@ -113,7 +113,16 @@ export default async function () {
     },
   )
 
-  on<HighlightTextFromUI>('HIGHLIGHT_TEXT_FROM_UI', highlightText)
+  on<HighlightTextFromUI>('HIGHLIGHT_TEXT_FROM_UI', async targetTextRange => {
+    await highlightText(targetTextRange).catch((error: Error) => {
+      handleError(error)
+      throw new Error(error.message)
+    })
+
+    emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
+      message: 'Highlighted applied variables.',
+    })
+  })
 
   on<clearCacheFromUI>('CLEAR_CACHE_FROM_UI', clearCache)
 

@@ -82,11 +82,7 @@ export async function getTextNodes(targetTextRange: TargetTextRange) {
   } else if (targetTextRange === 'selection') {
     // 何も選択していない場合は処理を終了
     if (figma.currentPage.selection.length === 0) {
-      emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-        message: '1つ以上の要素を選択してください',
-      })
-
-      return textNodes
+      throw new Error('Please select at least one element.')
     }
 
     figma.currentPage.selection.forEach(node => {

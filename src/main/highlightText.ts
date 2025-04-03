@@ -11,11 +11,7 @@ async function createHighlightRectOnPage(
 
   // textNodesが空の場合は処理を終了
   if (textNodes.length === 0) {
-    emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-      message: 'テキストが見つかりませんでした',
-    })
-
-    return
+    throw new Error('No text was found.')
   }
 
   // Rectangleを格納する配列を用意
@@ -135,9 +131,4 @@ export default async function highlightText(targetTextRange: TargetTextRange) {
     // ハイライト
     await createHighlightRectOnPage(textNodes, figma.currentPage)
   }
-
-  // 処理終了
-  emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-    message: 'Hghlighted applied variables.',
-  })
 }

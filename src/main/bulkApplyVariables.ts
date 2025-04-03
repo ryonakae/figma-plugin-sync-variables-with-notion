@@ -90,13 +90,9 @@ export default async function bulkApplyVariables(options: {
 
   console.log('filterd textNodes', textNodes)
 
+  // textNodeが1つもなかったら処理を終了
   if (textNodes.length === 0) {
-    // textNodeが1つもなかったら処理を終了
-    emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-      message: 'No text nodes found.',
-    })
-
-    return
+    throw new Error('No text nodes found.')
   }
 
   // variablesInTargetCollectionを定義
@@ -174,12 +170,9 @@ export default async function bulkApplyVariables(options: {
     ]
   }
 
+  // variablesInTargetCollectionが空なら処理を終了
   if (variablesInTargetCollection.length === 0) {
-    // variablesInTargetCollectionが空なら処理を終了
-    emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-      message: 'No variables found in the collection.',
-    })
-    return
+    throw new Error('No variables found in the collection.')
   }
 
   // includeKeyPropertyNameが指定されている場合、variablesInTargetCollectionをフィルタリング
