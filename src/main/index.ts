@@ -12,8 +12,7 @@ import getCollections from '@/main/getCollections'
 import getLibraryVariables from '@/main/getLibraryVariables'
 import getLocalVariables from '@/main/getLocalVariables'
 import highlightText from '@/main/highlightText'
-import loadSettings from '@/main/loadSettings'
-import saveSettings from '@/main/saveSettings'
+import { loadSettings, saveSettings } from '@/main/settings'
 import syncCollection from '@/main/syncCollection'
 
 export default async function () {

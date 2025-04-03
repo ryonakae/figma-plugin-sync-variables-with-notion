@@ -70,6 +70,10 @@ declare global {
     libraryCollections: LibraryVariableCollection[]
   }
 
+  type ClientStorageCache = {
+    [libraryCollectionKey: string]: Variable[]
+  }
+
   type ListTargetCollectionDropdownOptionValue = DropdownOptionValue & {
     value: string | null
   }

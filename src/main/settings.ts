@@ -1,8 +1,15 @@
-import { saveSettingsAsync } from '@create-figma-plugin/utilities'
+import {
+  DEFAULT_CLIENT_STORAGE_SETTINGS,
+  DEFAULT_DOCUMENT_SETTINGS,
+  SETTINGS_KEY,
+} from '@/constants'
+import {
+  emit,
+  loadSettingsAsync,
+  saveSettingsAsync,
+} from '@create-figma-plugin/utilities'
 
-import { SETTINGS_KEY } from '@/constants'
-
-export default async function saveSettings(settings: Settings) {
+export async function saveSettings(settings: Settings) {
   console.log('saveSettings: start', settings)
 
   const newDocumentSettings: DocumentSettings = {
@@ -36,4 +43,31 @@ export default async function saveSettings(settings: Settings) {
   )
 
   console.log('saveSettings: done')
+}
+
+export async function loadSettings() {
+  console.log('loadSettings: start')
+
+  // documentSettingsを取得
+  let documentSettings: DocumentSettings = DEFAULT_DOCUMENT_SETTINGS
+  const pluginData = figma.root.getPluginData(SETTINGS_KEY)
+  if (pluginData) {
+    documentSettings = JSON.parse(pluginData)
+  }
+  console.log('documentSettings', documentSettings)
+
+  // clientStorageSettingsを取得
+  const clientStorageSettings = await loadSettingsAsync<ClientStorageSettings>(
+    DEFAULT_CLIENT_STORAGE_SETTINGS,
+    SETTINGS_KEY,
+  )
+  console.log('clientStorageSettings', clientStorageSettings)
+
+  // documentSettingsとclientStorageSettingsをマージ
+  const settings: Settings = { ...documentSettings, ...clientStorageSettings }
+
+  // uiにsettingsを送る
+  emit<LoadSettingsFromMain>('LOAD_SETTINGS_FROM_MAIN', settings)
+
+  console.log('loadSettings: done', settings)
 }

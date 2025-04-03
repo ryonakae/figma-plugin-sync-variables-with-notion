@@ -1,9 +1,10 @@
 import { emit } from '@create-figma-plugin/utilities'
 
+import { loadCache, saveCache } from '@/main/cache'
 import { filterTextNodes, getTextNodes } from '@/main/util'
 
 // ローカルコレクションにあるバリアブルを取得する関数
-async function getVariablesInLocalCollection(
+async function getLocalVariables(
   collection: LocalVariableCollectionForUI,
 ): Promise<Variable[]> {
   // ローカルCollectionを取得
@@ -44,35 +45,53 @@ async function getVariablesInLocalCollection(
 }
 
 // ライブラリコレクションにあるバリアブルを取得する関数
-async function getVariablesInLibraryCollection(
+async function getLibraryVariables(
   collection: LibraryVariableCollection,
 ): Promise<Variable[]> {
-  // ライブラリコレクションにあるバリアブルを取得
-  let libraryVariables =
-    await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key)
+  let importedVariables: Variable[] = []
 
-  // libraryVariablesをSTRINGのみに絞り込む
-  libraryVariables = libraryVariables.filter(
-    variable => variable.resolvedType === 'STRING',
+  // キャッシュを検索
+  const cachedVariables = await loadCache(collection.key)
+
+  // キャッシュがあればそれを使う
+  if (cachedVariables) {
+    importedVariables = cachedVariables
+  } else {
+    // キャッシュがなければ、Variablesを取得してインポート
+    const libraryVariables =
+      await figma.teamLibrary.getVariablesInLibraryCollectionAsync(
+        collection.key,
+      )
+
+    // バリアブルをロードして配列に追加
+    await Promise.all(
+      libraryVariables.map(async libraryVariable => {
+        const importedVariable = await figma.variables.importVariableByKeyAsync(
+          libraryVariable.key,
+        )
+        importedVariables.push(importedVariable)
+      }),
+    )
+
+    // importedVariablesをキャッシュに保存
+    await saveCache(collection.key, importedVariables)
+  }
+
+  // importedVariablesを、resolvedTypeがstringのもの &
+  // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
+  importedVariables = importedVariables.filter(
+    variable =>
+      variable.resolvedType === 'STRING' &&
+      (variable.scopes.includes('ALL_SCOPES') ||
+        variable.scopes.includes('TEXT_CONTENT')),
   )
 
-  // ライブラリバリアブルがなかったらエラーを投げて処理を終了
-  if (libraryVariables.length === 0) {
-    throw new Error('ライブラリバリアブルが見つかりませんでした')
+  // バリアブルがなかったらエラーを投げて処理を終了
+  if (importedVariables.length === 0) {
+    throw new Error('No variables found.')
   }
 
-  // バリアブルを格納する配列を用意
-  const variables: Variable[] = []
-
-  // libraryVariablesをループして、バリアブルをロードして配列に追加
-  for (const libraryVariable of libraryVariables) {
-    const importedVariable = await figma.variables.importVariableByKeyAsync(
-      libraryVariable.key,
-    )
-    variables.push(importedVariable)
-  }
-
-  return variables
+  return importedVariables
 }
 
 // メイン関数
@@ -121,7 +140,7 @@ export default async function bulkApplyVariables(options: {
     // variablesInTargetCollectionに追加
     if (localCollections.length > 0) {
       for (const localCollection of localCollections) {
-        await getVariablesInLocalCollection(localCollection)
+        await getLocalVariables(localCollection)
           .then(localVariables => {
             variablesInTargetCollection = [
               ...variablesInTargetCollection,
@@ -142,7 +161,7 @@ export default async function bulkApplyVariables(options: {
     // variablesInTargetCollectionに追加
     if (libraryCollections.length > 0) {
       for (const libraryCollection of libraryCollections) {
-        await getVariablesInLibraryCollection(libraryCollection)
+        await getLibraryVariables(libraryCollection)
           .then(libraryVariables => {
             variablesInTargetCollection = [
               ...variablesInTargetCollection,
@@ -158,14 +177,14 @@ export default async function bulkApplyVariables(options: {
   // options.collectionがLocalVariableCollectionForUIの場合
   else if ('id' in options.collection) {
     // ローカルコレクションにあるバリアブルを取得し、variablesInTargetCollectionに追加
-    const localVariables = await getVariablesInLocalCollection(
-      options.collection,
-    ).catch((error: Error) => {
-      emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
-        message: error.message,
-      })
-      throw new Error(error.message)
-    })
+    const localVariables = await getLocalVariables(options.collection).catch(
+      (error: Error) => {
+        emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
+          message: error.message,
+        })
+        throw new Error(error.message)
+      },
+    )
     variablesInTargetCollection = [
       ...variablesInTargetCollection,
       ...localVariables,
@@ -174,7 +193,7 @@ export default async function bulkApplyVariables(options: {
   // options.collectionがLibraryVariableCollectionの場合
   else if ('key' in options.collection) {
     // ライブラリコレクションにあるバリアブルを取得し、variablesInTargetCollectionに追加
-    const libraryVariables = await getVariablesInLibraryCollection(
+    const libraryVariables = await getLibraryVariables(
       options.collection,
     ).catch((error: Error) => {
       emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {

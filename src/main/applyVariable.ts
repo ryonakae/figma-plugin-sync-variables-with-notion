@@ -29,20 +29,22 @@ export default async function applyVariable(variable: VariableForUI) {
   }
 
   // textNodeごとに処理を実行
-  for (const textNode of textNodes) {
-    // VariableForUI.idから実際のバリアブルを探す
-    const targetVariable = await figma.variables.getVariableByIdAsync(
-      variable.id,
-    )
+  await Promise.all(
+    textNodes.map(async textNode => {
+      // VariableForUI.idから実際のバリアブルを探す
+      const targetVariable = await figma.variables.getVariableByIdAsync(
+        variable.id,
+      )
 
-    // targetVariableが見つからなかったら処理をスキップ
-    if (!targetVariable) {
-      return
-    }
+      if (!targetVariable) {
+        // targetVariableが見つからなかったら処理をスキップ
+        return
+      }
 
-    // textNodeにVariableを割り当て
-    textNode.setBoundVariable('characters', targetVariable)
-  }
+      // textNodeにVariableを割り当て
+      textNode.setBoundVariable('characters', targetVariable)
+    }),
+  )
 
   // 処理終了
   emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {
