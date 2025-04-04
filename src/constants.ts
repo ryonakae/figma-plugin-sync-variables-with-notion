@@ -16,7 +16,7 @@ export const DEFAULT_DOCUMENT_SETTINGS: DocumentSettings = {
 
 export const DEFAULT_CLIENT_STORAGE_SETTINGS: ClientStorageSettings = {
   // common
-  selectedTab: 'Create/Update Collection',
+  selectedTab: 'Sync collection',
 
   // list
   listTargetCollection: null,

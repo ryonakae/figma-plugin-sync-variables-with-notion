@@ -1,7 +1,7 @@
 import type { DropdownOptionValue } from '@create-figma-plugin/ui'
 
 declare global {
-  type SelectedTab = 'Create/Update Collection' | 'List' | 'Utilities'
+  type SelectedTab = 'Sync collection' | 'List' | 'Utilities'
 
   type SortValue = 'key' | 'value' | 'created_time' | 'last_edited_time'
   type SortOrder = 'ascending' | 'descending'

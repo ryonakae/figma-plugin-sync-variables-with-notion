@@ -28,7 +28,7 @@ export default function App() {
     }[] = [
     {
       children: <Collection />,
-      value: 'Create/Update Collection',
+      value: 'Sync collection',
     },
     {
       children: <List />,
