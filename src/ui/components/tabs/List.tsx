@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   Divider,
+  Modal,
   Stack,
   VerticalSpace,
 } from '@create-figma-plugin/ui'
@@ -30,6 +31,7 @@ export default function List() {
     clearCache,
   } = useCollection()
   const [variables, setVariables] = useState<VariableForUI[]>([])
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
   async function updateVariables(
     targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
@@ -67,6 +69,14 @@ export default function List() {
     updateTmpSettings({
       loadingVariables: false,
     })
+  }
+
+  function handleDetailsClick() {
+    setIsDetailsOpen(true)
+  }
+
+  function handleDetailsCloseClick() {
+    setIsDetailsOpen(false)
   }
 
   function handleRefreshClick() {
@@ -130,8 +140,41 @@ export default function List() {
                     <div>Updating...</div>
                   ) : (
                     <Fragment>
-                      <div className="text-text-secondary">
-                        This collection is cached.
+                      <div className="flex gap-1 text-text-secondary">
+                        <span>This collection is cached.</span>
+                        <button
+                          type="button"
+                          className="text-text-link"
+                          onClick={handleDetailsClick}
+                        >
+                          Details
+                        </button>
+
+                        <Modal
+                          title="Abaout caching"
+                          open={isDetailsOpen}
+                          onCloseButtonClick={handleDetailsCloseClick}
+                          onOverlayClick={handleDetailsCloseClick}
+                          onEscapeKeyDown={handleDetailsCloseClick}
+                        >
+                          <div className="flex w-64 flex-col gap-2 p-4">
+                            <p>
+                              When the target collection is a library
+                              collection, this plugin caches the collection in
+                              Client Storage.
+                            </p>
+                            <p>
+                              This is because retrieving library collections
+                              with a large number of variables can take a
+                              significant amount of time. Additionally, there's
+                              a possibility of hitting Figma's API limitations.
+                            </p>
+                            <p>
+                              Clicking the Refresh button will clear the cache
+                              and re-fetch the variables.
+                            </p>
+                          </div>
+                        </Modal>
                       </div>
 
                       <Button secondary onClick={handleRefreshClick}>
