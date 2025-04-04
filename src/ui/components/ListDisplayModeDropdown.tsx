@@ -19,7 +19,10 @@ export default function ListDisplayModeDropdown() {
   }
 
   async function updateDropdownOptions(
-    targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
+    targetCollection:
+      | LocalVariableCollectionForUI
+      | LibraryVariableCollection
+      | null,
   ) {
     console.log(
       'ListDisplayModeDropdown: updateDropdownOptions',
@@ -31,8 +34,12 @@ export default function ListDisplayModeDropdown() {
     let newDropdownOptions: DropdownOption[] = []
     let displayModeId = ''
 
-    // LocalVariableCollectionの場合: modeの配列をdropdownOptionsに設定
-    if (isLocalCollection(targetCollection)) {
+    // targetCollectionがnullなら何もしない
+    if (targetCollection === null) {
+      newDropdownOptions = []
+      displayModeId = ''
+    } else if (isLocalCollection(targetCollection)) {
+      // LocalVariableCollectionの場合: modeの配列をdropdownOptionsに設定
       newDropdownOptions = targetCollection.modes.map(mode => ({
         text: mode.name,
         value: mode.modeId,
@@ -92,8 +99,6 @@ export default function ListDisplayModeDropdown() {
   }
 
   useEffect(() => {
-    if (settings.listTargetCollection === null) return
-
     // targetCollectionが変更された場合、dropdownOptionsを更新
     updateDropdownOptions(settings.listTargetCollection)
   }, [settings.listTargetCollection])
