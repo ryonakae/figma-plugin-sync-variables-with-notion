@@ -4,7 +4,7 @@
   "description": "MIT",
   "author": "Ryo Nakae",
   "scripts": {
-    "build": "concurrently -P 'npm:build:* -- {*}'",
+    "build": "NODE_ENV=production concurrently -P 'npm:build:* -- {*}'",
     "build:css": "npx @tailwindcss/cli -i ./src/ui/styles/input.css -o ./src/ui/styles/output.css",
     "build:js": "build-figma-plugin --typecheck",
     "check": "biome check",
