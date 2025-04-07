@@ -15,12 +15,12 @@ Specify the Notion database ID ([Reference](https://developers.notion.com/refere
 
 #### 2. Integration token
 First, create a new integration in Notion ([Reference](https://developers.notion.com/docs/create-a-notion-integration#create-your-integration-in-notion)).
-Next, give your integration page permissions ([Reference](https://developers.notion.com/docs/create-a-notion-integration#give-your-integration-page-permissions)).
-Input the copied token.
+Next, grant your integration page permissions ([Reference](https://developers.notion.com/docs/create-a-notion-integration#give-your-integration-page-permissions)).
+Enter the copied token.
 
 #### 3. Key property name
 Specify the name of the Notion property that serves as the unique key for the variables (e.g., `Name`, `Key`, `ID`).
-Currently, `title`, `formula`, and `text` (rich text) properties are supported as keys.
+Currently, `title`, `formula`, and `text` properties are supported as keys.
 
 #### 4. Collection name to create or update
 Specify the name of the Figma Variable Collection to sync with. Existing local collection names will be suggested via autocomplete. If the specified collection doesn't exist, it will be created.
@@ -31,7 +31,7 @@ Specify the Notion property names that correspond to Figma Variable Modes. These
 - **Adding modes**:
   1. Enter a mode name in the textbox (e.g., `ja`, `en`, or other property names in your Notion database).
   2. Click the "Add" button to add it to the list.
-- **Reordering modes**: Modes in the list can be reordered using drag and drop. This order will be reflected in the order of Figma Variable modes.
+- **Reordering modes**: Modes in the list can be reordered via drag and drop. This order will be reflected in the order of Figma variable modes.
 - **Removing modes**: Click the X icon to the right of each mode name to remove that mode from the list.
 
 After entering the information for steps 1-4, click the "Sync variable collection with Notion" button to start the synchronization. This process might take some time depending on the number of items in the database and the variables.
@@ -73,11 +73,11 @@ Visualizes variable usage on text layers. Text layers with variables applied are
 
 ## 📮 Support
 
-If you have any problem or feedback, please use the [GitHub Issues](https://github.com/ryonakae/figma-plugin-sync-variables-with-notion/issues).
+If you have any problems or feedback, please use the [GitHub Issues](https://github.com/ryonakae/figma-plugin-sync-variables-with-notion/issues).
 
 ---
 
-This plugin is made by Ryo Nakae 🙎‍♂️.
+This plugin was created by Ryo Nakae 🙎‍♂️.
 
 - https://brdr.jp
 - https://x.com/ryo_dg
