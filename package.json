@@ -48,7 +48,7 @@
   },
   "figma-plugin": {
     "editorType": ["figma"],
-    "id": "sync-variables-with-notion",
+    "id": "1490907592288129044",
     "name": "Sync Variables with Notion",
     "main": "src/main/index.ts",
     "ui": "src/ui/index.tsx",
