@@ -1,0 +1,108 @@
+# プロジェクトのコーディング規約と開発ガイドライン
+
+## 技術スタック (Tech Stack)
+
+### 主要技術
+- TypeScript 5.8.2
+- Preact 10.26.4 (軽量な React 互換ライブラリ)
+- @figma/plugin-typings 1.108.0 (Figma Plugin SDK)
+- TailwindCSS 4.0.17 (スタイリング)
+- Zustand 5.0.3 (状態管理)
+- Biome 1.9.4 (リンター・フォーマッター)
+
+### 補助ライブラリ
+- @create-figma-plugin/ui 4.0.0-alpha.0 (Figma プラグイン用 UI コンポーネント)
+- @create-figma-plugin/utilities 4.0.0-alpha.0 (Figma プラグイン用ユーティリティ)
+- @dnd-kit/core 6.3.1 (ドラッグ&ドロップ)
+- @dnd-kit/sortable 10.0.0 (並び替え機能)
+- @tanstack/react-virtual 3.13.3 (仮想化リスト)
+- @fortawesome/fontawesome-svg-core 6.7.2 (アイコン)
+- react-use 17.6.0 (ユーティリティフック)
+- tailwind-merge 3.0.2 (Tailwind クラスの結合)
+
+## コーディング規約 (Coding Conventions)
+
+### 全般的な規約
+- TypeScript:
+  - 厳格な型付けを使用し、`any`型の使用を避ける
+  - イベントハンドラーの型は専用の型定義ファイルで管理（例：`eventHandler.d.ts`）
+- コンポーネント:
+  - 関数コンポーネントと React Hooks を使用する
+  - JSXの記法は /** @jsx h */ を使用する
+- スタイリング:
+  - Tailwind CSS クラスを使用
+  - 複数のクラスや条件付きクラスは`twMerge`で結合
+  - ホバー状態などの動的なスタイルには`group`と`group-hover`を活用
+- 状態管理:
+  - 小規模な状態には React Hooks
+  - グローバル状態には Zustand を使用
+  - フォーム状態は適切なフォームライブラリを使用
+- ライブラリやコンポーネントのimport:
+  - 相対パスではなく`@/`を使用 (@: `${workspaceFolder}/src`)
+  - .tsxの場合、1行目には`/** @jsx h */`を記述し、2行目には`import { h } from 'preact'`を記述
+  - `declare global {}`内に書かれた型定義は明示的なimportは不要
+
+### コンポーネントの設計と実装
+- コンポーネントの分割:
+  - 単一責任の原則に従う
+  - 再利用可能な小さなコンポーネントに分割（例：`Button`、`CopyButton`）
+  - 20行以上のJSXは別コンポーネントへの分割を検討
+- 型定義:
+  - Props の型定義はコンポーネントファイルの上部で行う
+  - 型名は`Props`または目的を示す名前+`Props`とする（例：`CopyButtonProps`）
+  - オプショナルな props は`?`を使用（例：`className?: string`）
+- イベント処理:
+  - イベントハンドラー関数は`handle`プレフィックスを使用
+  - バブリングの制御は明示的に行う（`event.stopPropagation()`）
+  - `emit`イベントは型安全に定義
+
+### 命名規則
+- コンポーネント:
+  - PascalCase (例: `Header.tsx`, `AccordionContent.tsx`)
+  - 役割や機能を明確に表す名前
+  - 接尾辞として機能を示す単語を使用（例：`Button`、`List`、`Item`）
+- 関数:
+  - イベントハンドラー: `handle` + イベント名（例：`handleClick`、`handleSubmit`）
+  - getter関数: `get` + 取得対象（例：`getVariableValue`）
+  - boolean値を返す関数: `is`/`has`/`should` プレフィックス
+- 変数:
+  - camelCase
+  - 配列は複数形の名詞（例：`items`、`users`）
+  - boolean値は `is`/`has`/`should` プレフィックス
+- 定数: UPPER_SNAKE_CASE
+- ファイル名:
+  - コンポーネント: PascalCase
+  - その他: camelCase
+  - 型定義ファイル: `.d.ts` 拡張子
+
+## フォーマット規則 (Formatting Rules)
+
+- インデント: スペース 2 つ
+- 引用符: シングルクォート (`'`)
+- セミコロン: 必要な場合のみ使用
+- 末尾カンマ: 常に使用
+- アロー関数: 引数が1つの場合は括弧を省略可能
+
+## エラー処理とデバッグ
+
+- エラー処理:
+  - ユーザー操作の前提条件を必ずチェック
+  - エラーメッセージは具体的で actionable な内容に
+  - 早期リターンパターンを使用して条件分岐をフラット化
+- デバッグ:
+  - `console.log`は開発時のみ使用し、説明的なラベルを付ける
+  - 本番環境ではデバッグコードを削除
+- 非同期処理:
+  - Promise より `async/await` を優先
+  - エラーは適切に`try/catch`
+
+## コードレビュー基準 (Code Review Criteria)
+
+- 型安全性が確保されているか
+- コードの可読性が高いか
+- 既存のコード規約に従っているか
+- パフォーマットルールが適用されているか
+- 適切なコメントが記述されているか
+- コンポーネントの分割は適切か
+- 命名規則は守られているか
+- エラー処理は適切か
