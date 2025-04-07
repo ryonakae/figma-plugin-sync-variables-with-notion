@@ -60,6 +60,9 @@
       }
     },
     "documentAccess": "dynamic-page",
-    "permissions": ["teamlibrary"]
+    "permissions": ["teamlibrary"],
+    "networkAccess": {
+      "allowedDomains": ["https://*.workers.dev"]
+    }
   }
 }
