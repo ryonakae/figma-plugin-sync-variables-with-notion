@@ -80,7 +80,7 @@ export async function getTextNodes(targetTextRange: TargetTextRange) {
       // ページを読み込む
       await page.loadAsync()
 
-      // ページは以下にあるすべてのテキストをtextNodesに追加
+      // ページ配下にあるすべてのテキストをtextNodesに追加
       textNodes = [
         ...textNodes,
         ...page.findAllWithCriteria({ types: ['TEXT'] }),
