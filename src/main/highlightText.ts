@@ -1,6 +1,5 @@
+import { getAncestorInstances, getTextNodes } from '@/main/util'
 import { emit } from '@create-figma-plugin/utilities'
-
-import { getTextNodes } from '@/main/util'
 
 // ページにあるtextNodeの上にrectを作成し、ハイライトする関数
 async function createHighlightRectOnPage(
@@ -46,34 +45,53 @@ async function createHighlightRectOnPage(
           textNode.absoluteRenderBounds.height,
         )
 
-        console.log(
-          'boundVariables',
-          textNode.boundVariables,
-          textNode.inferredVariables,
-        )
+        let hasVariable = false
+        let variableName = ''
 
-        // boundVariables.characters がある場合は、rectを青で塗りつぶす
-        // ない場合は、rectを赤で塗りつぶす
-        if (textNode.boundVariables?.characters) {
-          rect.fills = [
-            { type: 'SOLID', color: { r: 0, g: 0, b: 1 }, opacity: 0.3 },
-          ]
+        // 先祖インスタンスを取得
+        const ancestorInstances = await getAncestorInstances(textNode)
 
-          // variableを取得し、rectの名前に追加
-          let variableId = ''
+        // 先祖インスタンスがある場合 (nodeはインスタンスの子要素)
+        if (
+          ancestorInstances.length > 0 &&
+          textNode.componentPropertyReferences?.characters
+        ) {
+          // 一番近い先祖インスタンスの取得
+          const ancestorInstance =
+            ancestorInstances[ancestorInstances.length - 1]
+          const propertyName = textNode.componentPropertyReferences.characters
 
-          if (textNode.boundVariables?.characters) {
-            variableId = textNode.boundVariables.characters.id
+          // インスタンスのプロパティを取得
+          const properties = ancestorInstance.componentProperties
+          const property = properties[propertyName]
+
+          // プロパティにVariableが割り当てられているか確認
+          if (property?.boundVariables?.value) {
+            const variable = await figma.variables.getVariableByIdAsync(
+              property.boundVariables.value.id,
+            )
+            if (variable) {
+              hasVariable = true
+              variableName = variable.name
+            }
           }
-
+        } else if (textNode.boundVariables?.characters) {
+          // 直接Variableが割り当てられている場合
+          const variableId = textNode.boundVariables.characters.id
           const variable =
             await figma.variables.getVariableByIdAsync(variableId)
           if (variable) {
-            rect.name = `⭕️ [${variable.name}] ${textNode.characters}`
-          } else {
-            rect.name = `⭕️ ${textNode.characters}`
+            hasVariable = true
+            variableName = variable.name
           }
+        }
 
+        // 変数が割り当てられている場合は青、そうでない場合は赤で塗りつぶす
+        if (hasVariable) {
+          rect.fills = [
+            { type: 'SOLID', color: { r: 0, g: 0, b: 1 }, opacity: 0.3 },
+          ]
+          rect.name = `⭕️ [${variableName}] ${textNode.characters}`
           correctRectNodes.push(rect)
         } else {
           rect.fills = [

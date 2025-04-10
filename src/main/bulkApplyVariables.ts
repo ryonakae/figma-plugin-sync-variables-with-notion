@@ -1,5 +1,6 @@
 import { emit } from '@create-figma-plugin/utilities'
 
+import { applyVariableToTextNode } from '@/main/applyVariableToTextNode'
 import getLibraryVariablesWithCache from '@/main/getLibraryVariablesWithCache'
 import { filterTextNodes, getTextNodes } from '@/main/util'
 
@@ -191,27 +192,28 @@ export default async function bulkApplyVariables(options: {
   let setBoundVariableCount = 0
 
   // textNodeごとに処理を実行
-  textNodes.forEach(textNode => {
-    // テキストの文字列を取得
-    const characters = textNode.characters
+  await Promise.all(
+    textNodes.map(async textNode => {
+      // テキストの文字列を取得
+      const characters = textNode.characters
 
-    // variablesInTargetCollectionの各Variableから、valuesByModeの値がcharactersと一致するものを探す
-    const targetVariable = variablesInTargetCollection.find(variable => {
-      return Object.values(variable.valuesByMode).includes(characters)
-    })
-    console.log('targetVariable', targetVariable)
+      // variablesInTargetCollectionの各Variableから、valuesByModeの値がcharactersと一致するものを探す
+      const targetVariable = variablesInTargetCollection.find(variable => {
+        return Object.values(variable.valuesByMode).includes(characters)
+      })
+      console.log('targetVariable', targetVariable)
 
-    // targetVariableが見つからなかったら処理をスキップ
-    if (!targetVariable) {
-      return
-    }
+      // targetVariableが見つからなかったら処理をスキップ
+      if (!targetVariable) {
+        return
+      }
 
-    // textNodeにVariableを割り当て
-    textNode.setBoundVariable('characters', targetVariable)
+      await applyVariableToTextNode(textNode, targetVariable)
 
-    // バリアブルを割り当てたテキストの数をカウントアップ
-    setBoundVariableCount++
-  })
+      // バリアブルを割り当てたテキストの数をカウントアップ
+      setBoundVariableCount++
+    }),
+  )
 
   // 処理終了
   emit<ProcessFinishFromMain>('PROCESS_FINISH_FROM_MAIN', {

@@ -1,4 +1,4 @@
-import { emit } from '@create-figma-plugin/utilities'
+import { applyVariableToTextNode } from '@/main/applyVariableToTextNode'
 
 export default async function applyVariable(variable: VariableForUI) {
   console.log('applyVariable', applyVariable)
@@ -41,8 +41,7 @@ export default async function applyVariable(variable: VariableForUI) {
         return
       }
 
-      // textNodeにVariableを割り当て
-      textNode.setBoundVariable('characters', targetVariable)
+      await applyVariableToTextNode(textNode, targetVariable)
     }),
   )
 }
