@@ -1,4 +1,4 @@
-import { getAncestorInstances } from '@/main/util'
+import { applyVariableToTextNode } from '@/main/applyVariableToTextNode'
 
 export default async function applyVariable(variable: VariableForUI) {
   console.log('applyVariable', applyVariable)
@@ -41,36 +41,7 @@ export default async function applyVariable(variable: VariableForUI) {
         return
       }
 
-      // 先祖インスタンスを取得
-      const ancestorInstances = await getAncestorInstances(textNode)
-      console.log('ancestorInstances', ancestorInstances)
-
-      // 先祖インスタンスがある場合 (nodeはインスタンスの子要素)
-      if (ancestorInstances.length > 0) {
-        // componentPropertyReferences.charactersがある場合
-        if (textNode.componentPropertyReferences?.characters) {
-          // 一番近い先祖インスタンスの取得 (ancestorInstancesの最後の要素)
-          const ancestorInstance =
-            ancestorInstances[ancestorInstances.length - 1]
-
-          // プロパティ名を取得
-          const propertyName = textNode.componentPropertyReferences.characters
-
-          // 先祖インスタンスの該当componentPropertyにVariableを割り当て
-          ancestorInstance.setProperties({
-            [propertyName]: {
-              type: 'VARIABLE_ALIAS',
-              id: targetVariable.id,
-            },
-          })
-        } else {
-          // ない場合、textNodeにVariableを割り当て
-          textNode.setBoundVariable('characters', targetVariable)
-        }
-      } else {
-        // 先祖インスタンスが無い場合、単純にtextNodeにVariableを割り当て
-        textNode.setBoundVariable('characters', targetVariable)
-      }
+      await applyVariableToTextNode(textNode, targetVariable)
     }),
   )
 }
