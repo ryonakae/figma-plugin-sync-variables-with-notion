@@ -194,13 +194,19 @@ export default async function bulkApplyVariables(options: {
   // textNodeごとに処理を実行
   await Promise.all(
     textNodes.map(async textNode => {
-      // テキストの文字列を取得
-      const characters = textNode.characters
+      // テキストの文字列を取得し、改行を除去
+      const characters = textNode.characters.replace(/\s+/g, ' ').trim()
 
-      // variablesInTargetCollectionの各Variableから、valuesByModeの値がcharactersと一致するものを探す
-      const targetVariable = variablesInTargetCollection.find(variable => {
-        return Object.values(variable.valuesByMode).includes(characters)
-      })
+      // テキストノードの内容と一致するバリアブルを検索
+      // バリアブルの各モードの値を確認し、文字列型で改行を除去した値が
+      // テキストノードの文字列（改行除去済み）と一致するものを探す
+      const targetVariable = variablesInTargetCollection.find(variable =>
+        Object.values(variable.valuesByMode).some(
+          value =>
+            typeof value === 'string' &&
+            value.replace(/\s+/g, ' ').trim() === characters,
+        ),
+      )
       console.log('targetVariable', targetVariable)
 
       // targetVariableが見つからなかったら処理をスキップ
