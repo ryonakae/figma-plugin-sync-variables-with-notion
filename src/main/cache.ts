@@ -15,6 +15,7 @@ export async function saveCache(
     {},
     CACHE_KEY,
   )
+  console.log('currentCache', currentCache)
   const newCache = {
     [libraryCollectionKey]: variables.map(
       v =>
@@ -32,6 +33,7 @@ export async function saveCache(
         }) as Variable,
     ),
   }
+  console.log('newCache', newCache)
 
   await saveSettingsAsync<ClientStorageCache>(
     { ...currentCache, ...newCache },

@@ -141,7 +141,7 @@ export default function List() {
                   ) : (
                     <Fragment>
                       <div className="flex gap-1 text-text-secondary">
-                        <span>This collection is cached.</span>
+                        <span>This library collection is cached.</span>
                         <button
                           type="button"
                           className="text-text-link"
@@ -151,7 +151,7 @@ export default function List() {
                         </button>
 
                         <Modal
-                          title="Abaout caching"
+                          title="About caching"
                           open={isDetailsOpen}
                           onCloseButtonClick={handleDetailsCloseClick}
                           onOverlayClick={handleDetailsCloseClick}

@@ -31,7 +31,7 @@ export default async function () {
   on<SaveSettingsFromUI>('SAVE_SETTINGS_FROM_UI', saveSettings)
 
   on<NotifyFromUI>('NOTIFY_FROM_UI', options => {
-    figma.notify(options.message, options.options)
+    figma.notify(options.message || 'Something went wrong', options.options)
   })
 
   on<ResizeWindowFromUI>('RESIZE_WINDOW_FROM_UI', windowSize => {
