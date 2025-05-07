@@ -14,10 +14,12 @@ export default async function getLibraryVariablesWithCache(
 
   // キャッシュがなければ、Variablesを取得してインポート
   console.log('Cache miss for:', libraryCollectionKey, '. Fetching from API...')
+
   const libraryVariables =
     await figma.teamLibrary.getVariablesInLibraryCollectionAsync(
       libraryCollectionKey,
     )
+  console.log('Fetched variables:', libraryVariables)
 
   const importedVariables: Variable[] = []
   await Promise.all(
@@ -28,6 +30,7 @@ export default async function getLibraryVariablesWithCache(
       importedVariables.push(importedVariable)
     }),
   )
+  console.log('Imported variables:', importedVariables)
 
   // importedVariablesをキャッシュに保存
   await saveCache(libraryCollectionKey, importedVariables)

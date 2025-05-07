@@ -137,7 +137,7 @@ export default function List() {
               isLibraryCollection(settings.listTargetCollection) && (
                 <div className="flex h-6 items-center justify-between">
                   {tmpSettings.loadingVariables ? (
-                    <div>Updating...</div>
+                    <div>Loading...</div>
                   ) : (
                     <Fragment>
                       <div className="flex gap-1 text-text-secondary">
