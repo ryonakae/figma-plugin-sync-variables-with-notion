@@ -28,16 +28,16 @@ export default async function getLocalVariables(
     const taretVariables = localVariables.filter(
       variable => variable.variableCollectionId === collectionId,
     )
-    variablesForUI = taretVariables.map(variable => ({
-      id: variable.id,
-      name: variable.name,
-      description: variable.description,
-      remote: variable.remote,
-      variableCollectionId: variable.variableCollectionId,
-      key: variable.key,
-      resolvedType: variable.resolvedType,
-      valuesByMode: variable.valuesByMode,
-      scopes: variable.scopes,
+    variablesForUI = taretVariables.map(v => ({
+      id: v.id,
+      name: v.name,
+      // description: v.description,
+      // remote: v.remote,
+      variableCollectionId: v.variableCollectionId,
+      key: v.key,
+      resolvedType: v.resolvedType,
+      valuesByMode: v.valuesByMode,
+      scopes: v.scopes,
     }))
   }
 

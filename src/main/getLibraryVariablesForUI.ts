@@ -11,17 +11,17 @@ export default async function getLibraryVariablesForUI(
 
   // importedVariablesの各要素をvariablesForUIに追加
   await Promise.all(
-    importedVariables.map(async importedVariable => {
+    importedVariables.map(async v => {
       variablesForUI.push({
-        id: importedVariable.id,
-        name: importedVariable.name,
-        description: importedVariable.description,
-        remote: importedVariable.remote,
-        variableCollectionId: importedVariable.variableCollectionId,
-        key: importedVariable.key,
-        resolvedType: importedVariable.resolvedType,
-        valuesByMode: importedVariable.valuesByMode,
-        scopes: importedVariable.scopes,
+        id: v.id,
+        name: v.name,
+        // description: v.description,
+        // remote: v.remote,
+        variableCollectionId: v.variableCollectionId,
+        key: v.key,
+        resolvedType: v.resolvedType,
+        valuesByMode: v.valuesByMode,
+        scopes: v.scopes,
       })
     }),
   )

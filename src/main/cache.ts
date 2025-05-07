@@ -22,9 +22,9 @@ export async function saveCache(
         ({
           id: v.id,
           name: v.name,
-          description: v.description,
-          hiddenFromPublishing: v.hiddenFromPublishing,
-          remote: v.remote,
+          // description: v.description,
+          // hiddenFromPublishing: v.hiddenFromPublishing,
+          // remote: v.remote,
           variableCollectionId: v.variableCollectionId,
           key: v.key,
           resolvedType: v.resolvedType,

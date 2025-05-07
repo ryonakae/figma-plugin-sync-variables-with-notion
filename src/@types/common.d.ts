@@ -19,8 +19,8 @@ declare global {
   type VariableForUI = {
     id: string
     name: string
-    description: string
-    remote: boolean
+    // description: string
+    // remote: boolean
     variableCollectionId: string
     key: string
     resolvedType: VariableResolvedDataType
