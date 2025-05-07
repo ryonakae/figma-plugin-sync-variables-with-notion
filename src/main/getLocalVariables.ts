@@ -1,5 +1,3 @@
-import { emit } from '@create-figma-plugin/utilities'
-
 export default async function getLocalVariables(
   targetCollection: LocalVariableCollectionForUI,
 ) {

@@ -1,4 +1,5 @@
-import { times, uniqBy } from 'es-toolkit/compat'
+import { uniqBy } from 'es-toolkit'
+import { times } from 'es-toolkit/compat'
 
 // nodeの親がコンポーネント or Variantsかどうかを返す再帰関数
 export function getIsNodeParentComponentOrVariants(node: SceneNode) {
@@ -98,8 +99,9 @@ export async function getTextNodes(targetTextRange: TargetTextRange) {
         textNodes.push(node)
       }
 
-      // 要素がグループ、フレーム、コンポーネント、インスタンスなら、要素内のすべてのテキストをtextNodesに追加
+      // 要素がセクション、グループ、フレーム、コンポーネント、インスタンスなら、要素内のすべてのテキストをtextNodesに追加
       else if (
+        node.type === 'SECTION' ||
         node.type === 'GROUP' ||
         node.type === 'FRAME' ||
         node.type === 'COMPONENT' ||
@@ -166,7 +168,7 @@ export async function filterTextNodes(
   }
 
   // textNodesToRemoveから重複を削除
-  textNodesToRemove = uniqBy(textNodesToRemove, 'id')
+  textNodesToRemove = uniqBy(textNodesToRemove, node => node.id)
 
   console.log('textNodesToRemove', textNodesToRemove)
 

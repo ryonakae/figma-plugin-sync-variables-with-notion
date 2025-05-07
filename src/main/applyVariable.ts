@@ -1,6 +1,7 @@
 import { applyVariableToTextNode } from '@/main/applyVariableToTextNode'
+import getVariable from '@/main/getVariable'
 
-export default async function applyVariable(variable: VariableForUI) {
+export default async function applyVariable(variableForUI: VariableForUI) {
   console.log('applyVariable', applyVariable)
 
   if (figma.currentPage.selection.length === 0) {
@@ -31,14 +32,11 @@ export default async function applyVariable(variable: VariableForUI) {
   // textNodeごとに処理を実行
   await Promise.all(
     textNodes.map(async textNode => {
-      // VariableForUI.idから実際のバリアブルを探す
-      const targetVariable = await figma.variables.getVariableByIdAsync(
-        variable.id,
-      )
+      const targetVariable = await getVariable(variableForUI)
 
-      // targetVariableが見つからなかったら処理をスキップ
+      // まだtargetVariableが見つからなかったら処理を中断
       if (!targetVariable) {
-        return
+        throw new Error(`Variable not found: ${variableForUI.id}`)
       }
 
       await applyVariableToTextNode(textNode, targetVariable)

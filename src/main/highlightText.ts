@@ -1,5 +1,4 @@
 import { getAncestorInstances, getTextNodes } from '@/main/util'
-import { emit } from '@create-figma-plugin/utilities'
 
 // ページにあるtextNodeの上にrectを作成し、ハイライトする関数
 async function createHighlightRectOnPage(
