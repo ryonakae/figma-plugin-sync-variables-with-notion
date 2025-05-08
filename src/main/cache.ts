@@ -16,6 +16,7 @@ export async function saveCache(
     CACHE_KEY,
   )
   console.log('currentCache', currentCache)
+
   const newCache = {
     [libraryCollectionKey]: variables.map(
       v =>
@@ -35,12 +36,15 @@ export async function saveCache(
   }
   console.log('newCache', newCache)
 
-  await saveSettingsAsync<ClientStorageCache>(
-    { ...currentCache, ...newCache },
-    CACHE_KEY,
-  )
-
-  console.log('saveCache: done')
+  try {
+    await saveSettingsAsync<ClientStorageCache>(
+      { ...currentCache, ...newCache },
+      CACHE_KEY,
+    )
+    console.log('saveCache: success')
+  } catch (error) {
+    console.error('saveCache: failed to save settings', error)
+  }
 }
 
 export async function loadCache(
