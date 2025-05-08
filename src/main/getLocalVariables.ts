@@ -1,5 +1,5 @@
 export default async function getLocalVariables(
-  targetCollection: LocalVariableCollectionForUI,
+  targetCollection: VariableCollectionForUI,
 ) {
   // Variablesを定義
   let variablesForUI: VariableForUI[] = []

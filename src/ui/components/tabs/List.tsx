@@ -34,7 +34,7 @@ export default function List() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
   async function updateVariables(
-    targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
+    targetCollection: VariableCollectionForUI | LibraryVariableCollection,
   ) {
     console.log('updateVariables', targetCollection)
 

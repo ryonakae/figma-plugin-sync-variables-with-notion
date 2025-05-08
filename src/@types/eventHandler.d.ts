@@ -49,14 +49,14 @@ declare global {
   interface SetCollectionsFromMain extends EventHandler {
     name: 'SET_COLLECTIONS_FROM_MAIN'
     handler: (options: {
-      localCollections: LocalVariableCollectionForUI[]
+      localCollections: VariableCollectionForUI[]
       libraryCollections: LibraryVariableCollection[]
     }) => void
   }
 
   interface GetLocalVariablesFromUI extends EventHandler {
     name: 'GET_LOCAL_VARIABLES_FROM_UI'
-    handler: (targetCollection: LocalVariableCollectionForUI) => void
+    handler: (targetCollection: VariableCollectionForUI) => void
   }
 
   interface SetLocalVariablesFromMain extends EventHandler {
@@ -82,10 +82,7 @@ declare global {
   interface BulkApplyVariablesFromUI extends EventHandler {
     name: 'BULK_APPLY_VARIABLES_FROM_UI'
     handler: (options: {
-      collection:
-        | 'all'
-        | LocalVariableCollectionForUI
-        | LibraryVariableCollection
+      collection: 'all' | VariableCollectionForUI | LibraryVariableCollection
       targetTextRange: TargetTextRange
       isIncludeComponents: boolean
       isIncludeInstances: boolean

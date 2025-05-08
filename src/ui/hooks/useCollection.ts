@@ -2,7 +2,7 @@ import { emit, once } from '@create-figma-plugin/utilities'
 
 export default function useCollection() {
   function getCollections(): Promise<{
-    localCollections: LocalVariableCollectionForUI[]
+    localCollections: VariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
   }> {
     return new Promise((resolve, _reject) => {
@@ -12,7 +12,7 @@ export default function useCollection() {
   }
 
   function getLocalVariables(
-    targetCollection: LocalVariableCollectionForUI,
+    targetCollection: VariableCollectionForUI,
   ): Promise<VariableForUI[]> {
     return new Promise((resolve, _reject) => {
       once<SetLocalVariablesFromMain>(
@@ -42,13 +42,13 @@ export default function useCollection() {
   }
 
   function isLocalCollection(
-    collection: LocalVariableCollectionForUI | LibraryVariableCollection,
-  ): collection is LocalVariableCollectionForUI {
+    collection: VariableCollectionForUI | LibraryVariableCollection,
+  ): collection is VariableCollectionForUI {
     return 'id' in collection && !('libraryName' in collection)
   }
 
   function isLibraryCollection(
-    collection: LocalVariableCollectionForUI | LibraryVariableCollection,
+    collection: VariableCollectionForUI | LibraryVariableCollection,
   ): collection is LibraryVariableCollection {
     return 'key' in collection
   }

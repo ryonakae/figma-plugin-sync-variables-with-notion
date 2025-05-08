@@ -6,7 +6,7 @@ import { filterTextNodes, getTextNodes } from '@/main/util'
 
 // ローカルコレクションにあるバリアブルを取得する関数
 async function getLocalVariables(
-  collection: LocalVariableCollectionForUI,
+  collection: VariableCollectionForUI,
 ): Promise<Variable[]> {
   // ローカルCollectionを取得
   const localCollections =
@@ -70,7 +70,7 @@ async function getLibraryVariables(
 
 // メイン関数
 export default async function bulkApplyVariables(options: {
-  collection: 'all' | LocalVariableCollectionForUI | LibraryVariableCollection
+  collection: 'all' | VariableCollectionForUI | LibraryVariableCollection
   targetTextRange: TargetTextRange
   isIncludeComponents: boolean
   isIncludeInstances: boolean
@@ -144,7 +144,7 @@ export default async function bulkApplyVariables(options: {
       }
     }
   }
-  // options.collectionがLocalVariableCollectionForUIの場合
+  // options.collectionがVariableCollectionForUIの場合
   else if ('id' in options.collection) {
     // ローカルコレクションにあるバリアブルを取得し、variablesInTargetCollectionに追加
     const localVariables = await getLocalVariables(options.collection).catch(

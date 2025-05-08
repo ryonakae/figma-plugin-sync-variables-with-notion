@@ -3,14 +3,14 @@ import { Fragment, type JSX, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
 import { Dropdown, type DropdownOption, Textbox } from '@create-figma-plugin/ui'
-import { useMount, useUnmount, useUpdateEffect } from 'react-use'
+import { useMount, useUnmount } from 'react-use'
 
 import useSettings from '@/ui/hooks/useSettings'
 
 // Propsの型定義
 type TargetCollectionDropdownProps = {
   settingKey: 'listTargetCollection' | 'utilitiesTargetCollection' // 更新する設定キー
-  value: LocalVariableCollectionForUI | LibraryVariableCollection | 'all' | null // 現在の選択値
+  value: VariableCollectionForUI | LibraryVariableCollection | 'all' | null // 現在の選択値
   initialOption?: DropdownOption // 先頭に追加する特別なオプション (例: 'All')
   defaultValue: 'all' | null // デフォルト値 (選択肢がない場合など)
 }
@@ -27,7 +27,7 @@ export default function TargetCollectionDropdown({
 
   // ドロップダウンの選択肢を更新する関数
   async function updateDropdownOptions(options: {
-    localCollections: LocalVariableCollectionForUI[]
+    localCollections: VariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
   }) {
     console.log(

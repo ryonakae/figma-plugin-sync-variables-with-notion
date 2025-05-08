@@ -10,7 +10,7 @@ declare global {
 
   type PluginLanguage = 'en' | 'ja'
 
-  type LocalVariableCollectionForUI = {
+  type VariableCollectionForUI = {
     id: string
     name: string
     modes: { modeId: string; name: string }[]
@@ -43,7 +43,7 @@ declare global {
 
     // list
     listTargetCollection:
-      | LocalVariableCollectionForUI
+      | VariableCollectionForUI
       | LibraryVariableCollection
       | null
     listDisplayModeId: string | null
@@ -54,7 +54,7 @@ declare global {
     // utilities
     utilitiesTargetCollection:
       | 'all'
-      | LocalVariableCollectionForUI
+      | VariableCollectionForUI
       | LibraryVariableCollection
     utilitiesTargetTextRange: TargetTextRange
     utilitiesIsIncludeComponents: boolean
@@ -67,7 +67,7 @@ declare global {
   type TmpSettings = {
     loading: boolean
     loadingVariables: boolean
-    localCollections: LocalVariableCollectionForUI[]
+    localCollections: VariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
   }
 

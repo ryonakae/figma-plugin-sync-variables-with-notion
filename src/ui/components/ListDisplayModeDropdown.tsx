@@ -20,7 +20,7 @@ export default function ListDisplayModeDropdown() {
 
   async function updateDropdownOptions(
     targetCollection:
-      | LocalVariableCollectionForUI
+      | VariableCollectionForUI
       | LibraryVariableCollection
       | null,
   ) {
