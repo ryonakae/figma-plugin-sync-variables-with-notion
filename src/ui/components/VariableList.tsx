@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * 変数リストコンポーネント
+ * 仮想化されたスクロール可能な変数リストを表示
+ */
 import { type JSX, h } from 'preact'
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 
@@ -25,10 +29,18 @@ import VariableListItem from '@/ui/components/VariableListItem'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
+/**
+ * 変数リストコンポーネントのプロパティ
+ */
 type VariableListProps = {
   variables: VariableForUI[]
 }
 
+/**
+ * 仮想化されたスクロール可能な変数リストコンポーネント
+ * 検索フィルターとスクロール位置の保存・復元機能を備えている
+ * @param variables 表示する変数の配列
+ */
 export default function VariableList({ variables }: VariableListProps) {
   const { settings, updateSettings } = useSettings()
   const { isLocalCollection } = useCollection()
@@ -38,6 +50,7 @@ export default function VariableList({ variables }: VariableListProps) {
   const [tmpScrollPosition, setTmpScrollPosition] = useState(0)
   const [scrollPositionRestored, setScrollPositionRestored] = useState(false)
 
+  // 仮想化されたリスト表示のためのフック
   const virtualizer = useVirtualizer({
     count: listItems.length,
     horizontal: false,
@@ -46,6 +59,10 @@ export default function VariableList({ variables }: VariableListProps) {
     estimateSize: () => 66,
   })
 
+  /**
+   * 検索フィルター入力時のハンドラ
+   * @param event 入力イベント
+   */
   function handleInput(event: JSX.TargetedEvent<HTMLInputElement>) {
     const inputValue = event.currentTarget.value
     console.log('handleInput', inputValue)

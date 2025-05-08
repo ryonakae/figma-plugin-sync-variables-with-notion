@@ -1,19 +1,26 @@
 /**
- * targetTextRangeに応じてtextNodeを取得する関数
- * @param targetTextRange 対象のテキスト範囲
+ * 指定された範囲のテキストノードを取得するユーティリティモジュール
+ */
+
+/**
+ * targetTextRangeに応じてテキストノードを取得する関数
+ * 現在のページ、すべてのページ、または選択範囲からテキストノードを収集
+ *
+ * @param targetTextRange 対象のテキスト範囲（'currentPage'|'allPages'|'selection'）
  * @returns テキストノードの配列
+ * @throws 選択範囲が指定された場合で何も選択されていない場合、エラーをスロー
  */
 export default async function getTextNodes(
   targetTextRange: TargetTextRange,
 ): Promise<TextNode[]> {
-  // textNodeを格納する配列を用意
+  // テキストノードを格納する配列を用意
   let textNodes: TextNode[] = []
 
   if (targetTextRange === 'currentPage') {
-    // targetTextRangeに応じてtextNodeを検索、配列に追加
+    // 現在のページ内のすべてのテキストノードを取得
     textNodes = figma.currentPage.findAllWithCriteria({ types: ['TEXT'] })
   } else if (targetTextRange === 'allPages') {
-    // 各ページごとに処理を実行
+    // すべてのページのテキストノードを取得
     for (const page of figma.root.children) {
       // ページを読み込む
       await page.loadAsync()
@@ -25,18 +32,22 @@ export default async function getTextNodes(
       ]
     }
   } else if (targetTextRange === 'selection') {
+    // 選択範囲からテキストノードを取得
+
     // 何も選択していない場合は処理を終了
     if (figma.currentPage.selection.length === 0) {
       throw new Error('Please select at least one element.')
     }
 
+    // 選択要素ごとに処理を実行
     figma.currentPage.selection.forEach(node => {
       // 要素がテキストの場合、textNodesに追加
       if (node.type === 'TEXT') {
         textNodes.push(node)
       }
 
-      // 要素がセクション、グループ、フレーム、コンポーネント、インスタンスなら、要素内のすべてのテキストをtextNodesに追加
+      // 要素がセクション、グループ、フレーム、コンポーネント、インスタンスなら、
+      // 要素内のすべてのテキストをtextNodesに追加
       else if (
         node.type === 'SECTION' ||
         node.type === 'GROUP' ||

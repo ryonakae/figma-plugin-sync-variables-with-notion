@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * コレクションモードリストコンポーネント
+ * ドラッグ&ドロップで並べ替え可能なモードリストを提供
+ */
 import { h } from 'preact'
 import { useCallback, useState } from 'preact/hooks'
 
@@ -21,18 +25,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import CollectionModeItem from '@/ui/components/CollectionModeItem'
 
+/**
+ * コレクションモードリストコンポーネントのプロパティ
+ */
 interface Props {
+  /** 現在のモード値配列 */
   values: string[]
+  /** モード変更時のコールバック関数 */
   onChange: (values: string[]) => void
 }
 
+/**
+ * ドラッグ&ドロップでの並べ替え機能を持つモードリストコンポーネント
+ * モードの追加、削除、順序変更が可能
+ */
 export default function CollectionModesList({ values, onChange }: Props) {
   const [inputValue, setInputValue] = useState('')
 
   // dnd-kitのセンサー設定
   const sensors = useSensors(useSensor(PointerSensor))
 
-  // 新しい言語の追加
+  /**
+   * 新しいモードの追加ハンドラ
+   * 重複チェックを行い、ユニークな値のみを追加
+   */
   const handleAddClick = useCallback(() => {
     const trimmedValue = inputValue.trim()
     if (trimmedValue && !values.includes(trimmedValue)) {
@@ -41,7 +57,10 @@ export default function CollectionModesList({ values, onChange }: Props) {
     }
   }, [inputValue, values, onChange])
 
-  // 言語の削除
+  /**
+   * モードの削除ハンドラ
+   * @param idToRemove 削除する項目のID
+   */
   const handleRemove = useCallback(
     (idToRemove: string) => {
       onChange(values.filter((_, index) => index.toString() !== idToRemove))

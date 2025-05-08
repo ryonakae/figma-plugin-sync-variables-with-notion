@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * アプリケーションのメインコンポーネント
+ * タブ切り替えとイベントハンドリングを統括
+ */
 import { type JSX, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 

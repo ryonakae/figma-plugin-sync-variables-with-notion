@@ -2,10 +2,19 @@ import { emit } from '@create-figma-plugin/utilities'
 
 import { useSettingsStore, useTmpSettingsStore } from '@/ui/store'
 
+/**
+ * 設定の取得と更新を行うカスタムフック
+ * 永続的な設定と一時的な設定の両方を管理
+ */
 export default function useSettings() {
   const settings = useSettingsStore()
   const tmpSettings = useTmpSettingsStore()
 
+  /**
+   * 永続的な設定を更新する関数
+   * storeに保存し、mainスレッドに送信
+   * @param newSettings 更新する設定のオブジェクト
+   */
   function updateSettings(
     newSettings: { [T in keyof Settings]?: Settings[T] },
   ) {
@@ -22,6 +31,11 @@ export default function useSettings() {
     })
   }
 
+  /**
+   * 一時的な設定を更新する関数
+   * storeに保存するのみで、mainスレッドには送信しません
+   * @param newSettings 更新する一時的な設定のオブジェクト
+   */
   function updateTmpSettings(
     newSettings: { [T in keyof TmpSettings]?: TmpSettings[T] },
   ) {

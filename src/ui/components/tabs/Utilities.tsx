@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * ユーティリティタブのコンポーネント
+ * テキスト変数の一括適用やハイライト機能を提供
+ */
 import { type JSX, h } from 'preact'
 
 import {
@@ -20,10 +24,17 @@ import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import useSettings from '@/ui/hooks/useSettings'
 import { emit } from '@create-figma-plugin/utilities'
 
+/**
+ * ユーティリティタブのメインコンポーネント
+ * 一括処理設定とボタンを提供
+ */
 export default function Utilities() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
 
+  /**
+   * 対象テキスト範囲のドロップダウンオプション
+   */
   const targetTextRangeDropdownOptions: DropdownOption[] &
     {
       value: TargetTextRange
@@ -42,6 +53,10 @@ export default function Utilities() {
     },
   ]
 
+  /**
+   * 対象テキスト範囲変更時のハンドラ
+   * @param event ドロップダウン変更イベント
+   */
   function handleTargetTextRangeChange(
     event: JSX.TargetedEvent<HTMLInputElement>,
   ) {

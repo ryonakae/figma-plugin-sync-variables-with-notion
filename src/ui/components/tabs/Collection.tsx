@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * コレクション同期設定タブのコンポーネント
+ * NotionデータベースとFigmaコレクションの設定と同期を行う
+ */
 import { type JSX, h } from 'preact'
 import { useRef } from 'preact/hooks'
 
@@ -18,6 +22,10 @@ import TabItem from '@/ui/components/TabItem'
 import useNotion from '@/ui/hooks/useNotion'
 import useSettings from '@/ui/hooks/useSettings'
 
+/**
+ * コレクション同期タブのメインコンポーネント
+ * Notion設定フォームと同期ボタンを提供
+ */
 export default function Collection() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
@@ -30,6 +38,11 @@ export default function Collection() {
   })
   const keyValuesRef = useRef<NotionKeyValue[]>([])
 
+  /**
+   * 設定フィールドの入力ハンドラ
+   * @param key 更新する設定のキー
+   * @returns イベントハンドラ関数
+   */
   function handleInput(key: keyof Settings) {
     return (event: JSX.TargetedEvent<HTMLInputElement>) => {
       updateSettings({
@@ -38,12 +51,20 @@ export default function Collection() {
     }
   }
 
+  /**
+   * モード選択変更時のハンドラ
+   * @param modes 選択されたモード配列
+   */
   function handleModesChange(modes: string[]) {
     updateSettings({
       notionValuePropertyNames: modes,
     })
   }
 
+  /**
+   * 同期ボタンクリック時のハンドラ
+   * Notionからデータを取得し、Figmaコレクションに同期
+   */
   async function handleSyncClick() {
     updateTmpSettings({
       loading: true,

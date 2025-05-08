@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * リスト表示モードドロップダウンコンポーネント
+ * 変数コレクションのモード選択機能を提供
+ */
 import { Fragment, type JSX, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
@@ -7,17 +11,30 @@ import { Dropdown, type DropdownOption, Textbox } from '@create-figma-plugin/ui'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
+/**
+ * 変数コレクションのモード（例：ライト/ダークテーマ）を選択するドロップダウン
+ * 選択されたコレクションに基づいて利用可能なモードを動的に表示
+ */
 export default function ListDisplayModeDropdown() {
   const { settings, updateSettings } = useSettings()
   const { getLibraryVariables, isLocalCollection } = useCollection()
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([])
   const [isDropdownReady, setIsDropdownReady] = useState(false)
 
+  /**
+   * モード選択変更時のハンドラ
+   * @param event 変更イベント
+   */
   function handleChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
     updateSettings({ listDisplayModeId: newValue })
   }
 
+  /**
+   * ドロップダウンオプションを更新する関数
+   * 選択されたコレクションに基づいて利用可能なモードを設定
+   * @param targetCollection 選択されたコレクション
+   */
   async function updateDropdownOptions(
     targetCollection:
       | VariableCollectionForUI

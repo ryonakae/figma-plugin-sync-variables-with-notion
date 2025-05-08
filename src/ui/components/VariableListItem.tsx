@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * 変数リストアイテムコンポーネント
+ * 単一の変数項目を表示し、コピーとクリック操作を提供
+ */
 import { type JSX, h } from 'preact'
 
 import { Button } from '@create-figma-plugin/ui'
@@ -8,19 +12,36 @@ import { twMerge } from 'tailwind-merge'
 import VariableListItemCopyButton from '@/ui/components/VariableListItemCopyButton'
 import useSettings from '@/ui/hooks/useSettings'
 
+/**
+ * コピーボタン付き値表示コンポーネントのプロパティ
+ */
 type ValueWithCopyButtonProps = {
+  /** 値のラベル */
   label: string
+  /** 表示する値 */
   value: string
+  /** コピーボタンクリック時にコピーするテキスト */
   copyText: string
+  /** 選択状態 */
   selected: boolean
 }
 
+/**
+ * 変数リストアイテムコンポーネントのプロパティ
+ */
 type VariableListItemProps = {
+  /** 表示する変数 */
   variable: VariableForUI
+  /** クリック時のコールバック */
   onClick: (id: string) => void
+  /** 選択状態 */
   selected: boolean
 }
 
+/**
+ * コピーボタン付きの値表示コンポーネント
+ * ホバー時にコピーボタンを表示
+ */
 function ValueWithCopyButton({
   label,
   value,

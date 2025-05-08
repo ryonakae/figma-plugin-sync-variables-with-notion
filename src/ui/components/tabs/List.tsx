@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * 変数リスト表示タブのコンポーネント
+ * コレクション内の変数一覧を表示し、適用や詳細表示機能を提供
+ */
 import { Fragment, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
@@ -21,6 +25,10 @@ import VariableList from '@/ui/components/VariableList'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
+/**
+ * 変数リストタブのメインコンポーネント
+ * コレクション選択と変数一覧表示を提供
+ */
 export default function List() {
   const { settings, tmpSettings, updateTmpSettings } = useSettings()
   const {
@@ -33,6 +41,10 @@ export default function List() {
   const [variables, setVariables] = useState<VariableForUI[]>([])
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
+  /**
+   * 選択されたコレクションの変数を取得して表示する関数
+   * @param targetCollection 対象のコレクション
+   */
   async function updateVariables(
     targetCollection: VariableCollectionForUI | LibraryVariableCollection,
   ) {

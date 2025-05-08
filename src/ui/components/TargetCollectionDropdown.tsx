@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * 変数コレクション選択ドロップダウンコンポーネント
+ * ローカルおよびライブラリのコレクションを選択するためのUI
+ */
 import { Fragment, type JSX, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
@@ -7,14 +11,24 @@ import { useMount, useUnmount } from 'react-use'
 
 import useSettings from '@/ui/hooks/useSettings'
 
-// Propsの型定義
+/**
+ * ターゲットコレクションドロップダウンのプロパティ
+ */
 type TargetCollectionDropdownProps = {
-  settingKey: 'listTargetCollection' | 'utilitiesTargetCollection' // 更新する設定キー
-  value: VariableCollectionForUI | LibraryVariableCollection | 'all' | null // 現在の選択値
-  initialOption?: DropdownOption // 先頭に追加する特別なオプション (例: 'All')
-  defaultValue: 'all' | null // デフォルト値 (選択肢がない場合など)
+  /** 更新する設定キー */
+  settingKey: 'listTargetCollection' | 'utilitiesTargetCollection'
+  /** 現在の選択値 */
+  value: VariableCollectionForUI | LibraryVariableCollection | 'all' | null
+  /** 先頭に追加する特別なオプション (例: 'All') */
+  initialOption?: DropdownOption
+  /** デフォルト値 (選択肢がない場合など) */
+  defaultValue: 'all' | null
 }
 
+/**
+ * 変数コレクション選択ドロップダウンコンポーネント
+ * ローカルとライブラリのコレクションをグループ化して表示
+ */
 export default function TargetCollectionDropdown({
   settingKey,
   value,
@@ -25,7 +39,10 @@ export default function TargetCollectionDropdown({
   const [isDropdownReady, setIsDropdownReady] = useState(false) // ドロップダウン準備完了フラグ
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([]) // ドロップダウンの選択肢
 
-  // ドロップダウンの選択肢を更新する関数
+  /**
+   * ドロップダウンの選択肢を更新する関数
+   * @param options ローカルおよびライブラリコレクションの配列
+   */
   async function updateDropdownOptions(options: {
     localCollections: VariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
