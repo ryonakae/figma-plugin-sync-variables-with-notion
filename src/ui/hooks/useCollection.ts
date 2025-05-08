@@ -15,10 +15,7 @@ export default function useCollection() {
     targetCollection: VariableCollectionForUI,
   ): Promise<VariableForUI[]> {
     return new Promise((resolve, _reject) => {
-      once<SetLocalVariablesFromMain>(
-        'SET_LOCAL_VARIABLES_FROM_MAIN',
-        variables => resolve(variables),
-      )
+      once<SetLocalVariablesFromMain>('SET_LOCAL_VARIABLES_FROM_MAIN', resolve)
       emit<GetLocalVariablesFromUI>(
         'GET_LOCAL_VARIABLES_FROM_UI',
         targetCollection,
@@ -32,7 +29,7 @@ export default function useCollection() {
     return new Promise((resolve, _reject) => {
       once<SetLibraryVariablesFromMain>(
         'SET_LIBRARY_VARIABLES_FROM_MAIN',
-        variables => resolve(variables),
+        resolve,
       )
       emit<GetLibraryVariablesFromUI>(
         'GET_LIBRARY_VARIABLES_FROM_UI',

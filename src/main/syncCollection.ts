@@ -1,5 +1,3 @@
-import { emit } from '@create-figma-plugin/utilities'
-
 // 対象のコレクションを取得する関数
 async function getTargetCollection(collectionName: string) {
   console.log('getTargetCollection', collectionName)

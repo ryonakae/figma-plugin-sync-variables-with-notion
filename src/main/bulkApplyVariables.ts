@@ -1,13 +1,12 @@
 import { emit } from '@create-figma-plugin/utilities'
 
-import { applyVariableToTextNode } from '@/main/applyVariableToTextNode'
-import getLibraryVariablesWithCache from '@/main/getLibraryVariablesWithCache'
-import { filterTextNodes, getTextNodes } from '@/main/util'
+import { applyVariableToTextNode } from '@/main/utils/applyVariableToTextNode'
+import filterTextNodes from '@/main/utils/filterTextNodes'
+import getLibraryVariablesWithCache from '@/main/utils/getLibraryVariablesWithCache'
+import getTextNodes from '@/main/utils/getTextNodes'
 
 // ローカルコレクションにあるバリアブルを取得する関数
-async function getLocalVariables(
-  collection: VariableCollectionForUI,
-): Promise<Variable[]> {
+async function getLocalVariables(collection: VariableCollectionForUI) {
   // ローカルCollectionを取得
   const localCollections =
     await figma.variables.getLocalVariableCollectionsAsync()
@@ -46,9 +45,7 @@ async function getLocalVariables(
 }
 
 // ライブラリコレクションにあるバリアブルを取得する関数
-async function getLibraryVariables(
-  collection: LibraryVariableCollection,
-): Promise<Variable[]> {
+async function getLibraryVariables(collection: LibraryVariableCollection) {
   let importedVariables = await getLibraryVariablesWithCache(collection.key)
 
   // importedVariablesを、resolvedTypeがstringのもの &

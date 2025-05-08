@@ -1,4 +1,4 @@
-export default async function getLocalVariables(
+export default async function getLocalVariableForUI(
   targetCollection: VariableCollectionForUI,
 ) {
   // Variablesを定義

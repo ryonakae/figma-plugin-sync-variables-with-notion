@@ -1,4 +1,5 @@
-import { getAncestorInstances, getTextNodes } from '@/main/util'
+import getAncestorInstances from '@/main/utils/getAncestorInstances'
+import getTextNodes from '@/main/utils/getTextNodes'
 
 // ページにあるtextNodeの上にrectを作成し、ハイライトする関数
 async function createHighlightRectOnPage(

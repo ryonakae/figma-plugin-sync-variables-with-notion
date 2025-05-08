@@ -1,4 +1,4 @@
-import getLibraryVariablesWithCache from '@/main/getLibraryVariablesWithCache'
+import getLibraryVariablesWithCache from '@/main/utils/getLibraryVariablesWithCache'
 
 export default async function getLibraryVariablesForUI(
   targetCollection: LibraryVariableCollection,

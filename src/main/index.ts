@@ -8,14 +8,14 @@ import {
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
 import bulkApplyVariables from '@/main/bulkApplyVariables'
-import { clearCache } from '@/main/cache'
-import getCollections from '@/main/getCollections'
-import getLibraryVariablesForUI from '@/main/getLibraryVariablesForUI'
-import getLocalVariables from '@/main/getLocalVariables'
-import handleError from '@/main/handleError'
 import highlightText from '@/main/highlightText'
 import { loadSettings, saveSettings } from '@/main/settings'
 import syncCollection from '@/main/syncCollection'
+import { clearCache } from '@/main/utils/cache'
+import getCollections from '@/main/utils/getCollections'
+import getLibraryVariablesForUI from '@/main/utils/getLibraryVariablesForUI'
+import getLocalVariableForUI from '@/main/utils/getLocalVariableForUI'
+import handleError from '@/main/utils/handleError'
 
 export default async function () {
   // set relaunch button
@@ -78,12 +78,12 @@ export default async function () {
   on<GetLocalVariablesFromUI>(
     'GET_LOCAL_VARIABLES_FROM_UI',
     async targetCollection => {
-      const variablesForUI = await getLocalVariables(targetCollection).catch(
-        (error: Error) => {
-          handleError(error)
-          throw new Error(error.message)
-        },
-      )
+      const variablesForUI = await getLocalVariableForUI(
+        targetCollection,
+      ).catch((error: Error) => {
+        handleError(error)
+        throw new Error(error.message)
+      })
 
       emit<SetLocalVariablesFromMain>(
         'SET_LOCAL_VARIABLES_FROM_MAIN',

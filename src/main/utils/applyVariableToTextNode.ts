@@ -1,4 +1,4 @@
-import { getAncestorInstances } from '@/main/util'
+import getAncestorInstances from '@/main/utils/getAncestorInstances'
 
 export async function applyVariableToTextNode(
   node: TextNode,
