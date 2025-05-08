@@ -40,6 +40,8 @@ export default function List() {
   } = useCollection()
   const [variables, setVariables] = useState<VariableForUI[]>([])
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [isLibraryCollectionCached, setIsLibraryCollectionCached] =
+    useState(false)
 
   /**
    * 選択されたコレクションの変数を取得して表示する関数
@@ -62,7 +64,9 @@ export default function List() {
     if (isLocalCollection(targetCollection)) {
       newVariables = await getLocalVariables(targetCollection)
     } else {
-      newVariables = await getLibraryVariables(targetCollection)
+      const result = await getLibraryVariables(targetCollection)
+      newVariables = result.variablesForUI
+      setIsLibraryCollectionCached(result.cacheResult.success)
     }
 
     // newVariablesを、resolvedTypeがstringのもの &
@@ -149,11 +153,20 @@ export default function List() {
               isLibraryCollection(settings.listTargetCollection) && (
                 <div className="flex h-6 items-center justify-between">
                   {tmpSettings.loadingVariables ? (
-                    <div>Loading...</div>
+                    <div className="text-text-secondary">Loading...</div>
                   ) : (
                     <Fragment>
-                      <div className="flex gap-1 text-text-secondary">
-                        <span>This library collection is cached.</span>
+                      <div className="flex gap-1">
+                        {isLibraryCollectionCached ? (
+                          <span className="text-text-secondary">
+                            This library collection is cached.
+                          </span>
+                        ) : (
+                          <span className="text-text-danger">
+                            This library collection is not cached.
+                          </span>
+                        )}
+
                         <button
                           type="button"
                           className="text-text-link"
@@ -184,6 +197,14 @@ export default function List() {
                             <p>
                               Clicking the Refresh button will clear the cache
                               and re-fetch the variables.
+                            </p>
+                            <p className="text-text-danger">
+                              For collections with an extremely large number of
+                              variables, caching may fail due to Figma's Client
+                              Storage limitations (5MB). In such cases, the
+                              plugin will need to fetch the collection each time
+                              it starts, which could potentially trigger Figma
+                              Plugin API rate limits.
                             </p>
                           </div>
                         </Modal>

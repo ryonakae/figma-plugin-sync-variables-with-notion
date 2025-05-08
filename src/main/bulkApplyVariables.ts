@@ -61,11 +61,11 @@ async function getLocalVariables(collection: VariableCollectionForUI) {
  */
 async function getLibraryVariables(collection: LibraryVariableCollection) {
   // キャッシュを利用してライブラリ変数を取得
-  let importedVariables = await getLibraryVariablesWithCache(collection.key)
+  const result = await getLibraryVariablesWithCache(collection.key)
 
-  // importedVariablesを、resolvedTypeがstringのもの &
+  // result.variablesを、resolvedTypeがstringのもの &
   // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
-  importedVariables = importedVariables.filter(
+  const importedVariables = result.variables.filter(
     variable =>
       variable.resolvedType === 'STRING' &&
       (variable.scopes.includes('ALL_SCOPES') ||

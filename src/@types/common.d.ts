@@ -117,6 +117,12 @@ declare global {
   }
 
   /**
+   * キャッシュ操作の結果を表す型
+   * 成功時はsuccessフラグのみ、失敗時はエラーメッセージを含む
+   */
+  type SaveCacheResult = { success: true } | { success: false; error: string }
+
+  /**
    * ドロップダウン用の型定義
    */
   type ListTargetCollectionDropdownOptionValue = DropdownOptionValue & {

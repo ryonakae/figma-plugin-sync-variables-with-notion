@@ -43,7 +43,10 @@ export default function useCollection() {
    */
   function getLibraryVariables(
     targetCollection: LibraryVariableCollection,
-  ): Promise<VariableForUI[]> {
+  ): Promise<{
+    variablesForUI: VariableForUI[]
+    cacheResult: SaveCacheResult
+  }> {
     return new Promise((resolve, _reject) => {
       once<SetLibraryVariablesFromMain>(
         'SET_LIBRARY_VARIABLES_FROM_MAIN',

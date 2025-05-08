@@ -13,11 +13,12 @@ import { CACHE_KEY } from '@/constants'
  * キャッシュにライブラリ変数を保存する関数
  * @param libraryCollectionKey ライブラリコレクションのキー
  * @param variables 保存する変数の配列
+ * @returns キャッシュ保存の結果
  */
 export async function saveCache(
   libraryCollectionKey: string,
   variables: Variable[],
-) {
+): Promise<SaveCacheResult> {
   console.log('saveCache: start', libraryCollectionKey, variables)
 
   // 現在のキャッシュを読み込む
@@ -54,8 +55,13 @@ export async function saveCache(
       CACHE_KEY,
     )
     console.log('saveCache: success')
+    return { success: true }
   } catch (error) {
     console.error('saveCache: failed to save settings', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    }
   }
 }
 

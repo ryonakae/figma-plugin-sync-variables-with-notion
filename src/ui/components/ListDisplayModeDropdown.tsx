@@ -76,8 +76,8 @@ export default function ListDisplayModeDropdown() {
       }
     } else {
       // LibraryVariableCollectionの場合: variableを取得し、そのmodeの配列をdropdownOptionsに設定
-      const variablesInLibraryCollection =
-        await getLibraryVariables(targetCollection)
+      const result = await getLibraryVariables(targetCollection)
+      const variablesInLibraryCollection = result.variablesForUI
       console.log('variablesInLibraryCollection', variablesInLibraryCollection)
 
       const valuesByMode = variablesInLibraryCollection[0].valuesByMode

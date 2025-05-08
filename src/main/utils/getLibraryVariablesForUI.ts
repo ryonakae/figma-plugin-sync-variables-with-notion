@@ -1,30 +1,33 @@
 import getLibraryVariablesWithCache from '@/main/utils/getLibraryVariablesWithCache'
 
+/**
+ * ライブラリコレクションからUI表示用の変数一覧を取得する関数
+ *
+ * @param targetCollection 対象のライブラリコレクション
+ * @returns UI表示用の変数一覧とキャッシュ操作の結果
+ */
 export default async function getLibraryVariablesForUI(
   targetCollection: LibraryVariableCollection,
 ) {
-  const importedVariables = await getLibraryVariablesWithCache(
-    targetCollection.key,
-  )
+  // キャッシュを利用して変数を取得
+  const result = await getLibraryVariablesWithCache(targetCollection.key)
 
-  const variablesForUI: VariableForUI[] = []
+  // variablesをUI表示用に変換
+  const variablesForUI: VariableForUI[] = result.variables.map(v => ({
+    id: v.id,
+    name: v.name,
+    // description: v.description,
+    // remote: v.remote,
+    variableCollectionId: v.variableCollectionId,
+    key: v.key,
+    resolvedType: v.resolvedType,
+    valuesByMode: v.valuesByMode,
+    scopes: v.scopes,
+  }))
 
-  // importedVariablesの各要素をvariablesForUIに追加
-  await Promise.all(
-    importedVariables.map(async v => {
-      variablesForUI.push({
-        id: v.id,
-        name: v.name,
-        // description: v.description,
-        // remote: v.remote,
-        variableCollectionId: v.variableCollectionId,
-        key: v.key,
-        resolvedType: v.resolvedType,
-        valuesByMode: v.valuesByMode,
-        scopes: v.scopes,
-      })
-    }),
-  )
-
-  return variablesForUI
+  // 変数の配列とキャッシュ操作の結果を返す
+  return {
+    variablesForUI: variablesForUI,
+    cacheResult: result.cacheResult,
+  }
 }

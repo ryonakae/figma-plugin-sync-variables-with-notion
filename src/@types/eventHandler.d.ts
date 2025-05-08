@@ -111,7 +111,10 @@ declare global {
    */
   interface SetLibraryVariablesFromMain extends EventHandler {
     name: 'SET_LIBRARY_VARIABLES_FROM_MAIN'
-    handler: (variablesForUI: VariableForUI[]) => void
+    handler: (options: {
+      variablesForUI: VariableForUI[]
+      cacheResult: SaveCacheResult
+    }) => void
   }
 
   /**

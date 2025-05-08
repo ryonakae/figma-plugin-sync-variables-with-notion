@@ -95,17 +95,17 @@ export default async function () {
   on<GetLibraryVariablesFromUI>(
     'GET_LIBRARY_VARIABLES_FROM_UI',
     async targetCollection => {
-      const variablesForUI = await getLibraryVariablesForUI(
-        targetCollection,
-      ).catch((error: Error) => {
-        handleError(error)
-        throw new Error(error.message)
-      })
-
-      emit<SetLibraryVariablesFromMain>(
-        'SET_LIBRARY_VARIABLES_FROM_MAIN',
-        variablesForUI,
+      const result = await getLibraryVariablesForUI(targetCollection).catch(
+        (error: Error) => {
+          handleError(error)
+          throw new Error(error.message)
+        },
       )
+
+      emit<SetLibraryVariablesFromMain>('SET_LIBRARY_VARIABLES_FROM_MAIN', {
+        variablesForUI: result.variablesForUI,
+        cacheResult: result.cacheResult,
+      })
     },
   )
 

@@ -10,18 +10,22 @@ import { loadCache, saveCache } from '@/main/cache'
  * キャッシュに保存
  *
  * @param libraryCollectionKey ライブラリコレクションのキー
- * @returns 変数の配列
+ * @returns 変数の配列とキャッシュ操作の結果
  */
 export default async function getLibraryVariablesWithCache(
   libraryCollectionKey: string,
-): Promise<Variable[]> {
+) {
   // キャッシュから変数を検索
   const cachedVariables = await loadCache(libraryCollectionKey)
 
   // キャッシュがあればそれを使用（キャッシュヒット）
   if (cachedVariables) {
     console.log('Cache hit for:', libraryCollectionKey)
-    return cachedVariables
+    // キャッシュヒットの場合は、変数とダミーの成功結果を返す
+    return {
+      variables: cachedVariables,
+      cacheResult: { success: true } as SaveCacheResult,
+    }
   }
 
   // キャッシュがなければAPIから取得（キャッシュミス）
@@ -47,8 +51,12 @@ export default async function getLibraryVariablesWithCache(
   console.log('Imported variables:', importedVariables)
 
   // インポートした変数をキャッシュに保存
-  await saveCache(libraryCollectionKey, importedVariables)
+  const cacheResult = await saveCache(libraryCollectionKey, importedVariables)
   console.log('Saved fetched variables to cache for:', libraryCollectionKey)
 
-  return importedVariables
+  // 変数とキャッシュ操作の結果を返す
+  return {
+    variables: importedVariables,
+    cacheResult,
+  }
 }
