@@ -1,6 +1,6 @@
 import { emit } from '@create-figma-plugin/utilities'
 
-import { useSettingsStore, useTmpSettingsStore } from '@/store'
+import { useSettingsStore, useTmpSettingsStore } from '@/ui/store'
 
 export default function useSettings() {
   const settings = useSettingsStore()
