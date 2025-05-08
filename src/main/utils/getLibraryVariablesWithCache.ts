@@ -1,4 +1,4 @@
-import { loadCache, saveCache } from '@/main/utils/cache'
+import { loadCache, saveCache } from '@/main/cache'
 
 export default async function getLibraryVariablesWithCache(
   libraryCollectionKey: string,

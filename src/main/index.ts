@@ -8,14 +8,15 @@ import {
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@/constants'
 import applyVariable from '@/main/applyVariable'
 import bulkApplyVariables from '@/main/bulkApplyVariables'
+import { clearCache } from '@/main/cache'
+import handleError from '@/main/handleError'
 import highlightText from '@/main/highlightText'
 import { loadSettings, saveSettings } from '@/main/settings'
 import syncCollection from '@/main/syncCollection'
-import { clearCache } from '@/main/utils/cache'
+
 import getCollections from '@/main/utils/getCollections'
 import getLibraryVariablesForUI from '@/main/utils/getLibraryVariablesForUI'
 import getLocalVariableForUI from '@/main/utils/getLocalVariableForUI'
-import handleError from '@/main/utils/handleError'
 
 export default async function () {
   // set relaunch button

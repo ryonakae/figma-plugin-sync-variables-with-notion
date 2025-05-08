@@ -1,5 +1,5 @@
-import getVariable from '@/main//utils/getVariable'
 import { applyVariableToTextNode } from '@/main/utils/applyVariableToTextNode'
+import getVariable from '@/main/utils/getVariable'
 
 export default async function applyVariable(variableForUI: VariableForUI) {
   console.log('applyVariable', applyVariable)
