@@ -16,9 +16,9 @@ import {
 } from '@create-figma-plugin/ui'
 import { useMount, useUnmount } from 'react-use'
 
+import DisplayModeDropdown from '@/ui/components/DisplayModeDropdown'
 import Empty from '@/ui/components/Empty'
 import FormItem from '@/ui/components/FormItem'
-import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import TabItem from '@/ui/components/TabItem'
 import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import VariableList from '@/ui/components/VariableList'
@@ -220,7 +220,7 @@ export default function List() {
           </FormItem>
 
           <FormItem title="Display mode">
-            <ListDisplayModeDropdown
+            <DisplayModeDropdown
               targetCollection={settings.listTargetCollection}
               variablesForUI={variables}
             />

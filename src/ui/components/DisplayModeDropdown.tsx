@@ -12,9 +12,9 @@ import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
 /**
- * ListDisplayModeDropdownコンポーネントのProps
+ * DisplayModeDropdownコンポーネントのProps
  */
-interface ListDisplayModeDropdownProps {
+interface DisplayModeDropdownProps {
   /**
    * 選択されたコレクション
    */
@@ -31,10 +31,10 @@ interface ListDisplayModeDropdownProps {
  * 変数コレクションのモード（例：ライト/ダークテーマ）を選択するドロップダウン
  * 選択されたコレクションに基づいて利用可能なモードを動的に表示
  */
-export default function ListDisplayModeDropdown({
+export default function DisplayModeDropdown({
   targetCollection,
   variablesForUI,
-}: ListDisplayModeDropdownProps) {
+}: DisplayModeDropdownProps) {
   const { settings, updateSettings } = useSettings()
   const { isLocalCollection } = useCollection()
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([])
@@ -55,7 +55,7 @@ export default function ListDisplayModeDropdown({
    */
   function updateDropdownOptions() {
     console.log(
-      '[ListDisplayModeDropdown] updateDropdownOptions',
+      '[DisplayModeDropdown] updateDropdownOptions',
       targetCollection,
       variablesForUI,
     )
@@ -67,13 +67,13 @@ export default function ListDisplayModeDropdown({
 
     // targetCollectionがnullなら何もしない
     if (targetCollection === null) {
-      console.log('[ListDisplayModeDropdown] targetCollection is null')
+      console.log('[DisplayModeDropdown] targetCollection is null')
       newDropdownOptions = []
       displayModeId = ''
     } else if (isLocalCollection(targetCollection)) {
       // LocalVariableCollectionの場合: modeの配列をdropdownOptionsに設定
       console.log(
-        '[ListDisplayModeDropdown] targetCollection is LocalVariableCollection',
+        '[DisplayModeDropdown] targetCollection is LocalVariableCollection',
       )
       newDropdownOptions = targetCollection.modes.map(mode => ({
         text: mode.name,
@@ -95,14 +95,14 @@ export default function ListDisplayModeDropdown({
     } else {
       // LibraryVariableCollectionの場合: propsから受け取った変数を使用
       console.log(
-        '[ListDisplayModeDropdown] targetCollection is LibraryVariableCollection',
+        '[DisplayModeDropdown] targetCollection is LibraryVariableCollection',
       )
       if (variablesForUI.length > 0) {
         const valuesByMode = variablesForUI[0].valuesByMode
         const modeIds = Object.keys(valuesByMode)
 
-        console.log('[ListDisplayModeDropdown] valuesByMode', valuesByMode)
-        console.log('[ListDisplayModeDropdown] modeIds', modeIds)
+        console.log('[DisplayModeDropdown] valuesByMode', valuesByMode)
+        console.log('[DisplayModeDropdown] modeIds', modeIds)
 
         newDropdownOptions = modeIds.map(modeId => ({
           value: modeId,
@@ -121,11 +121,8 @@ export default function ListDisplayModeDropdown({
       }
     }
 
-    console.log(
-      '[ListDisplayModeDropdown] newDropdownOptions',
-      newDropdownOptions,
-    )
-    console.log('[ListDisplayModeDropdown] displayModeId', displayModeId)
+    console.log('[DisplayModeDropdown] newDropdownOptions', newDropdownOptions)
+    console.log('[DisplayModeDropdown] displayModeId', displayModeId)
 
     setDropdownOptions(newDropdownOptions)
     updateSettings({
@@ -139,7 +136,7 @@ export default function ListDisplayModeDropdown({
 
   useEffect(() => {
     updateDropdownOptions()
-  }, [targetCollection])
+  }, [targetCollection, variablesForUI])
 
   return (
     <Fragment>
