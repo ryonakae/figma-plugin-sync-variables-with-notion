@@ -35,7 +35,7 @@ export default function DisplayModeDropdown({
   targetCollection,
   variablesForUI,
 }: DisplayModeDropdownProps) {
-  const { settings, updateSettings } = useSettings()
+  const { settings, tmpSettings, updateSettings } = useSettings()
   const { isLocalCollection } = useCollection()
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([])
   const [isDropdownReady, setIsDropdownReady] = useState(false)
@@ -142,7 +142,7 @@ export default function DisplayModeDropdown({
     <Fragment>
       {!targetCollection ? (
         <Textbox disabled value="" />
-      ) : !isDropdownReady ? (
+      ) : !isDropdownReady || tmpSettings.loadingVariables ? (
         <Textbox disabled value="Loading modes..." />
       ) : dropdownOptions.length > 0 ? (
         <Dropdown
