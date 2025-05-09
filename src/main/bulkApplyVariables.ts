@@ -95,7 +95,7 @@ export default async function bulkApplyVariables(options: {
   // 指定された範囲のテキストノードを取得
   let textNodes = await getTextNodes(options.targetTextRange)
 
-  console.log('textNodes', textNodes)
+  console.log('[bulkApplyVariables] textNodes', textNodes)
 
   // フィルタリングオプションが指定されている場合、テキストノードをフィルタリング
   if (!options.isIncludeComponents || !options.isIncludeInstances) {
@@ -106,7 +106,7 @@ export default async function bulkApplyVariables(options: {
     })
   }
 
-  console.log('filterd textNodes', textNodes)
+  console.log('[bulkApplyVariables] filterd textNodes', textNodes)
 
   // テキストノードが見つからない場合はエラーをスロー
   if (textNodes.length === 0) {
@@ -203,7 +203,10 @@ export default async function bulkApplyVariables(options: {
     )
   }
 
-  console.log('variablesInTargetCollection', variablesInTargetCollection)
+  console.log(
+    '[bulkApplyVariables] variablesInTargetCollection',
+    variablesInTargetCollection,
+  )
 
   // バリアブルを割り当てたテキストの数をカウントする変数
   let setBoundVariableCount = 0
@@ -224,7 +227,7 @@ export default async function bulkApplyVariables(options: {
             value.replace(/\s+/g, ' ').trim() === characters,
         ),
       )
-      console.log('targetVariable', targetVariable)
+      console.log('[bulkApplyVariables] targetVariable', targetVariable)
 
       // 一致する変数が見つからない場合はスキップ
       if (!targetVariable) {

@@ -10,7 +10,7 @@ import getVariable from '@/main/utils/getVariable'
  * @throws 変数が見つからない場合エラーをスロー
  */
 export default async function applyVariable(variableForUI: VariableForUI) {
-  console.log('applyVariable', applyVariable)
+  console.log('[applyVariable] applyVariable', variableForUI)
 
   // 選択がない場合は処理を終了
   if (figma.currentPage.selection.length === 0) {
@@ -30,7 +30,7 @@ export default async function applyVariable(variableForUI: VariableForUI) {
     }
   })
 
-  console.log('textNodes', textNodes)
+  console.log('[applyVariable] textNodes', textNodes)
 
   // textNodeが1つも無かったら処理を中断
   if (textNodes.length === 0) {

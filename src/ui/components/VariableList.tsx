@@ -65,14 +65,14 @@ export default function VariableList({ variables }: VariableListProps) {
    */
   function handleInput(event: JSX.TargetedEvent<HTMLInputElement>) {
     const inputValue = event.currentTarget.value
-    console.log('handleInput', inputValue)
+    console.log('[VarList] handleInput', inputValue)
     updateSettings({
       listFilterString: inputValue,
     })
   }
 
   function handleClear() {
-    console.log('handleClear')
+    console.log('[VarList] handleClear')
     updateSettings({
       listFilterString: '',
     })
@@ -81,7 +81,7 @@ export default function VariableList({ variables }: VariableListProps) {
   }
 
   function filterList(listFilterString: string) {
-    console.log('filterList', listFilterString)
+    console.log('[VarList] filterList', listFilterString)
 
     // リストをリセット
     reset()
@@ -109,7 +109,11 @@ export default function VariableList({ variables }: VariableListProps) {
   // itemをクリックした時に実行する関数
   const handleItemClick = useCallback(
     (id: string) => {
-      console.log('handleItemClick', id, settings.listSelectedListItems)
+      console.log(
+        '[VarList] handleItemClick',
+        id,
+        settings.listSelectedListItems,
+      )
 
       const targetCollection = settings.listTargetCollection
       if (!targetCollection) return
@@ -167,7 +171,10 @@ export default function VariableList({ variables }: VariableListProps) {
         const targetCollection = settings.listTargetCollection
         if (!targetCollection) return
 
-        console.log('scrollPosition update (debounced)', tmpScrollPosition)
+        console.log(
+          '[VarList] scrollPosition update (debounced)',
+          tmpScrollPosition,
+        )
 
         const collectionId = isLocalCollection(targetCollection)
           ? targetCollection.id
@@ -186,7 +193,7 @@ export default function VariableList({ variables }: VariableListProps) {
   )
 
   useMount(() => {
-    console.log('VariableList mounted', variables)
+    console.log('[VarList] VariableList mounted', variables)
 
     // マウント時にlistFilterStringが入力されていたらリストをフィルター
     if (settings.listFilterString.length > 0) {
@@ -195,12 +202,12 @@ export default function VariableList({ variables }: VariableListProps) {
   })
 
   useUnmount(() => {
-    console.log('VariableList unmounted')
+    console.log('[VarList] VariableList unmounted')
   })
 
   // listFilterStringがアップデートされたら配列をフィルター
   useUpdateEffect(() => {
-    console.log('listFilterString update', settings.listFilterString)
+    console.log('[VarList] listFilterString update', settings.listFilterString)
     filterList(settings.listFilterString)
   }, [settings.listFilterString])
 
@@ -209,7 +216,7 @@ export default function VariableList({ variables }: VariableListProps) {
   // スクロール位置が復元済み（フィルター or ソート時）→スクロール位置を0にする
   useEffect(() => {
     console.log(
-      'items updated',
+      '[VarList] items updated',
       `scrollPositionRestored: ${scrollPositionRestored}`,
     )
 
@@ -222,14 +229,14 @@ export default function VariableList({ variables }: VariableListProps) {
         : targetCollection.key
       const savedPosition = settings.listScrollPositions[collectionId] ?? 0
 
-      console.log('restore scroll position', savedPosition)
+      console.log('[VarList] restore scroll position', savedPosition)
 
       virtualizer.scrollToOffset(savedPosition)
       setTmpScrollPosition(savedPosition)
 
       setScrollPositionRestored(true)
     } else {
-      console.log('reset scroll position to top')
+      console.log('[VarList] reset scroll position to top')
       virtualizer.scrollToOffset(0)
       setTmpScrollPosition(0)
     }

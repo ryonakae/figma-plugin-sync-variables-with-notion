@@ -19,7 +19,10 @@ export default function useSettings() {
     newSettings: { [T in keyof Settings]?: Settings[T] },
   ) {
     const currentSettings = useSettingsStore.getState()
-    console.log('updateSettings', { ...currentSettings, ...newSettings })
+    console.log('[useSettings] updateSettings', {
+      ...currentSettings,
+      ...newSettings,
+    })
 
     // storeに保存
     useSettingsStore.setState({ ...currentSettings, ...newSettings })
@@ -40,7 +43,10 @@ export default function useSettings() {
     newSettings: { [T in keyof TmpSettings]?: TmpSettings[T] },
   ) {
     const currentSettings = useTmpSettingsStore.getState()
-    console.log('updateTmpSettings', { ...currentSettings, ...newSettings })
+    console.log('[useSettings] updateTmpSettings', {
+      ...currentSettings,
+      ...newSettings,
+    })
     useTmpSettingsStore.setState({ ...currentSettings, ...newSettings })
   }
 

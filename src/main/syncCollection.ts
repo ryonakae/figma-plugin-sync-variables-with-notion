@@ -1,6 +1,6 @@
 // 対象のコレクションを取得する関数
 async function getTargetCollection(collectionName: string) {
-  console.log('getTargetCollection', collectionName)
+  console.log('[syncCollection] getTargetCollection', collectionName)
 
   // ローカルCollectionを取得
   const localCollections =
@@ -13,11 +13,11 @@ async function getTargetCollection(collectionName: string) {
 
   // すでに同じ名前のCollectionがある場合はそれを使用
   if (sameNameCollection) {
-    console.log('use existing collection', sameNameCollection)
+    console.log('[syncCollection] use existing collection', sameNameCollection)
     return sameNameCollection
   }
   // ない場合はコレクションを新規作成
-  console.log('create new collection', collectionName)
+  console.log('[syncCollection] create new collection', collectionName)
   return figma.variables.createVariableCollection(collectionName)
 }
 
@@ -26,7 +26,10 @@ function updateModeFromValuePropertyNames(
   valuePropertyNames: string[],
   targetCollection: VariableCollection,
 ) {
-  console.log('updateModeFromValuePropertyNames', valuePropertyNames)
+  console.log(
+    '[syncCollection] updateModeFromValuePropertyNames',
+    valuePropertyNames,
+  )
 
   // valuePropertyNamesに含まれていないmodeを削除、含まれているものは残す
   // defaultModeは消せないのでスキップ
@@ -47,7 +50,7 @@ function updateModeFromValuePropertyNames(
       mode => mode.name === valuePropertyName,
     )
     if (sameNameMode) {
-      console.log('this mode is already exist', sameNameMode)
+      console.log('[syncCollection] this mode is already exist', sameNameMode)
       return
     }
 
@@ -76,7 +79,7 @@ function getOrCreateTargetVariable(
   variablesInTargetCollection: Variable[],
 ) {
   console.log(
-    'getOrCreateTargetVariable',
+    '[syncCollection] getOrCreateTargetVariable',
     key,
     targetCollection,
     variablesInTargetCollection,
@@ -118,7 +121,7 @@ function getUniqNotionKeyValues(
       // 重複している場合はkey名を変更
       const newKey = `[Duplicated] ${item.key} (${item.id})`
       console.warn(
-        `Duplicate key found: "${item.key}". Renaming to "${newKey}" for item ID: ${item.id}`,
+        `[syncCollection] Duplicate key found: "${item.key}". Renaming to "${newKey}" for item ID: ${item.id}`,
       )
       return { ...item, key: newKey }
     }
@@ -134,7 +137,7 @@ export default async function syncCollection(options: {
   notionKeyValues: NotionKeyValue[]
   notionValuePropertyNames: string[]
 }) {
-  console.log('syncCollection', options)
+  console.log('[syncCollection] syncCollection', options)
 
   // コレクションを取得
   const targetCollection = await getTargetCollection(options.collectionName)
@@ -152,7 +155,10 @@ export default async function syncCollection(options: {
   const variablesInTargetCollection = localVariables.filter(
     variable => variable.variableCollectionId === targetCollection.id,
   )
-  console.log('variablesInTargetCollection', variablesInTargetCollection)
+  console.log(
+    '[syncCollection] variablesInTargetCollection',
+    variablesInTargetCollection,
+  )
 
   // Notionに存在しない変数を削除
   for (const variable of variablesInTargetCollection) {
@@ -160,7 +166,10 @@ export default async function syncCollection(options: {
       notionKeyValue => notionKeyValue.key === variable.name,
     )
     if (!isExistsInNotion) {
-      console.log('Remove variable not in Notion:', variable.name)
+      console.log(
+        '[syncCollection] Remove variable not in Notion:',
+        variable.name,
+      )
       variable.remove()
     }
   }

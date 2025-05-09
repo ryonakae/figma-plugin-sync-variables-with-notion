@@ -1,7 +1,7 @@
 export default async function getCollections() {
   const localCollections =
     await figma.variables.getLocalVariableCollectionsAsync()
-  console.log('localCollections', localCollections)
+  console.log('[getCollections] localCollections', localCollections)
 
   const localCollectionsForUI: VariableCollectionForUI[] = localCollections.map(
     collection => ({
@@ -13,7 +13,7 @@ export default async function getCollections() {
 
   const libraryCollections =
     await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync()
-  console.log('libraryCollections', libraryCollections)
+  console.log('[getCollections] libraryCollections', libraryCollections)
 
   return {
     localCollections: localCollectionsForUI,

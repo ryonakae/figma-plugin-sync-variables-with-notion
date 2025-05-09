@@ -33,14 +33,14 @@ export default function TabItem({ space = 'medium', children }: TabItemProps) {
   const { resizeWindow } = useResizeWindow()
 
   useMount(async () => {
-    console.log('TabItem useMount')
+    console.log('[TabItem] TabItem useMount')
 
     // ウインドウをリサイズ
     window.requestAnimationFrame(resizeWindow)
   })
 
   useUnmount(() => {
-    console.log('TabItem useUnmount')
+    console.log('[TabItem] TabItem useUnmount')
   })
 
   return (

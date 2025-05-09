@@ -19,14 +19,14 @@ export async function saveCache(
   libraryCollectionKey: string,
   variables: Variable[],
 ): Promise<SaveCacheResult> {
-  console.log('saveCache: start', libraryCollectionKey, variables)
+  console.log('[cache] saveCache: start', libraryCollectionKey, variables)
 
   // 現在のキャッシュを読み込む
   const currentCache = await loadSettingsAsync<ClientStorageCache>(
     {},
     CACHE_KEY,
   )
-  console.log('currentCache', currentCache)
+  console.log('[cache] currentCache', currentCache)
 
   // 新しいキャッシュデータを作成（必要な属性のみを抽出して保存）
   const newCache = {
@@ -46,7 +46,7 @@ export async function saveCache(
         }) as Variable,
     ),
   }
-  console.log('newCache', newCache)
+  console.log('[cache] newCache', newCache)
 
   try {
     // 現在のキャッシュと新しいキャッシュをマージして保存
@@ -54,10 +54,10 @@ export async function saveCache(
       { ...currentCache, ...newCache },
       CACHE_KEY,
     )
-    console.log('saveCache: success')
+    console.log('[cache] saveCache: success')
     return { success: true }
   } catch (error) {
-    console.error('saveCache: failed to save settings', error)
+    console.error('[cache] saveCache: failed to save settings', error)
     return {
       success: false,
       error: error instanceof Error ? error.message : String(error),
@@ -73,12 +73,12 @@ export async function saveCache(
 export async function loadCache(
   libraryCollectionKey: string,
 ): Promise<Variable[] | undefined> {
-  console.log('loadCache: start', libraryCollectionKey)
+  console.log('[cache] loadCache: start', libraryCollectionKey)
 
   // キャッシュを読み込む
   const cache = await loadSettingsAsync<ClientStorageCache>({}, CACHE_KEY)
 
-  console.log('loadCache: done', cache[libraryCollectionKey])
+  console.log('[cache] loadCache: done', cache[libraryCollectionKey])
 
   return cache[libraryCollectionKey]
 }
@@ -88,7 +88,7 @@ export async function loadCache(
  * @param libraryCollectionKey クリアするライブラリコレクションのキー
  */
 export async function clearCache(libraryCollectionKey: string) {
-  console.log('clearCache: start', libraryCollectionKey)
+  console.log('[cache] clearCache: start', libraryCollectionKey)
 
   // 現在のキャッシュを読み込む
   const currentCache = await loadSettingsAsync<ClientStorageCache>(

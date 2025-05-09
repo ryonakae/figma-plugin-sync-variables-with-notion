@@ -12,12 +12,31 @@ import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
 /**
+ * ListDisplayModeDropdownコンポーネントのProps
+ */
+interface ListDisplayModeDropdownProps {
+  /**
+   * 選択されたコレクション
+   */
+  targetCollection: VariableCollectionForUI | LibraryVariableCollection | null
+
+  /**
+   * コレクションに関連する変数配列
+   * ライブラリコレクションの場合に使用され、getLibraryVariablesの重複呼び出しを防止
+   */
+  variablesForUI: VariableForUI[]
+}
+
+/**
  * 変数コレクションのモード（例：ライト/ダークテーマ）を選択するドロップダウン
  * 選択されたコレクションに基づいて利用可能なモードを動的に表示
  */
-export default function ListDisplayModeDropdown() {
+export default function ListDisplayModeDropdown({
+  targetCollection,
+  variablesForUI,
+}: ListDisplayModeDropdownProps) {
   const { settings, updateSettings } = useSettings()
-  const { getLibraryVariables, isLocalCollection } = useCollection()
+  const { isLocalCollection } = useCollection()
   const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([])
   const [isDropdownReady, setIsDropdownReady] = useState(false)
 
@@ -33,17 +52,12 @@ export default function ListDisplayModeDropdown() {
   /**
    * ドロップダウンオプションを更新する関数
    * 選択されたコレクションに基づいて利用可能なモードを設定
-   * @param targetCollection 選択されたコレクション
    */
-  async function updateDropdownOptions(
-    targetCollection:
-      | VariableCollectionForUI
-      | LibraryVariableCollection
-      | null,
-  ) {
+  function updateDropdownOptions() {
     console.log(
-      'ListDisplayModeDropdown: updateDropdownOptions',
+      '[ListDisplayModeDropdown] updateDropdownOptions',
       targetCollection,
+      variablesForUI,
     )
 
     setIsDropdownReady(false)
@@ -53,10 +67,14 @@ export default function ListDisplayModeDropdown() {
 
     // targetCollectionがnullなら何もしない
     if (targetCollection === null) {
+      console.log('[ListDisplayModeDropdown] targetCollection is null')
       newDropdownOptions = []
       displayModeId = ''
     } else if (isLocalCollection(targetCollection)) {
       // LocalVariableCollectionの場合: modeの配列をdropdownOptionsに設定
+      console.log(
+        '[ListDisplayModeDropdown] targetCollection is LocalVariableCollection',
+      )
       newDropdownOptions = targetCollection.modes.map(mode => ({
         text: mode.name,
         value: mode.modeId,
@@ -75,35 +93,39 @@ export default function ListDisplayModeDropdown() {
         displayModeId = targetCollection.modes[0].modeId
       }
     } else {
-      // LibraryVariableCollectionの場合: variableを取得し、そのmodeの配列をdropdownOptionsに設定
-      const result = await getLibraryVariables(targetCollection)
-      const variablesInLibraryCollection = result.variablesForUI
-      console.log('variablesInLibraryCollection', variablesInLibraryCollection)
+      // LibraryVariableCollectionの場合: propsから受け取った変数を使用
+      console.log(
+        '[ListDisplayModeDropdown] targetCollection is LibraryVariableCollection',
+      )
+      if (variablesForUI.length > 0) {
+        const valuesByMode = variablesForUI[0].valuesByMode
+        const modeIds = Object.keys(valuesByMode)
 
-      const valuesByMode = variablesInLibraryCollection[0].valuesByMode
-      console.log('valuesByMode', valuesByMode)
+        console.log('[ListDisplayModeDropdown] valuesByMode', valuesByMode)
+        console.log('[ListDisplayModeDropdown] modeIds', modeIds)
 
-      const modeIds = Object.keys(valuesByMode)
-      console.log('modeIds', modeIds)
+        newDropdownOptions = modeIds.map(modeId => ({
+          value: modeId,
+        }))
 
-      newDropdownOptions = modeIds.map(modeId => ({
-        value: modeId,
-      }))
-
-      // settings.listDisplayModeIdがnullではなく、かつnewDropdownOptionsに存在する場合は、settings.listDisplayModeIdをセット
-      // そうではない場合は、最初のモードidをセット
-      if (
-        settings.listDisplayModeId &&
-        modeIds.some(modeId => modeId === settings.listDisplayModeId)
-      ) {
-        displayModeId = settings.listDisplayModeId
-      } else {
-        displayModeId = modeIds[0]
+        // settings.listDisplayModeIdがnullではなく、かつnewDropdownOptionsに存在する場合は、settings.listDisplayModeIdをセット
+        // そうではない場合は、最初のモードidをセット
+        if (
+          settings.listDisplayModeId &&
+          modeIds.some(modeId => modeId === settings.listDisplayModeId)
+        ) {
+          displayModeId = settings.listDisplayModeId
+        } else {
+          displayModeId = modeIds[0]
+        }
       }
     }
 
-    console.log('newDropdownOptions', newDropdownOptions)
-    console.log('displayModeId', displayModeId)
+    console.log(
+      '[ListDisplayModeDropdown] newDropdownOptions',
+      newDropdownOptions,
+    )
+    console.log('[ListDisplayModeDropdown] displayModeId', displayModeId)
 
     setDropdownOptions(newDropdownOptions)
     updateSettings({
@@ -116,22 +138,23 @@ export default function ListDisplayModeDropdown() {
   }
 
   useEffect(() => {
-    // targetCollectionが変更された場合、dropdownOptionsを更新
-    updateDropdownOptions(settings.listTargetCollection)
-  }, [settings.listTargetCollection])
+    updateDropdownOptions()
+  }, [targetCollection])
 
   return (
     <Fragment>
-      {isDropdownReady && dropdownOptions.length > 0 ? (
+      {!targetCollection ? (
+        <Textbox disabled value="" />
+      ) : !isDropdownReady ? (
+        <Textbox disabled value="Loading modes..." />
+      ) : dropdownOptions.length > 0 ? (
         <Dropdown
           onChange={handleChange}
           options={dropdownOptions}
           value={settings.listDisplayModeId}
         />
-      ) : !settings.listTargetCollection ? (
-        <Textbox disabled value="" />
       ) : (
-        <Textbox disabled value="Loading modes..." />
+        <Textbox disabled value="No display modes available" />
       )}
     </Fragment>
   )

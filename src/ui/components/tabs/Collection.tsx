@@ -92,7 +92,7 @@ export default function Collection() {
       throw new Error(error.message)
     })
 
-    console.log('fetch done', keyValuesRef.current)
+    console.log('[Collection] fetch done', keyValuesRef.current)
 
     emit<SyncCollectionFromUI>('SYNC_COLLECTION_FROM_UI', {
       collectionName: settings.figmaCollectionName,
@@ -102,12 +102,12 @@ export default function Collection() {
   }
 
   useMount(async () => {
-    console.log('Collection: mounted')
-    console.log(process.env.PROXY_URL)
+    console.log('[Collection] Collection: mounted')
+    console.log('[Collection] PROXY_URL:', process.env.PROXY_URL)
   })
 
   useUnmount(() => {
-    console.log('Collection: unmounted')
+    console.log('[Collection] Collection: unmounted')
   })
 
   return (

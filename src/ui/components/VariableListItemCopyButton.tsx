@@ -43,7 +43,7 @@ export default function VariableListItemCopyButton({
     event.stopPropagation()
 
     copyToClipboard(text)
-    console.log('copied', text)
+    console.log('[VarListItemCopyBtn] copied', text)
 
     emit<NotifyFromUI>('NOTIFY_FROM_UI', {
       message: 'Copied to clipboard.',

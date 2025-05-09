@@ -114,11 +114,11 @@ export default function Utilities() {
   }
 
   useMount(async () => {
-    console.log('Utilities: mounted')
+    console.log('[Utilities] mounted')
   })
 
   useUnmount(() => {
-    console.log('Utilities: unmounted')
+    console.log('[Utilities] unmounted')
   })
 
   return (

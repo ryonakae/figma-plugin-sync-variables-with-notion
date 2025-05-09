@@ -220,7 +220,10 @@ export default function List() {
           </FormItem>
 
           <FormItem title="Display mode">
-            <ListDisplayModeDropdown />
+            <ListDisplayModeDropdown
+              targetCollection={settings.listTargetCollection}
+              variablesForUI={variables}
+            />
           </FormItem>
         </Stack>
 

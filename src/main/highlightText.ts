@@ -6,7 +6,7 @@ async function createHighlightRectOnPage(
   textNodes: TextNode[],
   pageNode: PageNode,
 ) {
-  console.log('createHighlightRectOnPage', textNodes, pageNode)
+  console.log('[highlightText] createHighlightRectOnPage', textNodes, pageNode)
 
   // textNodesが空の場合は処理を終了
   if (textNodes.length === 0) {
@@ -23,8 +23,8 @@ async function createHighlightRectOnPage(
   const previousGeneratedGroup = pageNode.findOne(
     node => node.id === generatedGroupId,
   )
-  console.log('generatedGroupId', generatedGroupId)
-  console.log('previousGeneratedGroup', previousGeneratedGroup)
+  console.log('[highlightText] generatedGroupId', generatedGroupId)
+  console.log('[highlightText] previousGeneratedGroup', previousGeneratedGroup)
   if (previousGeneratedGroup) {
     previousGeneratedGroup.remove()
   }
@@ -32,7 +32,7 @@ async function createHighlightRectOnPage(
   // textNodeごとに処理を実行
   await Promise.all(
     textNodes.map(async textNode => {
-      console.log(textNode, textNode.characters)
+      console.log('[highlightText] textNode', textNode, textNode.characters)
 
       // ハイライト用のrectを作る（レイヤーが表示されているものだけ）
       if (textNode.absoluteRenderBounds) {
@@ -106,7 +106,7 @@ async function createHighlightRectOnPage(
 
   // correctRectNodesとincorrectRectNodesをrectNodesにマージする
   rectNodes = [...correctRectNodes, ...incorrectRectNodes]
-  console.log('rectNodes', rectNodes)
+  console.log('[highlightText] rectNodes', rectNodes)
 
   // rectNodeが1つ以上ある場合、rectをグルーピングする
   if (rectNodes.length > 0) {
@@ -126,7 +126,7 @@ async function createHighlightRectOnPage(
 
 // メイン関数
 export default async function highlightText(targetTextRange: TargetTextRange) {
-  console.log('highlightText', targetTextRange)
+  console.log('[highlightText] highlightText', targetTextRange)
 
   // ハイライトを実行
   // allPagesの場合、各ページごとに処理を実行

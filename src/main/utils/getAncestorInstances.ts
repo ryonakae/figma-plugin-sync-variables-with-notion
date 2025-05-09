@@ -33,7 +33,10 @@ export default async function getAncestorInstances(
         return instance as InstanceNode
       }
     } catch (error) {
-      console.error(`Failed to get instance with id: ${targetId}`, error)
+      console.error(
+        `[getAncestorInstances] Failed to get instance with id: ${targetId}`,
+        error,
+      )
     }
     // インスタンスが見つからない、またはエラーが発生した場合はnullを返す
     return null

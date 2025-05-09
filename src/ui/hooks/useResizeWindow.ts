@@ -20,7 +20,10 @@ export default function useResizeWindow() {
       height,
     })
 
-    console.log('resizeWindow', { width: DEFAULT_WIDTH, height })
+    console.log('[useResizeWindow] resizeWindow', {
+      width: DEFAULT_WIDTH,
+      height,
+    })
   }
 
   return { resizeWindow }

@@ -20,7 +20,7 @@ export default async function getLibraryVariablesWithCache(
 
   // キャッシュがあればそれを使用（キャッシュヒット）
   if (cachedVariables) {
-    console.log('Cache hit for:', libraryCollectionKey)
+    console.log('[getLibraryVarsCache] Cache hit for:', libraryCollectionKey)
     // キャッシュヒットの場合は、変数とダミーの成功結果を返す
     return {
       variables: cachedVariables,
@@ -29,14 +29,18 @@ export default async function getLibraryVariablesWithCache(
   }
 
   // キャッシュがなければAPIから取得（キャッシュミス）
-  console.log('Cache miss for:', libraryCollectionKey, '. Fetching from API...')
+  console.log(
+    '[getLibraryVarsCache] Cache miss for:',
+    libraryCollectionKey,
+    '. Fetching from API...',
+  )
 
   // ライブラリコレクションから変数リストを取得
   const libraryVariables =
     await figma.teamLibrary.getVariablesInLibraryCollectionAsync(
       libraryCollectionKey,
     )
-  console.log('Fetched variables:', libraryVariables)
+  console.log('[getLibraryVarsCache] Fetched variables:', libraryVariables)
 
   // ライブラリの変数をインポート
   const importedVariables: Variable[] = []
@@ -48,11 +52,14 @@ export default async function getLibraryVariablesWithCache(
       importedVariables.push(importedVariable)
     }),
   )
-  console.log('Imported variables:', importedVariables)
+  console.log('[getLibraryVarsCache] Imported variables:', importedVariables)
 
   // インポートした変数をキャッシュに保存
   const cacheResult = await saveCache(libraryCollectionKey, importedVariables)
-  console.log('Saved fetched variables to cache for:', libraryCollectionKey)
+  console.log(
+    '[getLibraryVarsCache] Saved fetched variables to cache for:',
+    libraryCollectionKey,
+  )
 
   // 変数とキャッシュ操作の結果を返す
   return {

@@ -130,7 +130,7 @@ export default function useNotion(props: useNotionProps) {
     nextCursor?: string
     keyValuesArray: NotionKeyValue[]
   }) {
-    console.log('fetchNotion', props, options)
+    console.log('[useNotion] fetchNotion', props, options)
     // proxyUrlから末尾のスラッシュを削除
     const proxyUrl = process.env.PROXY_URL?.replace(/\/$/, '')
 
@@ -161,7 +161,7 @@ export default function useNotion(props: useNotionProps) {
     }
 
     const resJson = await res.json()
-    console.log(resJson)
+    console.log('[useNotion] resJson', resJson)
     const pages = resJson.results as NotionPage[]
 
     if (!pages) {

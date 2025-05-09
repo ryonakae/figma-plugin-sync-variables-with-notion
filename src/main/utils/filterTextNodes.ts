@@ -24,13 +24,13 @@ export default async function filterTextNodes(
   if (!options.isIncludeComponents) {
     textNodes.forEach(textNode => {
       console.log(
-        'Checking textNode (component/variant child):',
+        '[filterTextNodes] Checking textNode (component/variant child):',
         textNode.characters,
       )
 
       if (getIsNodeParentComponentOrVariants(textNode)) {
         console.log(
-          'Removing textNode (component/variant child):',
+          '[filterTextNodes] Removing textNode (component/variant child):',
           textNode.characters,
         )
         textNodesToRemove.push(textNode)
@@ -41,13 +41,19 @@ export default async function filterTextNodes(
   // isIncludeInstances
   // → インスタンスの子要素をtextNodesToRemoveに追加
   if (!options.isIncludeInstances) {
-    console.log('textNodes', textNodes)
+    console.log('[filterTextNodes] textNodes', textNodes)
     for (const textNode of textNodes) {
-      console.log('Checking textNode (instance child):', textNode.characters)
+      console.log(
+        '[filterTextNodes] Checking textNode (instance child):',
+        textNode.characters,
+      )
 
       const ancestorInstances = await getAncestorInstances(textNode)
       if (ancestorInstances.length > 0) {
-        console.log('Removing textNode (instance child):', textNode.characters)
+        console.log(
+          '[filterTextNodes] Removing textNode (instance child):',
+          textNode.characters,
+        )
         textNodesToRemove.push(textNode)
       }
     }
@@ -56,7 +62,7 @@ export default async function filterTextNodes(
   // textNodesToRemoveから重複を削除
   textNodesToRemove = uniqBy(textNodesToRemove, node => node.id)
 
-  console.log('textNodesToRemove', textNodesToRemove)
+  console.log('[filterTextNodes] textNodesToRemove', textNodesToRemove)
 
   // textNodesからtextNodesToRemoveにある要素を削除
   const filteredTextNodes = textNodes.filter(textNode => {

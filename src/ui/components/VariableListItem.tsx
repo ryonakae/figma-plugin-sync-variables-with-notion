@@ -88,7 +88,7 @@ export default function VariableListItem({
     // 親要素へのバブリングを止める
     event.stopPropagation()
 
-    console.log('handleApplyClick', variable)
+    console.log('[VarListItem] handleApplyClick', variable)
     emit<ApplyVariableFromUI>('APPLY_VARIABLE_FROM_UI', variable)
   }
 
