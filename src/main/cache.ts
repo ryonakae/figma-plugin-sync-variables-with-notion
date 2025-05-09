@@ -17,9 +17,9 @@ import { CACHE_KEY } from '@/constants'
  */
 export async function saveCache(
   libraryCollectionKey: string,
-  variables: Variable[],
+  variablesForUI: VariableForUI[],
 ): Promise<SaveCacheResult> {
-  console.log('[cache] saveCache: start', libraryCollectionKey, variables)
+  console.log('[cache] saveCache: start', libraryCollectionKey, variablesForUI)
 
   // 現在のキャッシュを読み込む
   const currentCache = await loadSettingsAsync<ClientStorageCache>(
@@ -29,8 +29,9 @@ export async function saveCache(
   console.log('[cache] currentCache', currentCache)
 
   // 新しいキャッシュデータを作成（必要な属性のみを抽出して保存）
+  // 配列を新しく作成しないと、idのみしか保存されないため
   const newCache = {
-    [libraryCollectionKey]: variables.map(
+    [libraryCollectionKey]: variablesForUI.map(
       v =>
         ({
           id: v.id,
@@ -72,7 +73,7 @@ export async function saveCache(
  */
 export async function loadCache(
   libraryCollectionKey: string,
-): Promise<Variable[] | undefined> {
+): Promise<VariableForUI[] | undefined> {
   console.log('[cache] loadCache: start', libraryCollectionKey)
 
   // キャッシュを読み込む

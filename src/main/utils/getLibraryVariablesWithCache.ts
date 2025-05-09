@@ -14,23 +14,26 @@ import { loadCache, saveCache } from '@/main/cache'
  */
 export default async function getLibraryVariablesWithCache(
   libraryCollectionKey: string,
-) {
+): Promise<{ variablesForUI: VariableForUI[]; cacheResult: SaveCacheResult }> {
   // キャッシュから変数を検索
   const cachedVariables = await loadCache(libraryCollectionKey)
 
   // キャッシュがあればそれを使用（キャッシュヒット）
   if (cachedVariables) {
-    console.log('[getLibraryVarsCache] Cache hit for:', libraryCollectionKey)
+    console.log(
+      '[getLibraryVariablesWithCache] Cache hit for:',
+      libraryCollectionKey,
+    )
     // キャッシュヒットの場合は、変数とダミーの成功結果を返す
     return {
-      variables: cachedVariables,
-      cacheResult: { success: true } as SaveCacheResult,
+      variablesForUI: cachedVariables,
+      cacheResult: { success: true },
     }
   }
 
   // キャッシュがなければAPIから取得（キャッシュミス）
   console.log(
-    '[getLibraryVarsCache] Cache miss for:',
+    '[getLibraryVariablesWithCache] Cache miss for:',
     libraryCollectionKey,
     '. Fetching from API...',
   )
@@ -40,7 +43,10 @@ export default async function getLibraryVariablesWithCache(
     await figma.teamLibrary.getVariablesInLibraryCollectionAsync(
       libraryCollectionKey,
     )
-  console.log('[getLibraryVarsCache] Fetched variables:', libraryVariables)
+  console.log(
+    '[getLibraryVariablesWithCache] Fetched variables:',
+    libraryVariables,
+  )
 
   // ライブラリの変数をインポート
   const importedVariables: Variable[] = []
@@ -52,18 +58,21 @@ export default async function getLibraryVariablesWithCache(
       importedVariables.push(importedVariable)
     }),
   )
-  console.log('[getLibraryVarsCache] Imported variables:', importedVariables)
+  console.log(
+    '[getLibraryVariablesWithCache] Imported variables:',
+    importedVariables,
+  )
 
   // インポートした変数をキャッシュに保存
   const cacheResult = await saveCache(libraryCollectionKey, importedVariables)
   console.log(
-    '[getLibraryVarsCache] Saved fetched variables to cache for:',
+    '[getLibraryVariablesWithCache] Saved fetched variables to cache for:',
     libraryCollectionKey,
   )
 
   // 変数とキャッシュ操作の結果を返す
   return {
-    variables: importedVariables,
+    variablesForUI: importedVariables, // Variable[]はVariableForUI[]として扱える
     cacheResult,
   }
 }

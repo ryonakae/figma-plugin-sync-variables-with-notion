@@ -15,8 +15,7 @@ export default async function applyVariable(variableForUI: VariableForUI) {
   // 選択がない場合は処理を終了
   if (figma.currentPage.selection.length === 0) {
     // 何も選択していない場合は処理を終了
-    figma.notify('Please select at least one element.')
-    return
+    throw new Error('Please select at least one element.')
   }
 
   // textNodeを格納する配列を用意
@@ -34,8 +33,7 @@ export default async function applyVariable(variableForUI: VariableForUI) {
 
   // textNodeが1つも無かったら処理を中断
   if (textNodes.length === 0) {
-    figma.notify('No text elements are selected.')
-    return
+    throw new Error('No text elements are selected.')
   }
 
   // textNodeごとに処理を実行

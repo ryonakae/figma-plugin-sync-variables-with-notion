@@ -113,7 +113,7 @@ declare global {
    * ライブラリコレクションのキーと対応する変数の配列を格納
    */
   type ClientStorageCache = {
-    [libraryCollectionKey: string]: Variable[]
+    [libraryCollectionKey: string]: VariableForUI[]
   }
 
   /**

@@ -6,79 +6,10 @@ import { emit } from '@create-figma-plugin/utilities'
 
 import { applyVariableToTextNode } from '@/main/utils/applyVariableToTextNode'
 import filterTextNodes from '@/main/utils/filterTextNodes'
-import getLibraryVariablesWithCache from '@/main/utils/getLibraryVariablesWithCache'
+import getLibraryVariablesForUI from '@/main/utils/getLibraryVariablesForUI'
+import getLocalVariableForUI from '@/main/utils/getLocalVariableForUI'
 import getTextNodes from '@/main/utils/getTextNodes'
-
-/**
- * ローカルコレクションにあるバリアブルを取得する関数
- * @param collection 対象のバリアブルコレクション
- * @returns 文字列型のバリアブル配列
- * @throws コレクションやバリアブルが見つからない場合エラーをスロー
- */
-async function getLocalVariables(collection: VariableCollectionForUI) {
-  // ローカルCollectionを取得
-  const localCollections =
-    await figma.variables.getLocalVariableCollectionsAsync()
-
-  // コレクションがなかったらエラーを投げて処理を終了
-  if (localCollections.length === 0) {
-    throw new Error('No local collections found.')
-  }
-
-  // localCollectionsからidがoptions.collectionと同じものを探してtargetCollectionに設定
-  const targetCollection = localCollections.find(
-    localCollection => localCollection.id === collection.id,
-  )
-
-  // targetCollectionが見つからなかったらエラーを投げて処理を終了
-  if (!targetCollection) {
-    throw new Error('Target local collection not found.')
-  }
-
-  // すべてのローカルVariablesを取得 (stringのみ)
-  const localVariables = await figma.variables.getLocalVariablesAsync('STRING')
-
-  // ローカルVariablesがなかったらエラーを投げて処理を終了
-  if (localVariables.length === 0) {
-    throw new Error('No local variables found.')
-  }
-
-  // ローカルVariablesからvariableCollectionIdがtargetCollectionと同じものを探して、配列に格納
-  const variables = localVariables.filter(
-    variable =>
-      variable.variableCollectionId ===
-      (targetCollection as VariableCollection).id,
-  )
-
-  return variables
-}
-
-/**
- * ライブラリコレクションにあるバリアブルを取得する関数
- * @param collection 対象のライブラリコレクション
- * @returns 文字列型のバリアブル配列
- * @throws バリアブルが見つからない場合エラーをスロー
- */
-async function getLibraryVariables(collection: LibraryVariableCollection) {
-  // キャッシュを利用してライブラリ変数を取得
-  const result = await getLibraryVariablesWithCache(collection.key)
-
-  // result.variablesを、resolvedTypeがstringのもの &
-  // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
-  const importedVariables = result.variables.filter(
-    variable =>
-      variable.resolvedType === 'STRING' &&
-      (variable.scopes.includes('ALL_SCOPES') ||
-        variable.scopes.includes('TEXT_CONTENT')),
-  )
-
-  // バリアブルがなかったらエラーを投げて処理を終了
-  if (importedVariables.length === 0) {
-    throw new Error('No variables found.')
-  }
-
-  return importedVariables
-}
+import getVariable from '@/main/utils/getVariable'
 
 /**
  * テキスト要素に一括で変数を適用するメイン関数
@@ -114,7 +45,7 @@ export default async function bulkApplyVariables(options: {
   }
 
   // 対象コレクションの変数を格納する配列
-  let variablesInTargetCollection: Variable[] = []
+  let variablesInTargetCollection: VariableForUI[] = []
 
   // コレクションオプションに応じて処理を分岐
   if (options.collection === 'all') {
@@ -127,7 +58,7 @@ export default async function bulkApplyVariables(options: {
     // variablesInTargetCollectionに追加
     if (localCollections.length > 0) {
       for (const localCollection of localCollections) {
-        await getLocalVariables(localCollection)
+        await getLocalVariableForUI(localCollection)
           .then(localVariables => {
             variablesInTargetCollection = [
               ...variablesInTargetCollection,
@@ -148,11 +79,11 @@ export default async function bulkApplyVariables(options: {
     // variablesInTargetCollectionに追加
     if (libraryCollections.length > 0) {
       for (const libraryCollection of libraryCollections) {
-        await getLibraryVariables(libraryCollection)
+        await getLibraryVariablesForUI(libraryCollection)
           .then(libraryVariables => {
             variablesInTargetCollection = [
               ...variablesInTargetCollection,
-              ...libraryVariables,
+              ...libraryVariables.variablesForUI,
             ]
           })
           .catch((error: Error) => {
@@ -164,11 +95,11 @@ export default async function bulkApplyVariables(options: {
   // options.collectionがVariableCollectionForUIの場合
   else if ('id' in options.collection) {
     // ローカルコレクションにあるバリアブルを取得し、variablesInTargetCollectionに追加
-    const localVariables = await getLocalVariables(options.collection).catch(
-      (error: Error) => {
-        throw new Error(error.message)
-      },
-    )
+    const localVariables = await getLocalVariableForUI(
+      options.collection,
+    ).catch((error: Error) => {
+      throw new Error(error.message)
+    })
     variablesInTargetCollection = [
       ...variablesInTargetCollection,
       ...localVariables,
@@ -177,14 +108,14 @@ export default async function bulkApplyVariables(options: {
   // options.collectionがLibraryVariableCollectionの場合
   else if ('key' in options.collection) {
     // ライブラリコレクションにあるバリアブルを取得し、variablesInTargetCollectionに追加
-    const libraryVariables = await getLibraryVariables(
+    const libraryVariables = await getLibraryVariablesForUI(
       options.collection,
     ).catch((error: Error) => {
       throw new Error(error.message)
     })
     variablesInTargetCollection = [
       ...variablesInTargetCollection,
-      ...libraryVariables,
+      ...libraryVariables.variablesForUI,
     ]
   }
 
@@ -220,16 +151,28 @@ export default async function bulkApplyVariables(options: {
       // テキストノードの内容と一致するバリアブルを検索
       // バリアブルの各モードの値を確認し、文字列型で改行を除去した値が
       // テキストノードの文字列（改行除去済み）と一致するものを探す
-      const targetVariable = variablesInTargetCollection.find(variable =>
+      const targetVariableForUI = variablesInTargetCollection.find(variable =>
         Object.values(variable.valuesByMode).some(
           value =>
             typeof value === 'string' &&
             value.replace(/\s+/g, ' ').trim() === characters,
         ),
       )
-      console.log('[bulkApplyVariables] targetVariable', targetVariable)
+      console.log(
+        '[bulkApplyVariables] targetVariableForUI',
+        targetVariableForUI,
+      )
 
       // 一致する変数が見つからない場合はスキップ
+      if (!targetVariableForUI) {
+        return
+      }
+
+      // UI用の変数情報から実際の変数オブジェクトを取得
+      const targetVariable = await getVariable(targetVariableForUI)
+      console.log('[bulkApplyVariables] targetVariable', targetVariable)
+
+      // まだtargetVariableが見つからなかったらスキップ
       if (!targetVariable) {
         return
       }

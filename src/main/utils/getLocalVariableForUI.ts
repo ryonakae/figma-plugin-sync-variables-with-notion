@@ -25,20 +25,10 @@ export default async function getLocalVariableForUI(
   if (collectionId) {
     const localVariables =
       await figma.variables.getLocalVariablesAsync('STRING')
-    const taretVariables = localVariables.filter(
+    // Variable[]はVariableForUI[]として扱える
+    variablesForUI = localVariables.filter(
       variable => variable.variableCollectionId === collectionId,
     )
-    variablesForUI = taretVariables.map(v => ({
-      id: v.id,
-      name: v.name,
-      // description: v.description,
-      // remote: v.remote,
-      variableCollectionId: v.variableCollectionId,
-      key: v.key,
-      resolvedType: v.resolvedType,
-      valuesByMode: v.valuesByMode,
-      scopes: v.scopes,
-    }))
   }
 
   return variablesForUI

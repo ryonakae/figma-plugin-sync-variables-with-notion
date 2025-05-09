@@ -12,22 +12,9 @@ export default async function getLibraryVariablesForUI(
   // キャッシュを利用して変数を取得
   const result = await getLibraryVariablesWithCache(targetCollection.key)
 
-  // variablesをUI表示用に変換
-  const variablesForUI: VariableForUI[] = result.variables.map(v => ({
-    id: v.id,
-    name: v.name,
-    // description: v.description,
-    // remote: v.remote,
-    variableCollectionId: v.variableCollectionId,
-    key: v.key,
-    resolvedType: v.resolvedType,
-    valuesByMode: v.valuesByMode,
-    scopes: v.scopes,
-  }))
-
   // 変数の配列とキャッシュ操作の結果を返す
   return {
-    variablesForUI: variablesForUI,
+    variablesForUI: result.variablesForUI,
     cacheResult: result.cacheResult,
   }
 }
