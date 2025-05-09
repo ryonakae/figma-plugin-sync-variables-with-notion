@@ -50,7 +50,7 @@ export default function List() {
   async function updateVariables(
     targetCollection: VariableCollectionForUI | LibraryVariableCollection,
   ) {
-    console.log('updateVariables', targetCollection)
+    console.log('[List] updateVariables', targetCollection)
 
     updateTmpSettings({
       loadingVariables: true,
@@ -78,7 +78,7 @@ export default function List() {
           variable.scopes.includes('TEXT_CONTENT')),
     )
 
-    console.log('newVariables', newVariables, newVariables.length)
+    console.log('[List] newVariables', newVariables, newVariables.length)
 
     setVariables(newVariables)
 
@@ -110,11 +110,11 @@ export default function List() {
   }
 
   useMount(async () => {
-    console.log('List: mounted')
+    console.log('[List] mounted')
   })
 
   useUnmount(() => {
-    console.log('List: unmounted')
+    console.log('[List] unmounted')
   })
 
   useEffect(() => {

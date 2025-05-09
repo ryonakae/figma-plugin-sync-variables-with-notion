@@ -99,7 +99,7 @@ export async function clearCache(libraryCollectionKey: string) {
   // 指定されたキーが存在するか確認
   if (!(libraryCollectionKey in currentCache)) {
     // キーが存在しない場合は処理を終了
-    console.log('clearCache: key not found, nothing to clear')
+    console.log('[cache] clearCache: key not found, nothing to clear')
     return // または、必要に応じてエラーをスロー
   }
 
@@ -110,5 +110,5 @@ export async function clearCache(libraryCollectionKey: string) {
   // 更新されたキャッシュを保存
   await saveSettingsAsync<ClientStorageCache>(newCache, CACHE_KEY)
 
-  console.log('clearCache: done')
+  console.log('[cache] clearCache: done')
 }

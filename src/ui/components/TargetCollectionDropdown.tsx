@@ -191,7 +191,7 @@ export default function TargetCollectionDropdown({
   })
 
   useUnmount(() => {
-    console.log('TargetCollectionDropdown unmounted')
+    console.log('[TargetCollectionDropdown] unmounted')
   })
 
   // localCollections または libraryCollections が変更されたときにドロップダウンオプションを更新
