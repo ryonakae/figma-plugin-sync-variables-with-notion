@@ -82,7 +82,7 @@ export default function CollectionModesList({ values, onChange }: Props) {
   )
 
   return (
-    <div className="flex flex-col gap-2 overflow-hidden">
+    <div className="flex flex-col gap-1 overflow-hidden">
       {/* 入力フォーム */}
       <div className="flex gap-1">
         <div className="flex-1">
@@ -97,27 +97,29 @@ export default function CollectionModesList({ values, onChange }: Props) {
       </div>
 
       {/* 並び替え可能なリスト */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={values.map((_, index) => index.toString())}
-          strategy={verticalListSortingStrategy}
+      {values.length > 0 && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          <div className="flex flex-col gap-1">
-            {values.map((value, index) => (
-              <CollectionModeItem
-                key={`${index}-${value}`}
-                id={index.toString()}
-                value={value}
-                onRemove={handleRemove}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+          <SortableContext
+            items={values.map((_, index) => index.toString())}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="my-1 flex flex-col gap-1">
+              {values.map((value, index) => (
+                <CollectionModeItem
+                  key={`${index}-${value}`}
+                  id={index.toString()}
+                  value={value}
+                  onRemove={handleRemove}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
     </div>
   )
 }

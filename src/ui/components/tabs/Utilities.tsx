@@ -8,7 +8,6 @@ import { type JSX, h } from 'preact'
 import {
   Button,
   Checkbox,
-  Divider,
   Dropdown,
   type DropdownOption,
   Stack,
@@ -166,7 +165,7 @@ export default function Utilities() {
         </Checkbox>
 
         <FormItem
-          title="Limit variable name"
+          title="Bulk apply variables: limit variable name"
           description="Only variables with names containing this text will be used for bulk apply."
         >
           <div className="flex gap-1">
@@ -185,11 +184,7 @@ export default function Utilities() {
         </FormItem>
       </Stack>
 
-      <VerticalSpace space="medium" />
-
-      <Divider />
-
-      <VerticalSpace space="medium" />
+      <VerticalSpace space="large" />
 
       <Stack space="small">
         <div className="font-bold">Select an action</div>
