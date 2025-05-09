@@ -106,6 +106,12 @@ declare global {
     loadingVariables: boolean
     localCollections: VariableCollectionForUI[]
     libraryCollections: LibraryVariableCollection[]
+    libraryCollectionCache: {
+      [libraryCollectionKey: string]: {
+        variables: VariableForUI[]
+        cacheResult: SaveCacheResult
+      }
+    }
   }
 
   /**

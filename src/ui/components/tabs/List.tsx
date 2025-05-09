@@ -180,7 +180,7 @@ export default function List() {
                         </button>
 
                         <Modal
-                          title="About caching"
+                          title="About library collection caching"
                           open={isDetailsOpen}
                           onCloseButtonClick={handleDetailsCloseClick}
                           onOverlayClick={handleDetailsCloseClick}
@@ -191,8 +191,7 @@ export default function List() {
                               When the target collection is a library
                               collection, this plugin caches the collection in
                               Client Storage.
-                            </p>
-                            <p>
+                              <br />
                               This is because retrieving library collections
                               with a large number of variables can take a
                               significant amount of time. Additionally, there's
@@ -209,6 +208,14 @@ export default function List() {
                               plugin will need to fetch the collection each time
                               it starts, which could potentially trigger Figma
                               Plugin API rate limits.
+                            </p>
+                            <p className="text-text-danger">
+                              Note that while the plugin remains running,
+                              variables are kept in memory and no additional API
+                              calls are made. However, if you frequently restart
+                              the plugin, it will fetch all variables again with
+                              each restart, which increases the risk of hitting
+                              API rate limits.
                             </p>
                           </div>
                         </Modal>

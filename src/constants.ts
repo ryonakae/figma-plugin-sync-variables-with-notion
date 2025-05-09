@@ -48,4 +48,5 @@ export const DEFAULT_TMP_SETTINGS: TmpSettings = {
   loadingVariables: false,
   localCollections: [],
   libraryCollections: [],
+  libraryCollectionCache: {},
 }
