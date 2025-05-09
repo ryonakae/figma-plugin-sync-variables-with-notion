@@ -28,7 +28,7 @@ export async function saveCache(
   )
   console.log('[cache] currentCache', currentCache)
 
-  // 新しいキャッシュデータを作成（必要な属性のみを抽出して保存）
+  // 新しい配列を作成
   // 配列を新しく作成しないと、idのみしか保存されないため
   const newCache = {
     [libraryCollectionKey]: variablesForUI.map(

@@ -68,6 +68,7 @@ export default function List() {
       newVariables = result.variablesForUI
       setIsLibraryCollectionCached(result.cacheResult.success)
     }
+    console.log('[List] newVariables', newVariables, newVariables.length)
 
     // newVariablesを、resolvedTypeがstringのもの &
     // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
@@ -77,8 +78,11 @@ export default function List() {
         (variable.scopes.includes('ALL_SCOPES') ||
           variable.scopes.includes('TEXT_CONTENT')),
     )
-
-    console.log('[List] newVariables', newVariables, newVariables.length)
+    console.log(
+      '[List] filtered newVariables',
+      newVariables,
+      newVariables.length,
+    )
 
     setVariables(newVariables)
 

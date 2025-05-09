@@ -25,10 +25,22 @@ export default async function getLocalVariableForUI(
   if (collectionId) {
     const localVariables =
       await figma.variables.getLocalVariablesAsync('STRING')
-    // Variable[]はVariableForUI[]として扱える
-    variablesForUI = localVariables.filter(
+    const targetVariables = localVariables.filter(
       variable => variable.variableCollectionId === collectionId,
     )
+    // targetVariablesからvariablesForUIを作成
+    // 配列を渡すだけだとidしかコピーされないので
+    variablesForUI = targetVariables.map(v => ({
+      id: v.id,
+      name: v.name,
+      // description: v.description,
+      // remote: v.remote,
+      variableCollectionId: v.variableCollectionId,
+      key: v.key,
+      resolvedType: v.resolvedType,
+      valuesByMode: v.valuesByMode,
+      scopes: v.scopes,
+    }))
   }
 
   return variablesForUI
