@@ -10,7 +10,7 @@ import {
 } from '@create-figma-plugin/utilities'
 
 export async function saveSettings(settings: Settings) {
-  console.log('saveSettings: start', settings)
+  console.log('[settings] saveSettings: start', settings)
 
   const newDocumentSettings: DocumentSettings = {
     notionIntegrationToken: settings.notionIntegrationToken,
@@ -42,11 +42,11 @@ export async function saveSettings(settings: Settings) {
     SETTINGS_KEY,
   )
 
-  console.log('saveSettings: done')
+  console.log('[settings] saveSettings: done')
 }
 
 export async function loadSettings() {
-  console.log('loadSettings: start')
+  console.log('[settings] loadSettings: start')
 
   // documentSettingsを取得
   let documentSettings: DocumentSettings = DEFAULT_DOCUMENT_SETTINGS
@@ -54,14 +54,14 @@ export async function loadSettings() {
   if (pluginData) {
     documentSettings = JSON.parse(pluginData)
   }
-  console.log('documentSettings', documentSettings)
+  console.log('[settings] documentSettings', documentSettings)
 
   // clientStorageSettingsを取得
   const clientStorageSettings = await loadSettingsAsync<ClientStorageSettings>(
     DEFAULT_CLIENT_STORAGE_SETTINGS,
     SETTINGS_KEY,
   )
-  console.log('clientStorageSettings', clientStorageSettings)
+  console.log('[settings] clientStorageSettings', clientStorageSettings)
 
   // documentSettingsとclientStorageSettingsをマージ
   const settings: Settings = { ...documentSettings, ...clientStorageSettings }
@@ -69,5 +69,5 @@ export async function loadSettings() {
   // uiにsettingsを送る
   emit<LoadSettingsFromMain>('LOAD_SETTINGS_FROM_MAIN', settings)
 
-  console.log('loadSettings: done', settings)
+  console.log('[settings] loadSettings: done', settings)
 }

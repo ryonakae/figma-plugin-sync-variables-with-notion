@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * アプリケーションのメインコンポーネント
+ * タブ切り替えとイベントハンドリングを統括
+ */
 import { type JSX, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
@@ -6,7 +10,6 @@ import { Tabs, type TabsOption } from '@create-figma-plugin/ui'
 import { emit, on, once } from '@create-figma-plugin/utilities'
 import { useMount, useUpdateEffect } from 'react-use'
 
-import Empty from '@/ui/components/Empty'
 import Collection from '@/ui/components/tabs/Collection'
 import List from '@/ui/components/tabs/List'
 import Utilities from '@/ui/components/tabs/Utilities'

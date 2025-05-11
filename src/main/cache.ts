@@ -1,3 +1,7 @@
+/**
+ * キャッシュ機能を提供するモジュール
+ * ライブラリ変数を取得する際のパフォーマンス向上のためのキャッシュ機能を提供
+ */
 import {
   loadSettingsAsync,
   saveSettingsAsync,
@@ -5,25 +9,36 @@ import {
 
 import { CACHE_KEY } from '@/constants'
 
+/**
+ * キャッシュにライブラリ変数を保存する関数
+ * @param libraryCollectionKey ライブラリコレクションのキー
+ * @param variables 保存する変数の配列
+ * @returns キャッシュ保存の結果
+ */
 export async function saveCache(
   libraryCollectionKey: string,
-  variables: Variable[],
-) {
-  console.log('saveCache: start', libraryCollectionKey, variables)
+  variablesForUI: VariableForUI[],
+): Promise<SaveCacheResult> {
+  console.log('[cache] saveCache: start', libraryCollectionKey, variablesForUI)
 
+  // 現在のキャッシュを読み込む
   const currentCache = await loadSettingsAsync<ClientStorageCache>(
     {},
     CACHE_KEY,
   )
+  console.log('[cache] currentCache', currentCache)
+
+  // 新しい配列を作成
+  // 配列を新しく作成しないと、idのみしか保存されないため
   const newCache = {
-    [libraryCollectionKey]: variables.map(
+    [libraryCollectionKey]: variablesForUI.map(
       v =>
         ({
           id: v.id,
           name: v.name,
-          description: v.description,
-          hiddenFromPublishing: v.hiddenFromPublishing,
-          remote: v.remote,
+          // description: v.description,
+          // hiddenFromPublishing: v.hiddenFromPublishing,
+          // remote: v.remote,
           variableCollectionId: v.variableCollectionId,
           key: v.key,
           resolvedType: v.resolvedType,
@@ -32,47 +47,69 @@ export async function saveCache(
         }) as Variable,
     ),
   }
+  console.log('[cache] newCache', newCache)
 
-  await saveSettingsAsync<ClientStorageCache>(
-    { ...currentCache, ...newCache },
-    CACHE_KEY,
-  )
-
-  console.log('saveCache: done')
+  try {
+    // 現在のキャッシュと新しいキャッシュをマージして保存
+    await saveSettingsAsync<ClientStorageCache>(
+      { ...currentCache, ...newCache },
+      CACHE_KEY,
+    )
+    console.log('[cache] saveCache: success')
+    return { success: true }
+  } catch (error) {
+    console.error('[cache] saveCache: failed to save settings', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    }
+  }
 }
 
+/**
+ * キャッシュからライブラリ変数を読み込む関数
+ * @param libraryCollectionKey ライブラリコレクションのキー
+ * @returns キャッシュされた変数の配列、またはundefined（キャッシュがない場合）
+ */
 export async function loadCache(
   libraryCollectionKey: string,
-): Promise<Variable[] | undefined> {
-  console.log('loadCache: start', libraryCollectionKey)
+): Promise<VariableForUI[] | undefined> {
+  console.log('[cache] loadCache: start', libraryCollectionKey)
 
+  // キャッシュを読み込む
   const cache = await loadSettingsAsync<ClientStorageCache>({}, CACHE_KEY)
 
-  console.log('loadCache: done', cache[libraryCollectionKey])
+  console.log('[cache] loadCache: done', cache[libraryCollectionKey])
 
   return cache[libraryCollectionKey]
 }
 
+/**
+ * 指定したライブラリコレクションのキャッシュをクリアする関数
+ * @param libraryCollectionKey クリアするライブラリコレクションのキー
+ */
 export async function clearCache(libraryCollectionKey: string) {
-  console.log('clearCache: start', libraryCollectionKey)
+  console.log('[cache] clearCache: start', libraryCollectionKey)
 
+  // 現在のキャッシュを読み込む
   const currentCache = await loadSettingsAsync<ClientStorageCache>(
     {},
     CACHE_KEY,
   )
 
+  // 指定されたキーが存在するか確認
   if (!(libraryCollectionKey in currentCache)) {
-    // Check if the key actually exists before proceeding
-    console.log('clearCache: key not found, nothing to clear')
-    return // Or throw an error, depending on desired behavior
+    // キーが存在しない場合は処理を終了
+    console.log('[cache] clearCache: key not found, nothing to clear')
+    return // または、必要に応じてエラーをスロー
   }
 
-  // Create a new cache object excluding the specified key
+  // 指定されたキーを除いた新しいキャッシュオブジェクトを作成
   const newCache: ClientStorageCache = { ...currentCache }
   delete newCache[libraryCollectionKey]
 
-  // Save the updated cache
+  // 更新されたキャッシュを保存
   await saveSettingsAsync<ClientStorageCache>(newCache, CACHE_KEY)
 
-  console.log('clearCache: done')
+  console.log('[cache] clearCache: done')
 }

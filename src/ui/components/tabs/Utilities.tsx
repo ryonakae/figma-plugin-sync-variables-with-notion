@@ -1,10 +1,13 @@
 /** @jsx h */
+/**
+ * ユーティリティタブのコンポーネント
+ * テキスト変数の一括適用やハイライト機能を提供
+ */
 import { type JSX, h } from 'preact'
 
 import {
   Button,
   Checkbox,
-  Divider,
   Dropdown,
   type DropdownOption,
   Stack,
@@ -20,10 +23,17 @@ import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import useSettings from '@/ui/hooks/useSettings'
 import { emit } from '@create-figma-plugin/utilities'
 
+/**
+ * ユーティリティタブのメインコンポーネント
+ * 一括処理設定とボタンを提供
+ */
 export default function Utilities() {
   const { settings, tmpSettings, updateSettings, updateTmpSettings } =
     useSettings()
 
+  /**
+   * 対象テキスト範囲のドロップダウンオプション
+   */
   const targetTextRangeDropdownOptions: DropdownOption[] &
     {
       value: TargetTextRange
@@ -42,6 +52,10 @@ export default function Utilities() {
     },
   ]
 
+  /**
+   * 対象テキスト範囲変更時のハンドラ
+   * @param event ドロップダウン変更イベント
+   */
   function handleTargetTextRangeChange(
     event: JSX.TargetedEvent<HTMLInputElement>,
   ) {
@@ -99,11 +113,11 @@ export default function Utilities() {
   }
 
   useMount(async () => {
-    console.log('Utilities: mounted')
+    console.log('[Utilities] mounted')
   })
 
   useUnmount(() => {
-    console.log('Utilities: unmounted')
+    console.log('[Utilities] unmounted')
   })
 
   return (
@@ -151,7 +165,7 @@ export default function Utilities() {
         </Checkbox>
 
         <FormItem
-          title="Limit variable name"
+          title="Bulk apply variables: limit variable name"
           description="Only variables with names containing this text will be used for bulk apply."
         >
           <div className="flex gap-1">
@@ -170,11 +184,7 @@ export default function Utilities() {
         </FormItem>
       </Stack>
 
-      <VerticalSpace space="medium" />
-
-      <Divider />
-
-      <VerticalSpace space="medium" />
+      <VerticalSpace space="large" />
 
       <Stack space="small">
         <div className="font-bold">Select an action</div>

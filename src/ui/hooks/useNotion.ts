@@ -1,3 +1,11 @@
+/**
+ * Notion APIを使用するためのカスタムフック
+ * データベースからの読み込みと処理を行う
+ */
+
+/**
+ * カスタムフックの引数の型定義
+ */
 type useNotionProps = {
   databaseId: string
   integrationToken: string
@@ -10,8 +18,16 @@ type useNotionProps = {
 type NotionPropertyType = 'title' | 'rich_text' | 'formula'
 type SupportedNotionProperty = NotionTitle | NotionFomula | NotionRichText
 
+/**
+ * Notion APIを操作するためのカスタムフック
+ * @param props Notionデータベースへの接続情報
+ */
 export default function useNotion(props: useNotionProps) {
-  // プロパティ値を取得する関数
+  /**
+   * Notionプロパティから値を取得する関数
+   * @param property Notionのプロパティオブジェクト
+   * @returns プロパティの値（文字列）
+   */
   function getPropertyValue(property: SupportedNotionProperty): string {
     // プロパティタイプに応じて値を抽出
     switch (property.type) {
@@ -26,7 +42,11 @@ export default function useNotion(props: useNotionProps) {
     }
   }
 
-  // プロパティタイプが有効かチェックする関数
+  /**
+   * プロパティタイプが有効かチェックする型ガード関数
+   * @param type チェックするタイプ
+   * @returns タイプが有効な場合true
+   */
   function isValidPropertyType(type: string): type is NotionPropertyType {
     return ['title', 'rich_text', 'formula'].includes(type)
   }
@@ -42,7 +62,12 @@ export default function useNotion(props: useNotionProps) {
       `Property '${name}' has invalid type. Expected 'title', 'rich_text', or 'formula'.`,
   }
 
-  // 各Notionの行データを処理する関数
+  /**
+   * Notionの行データを処理してキーと値のペアを作成する関数
+   * @param row Notionの行データ
+   * @param keyValuesArray 結果を格納する配列
+   * @throws プロパティが見つからないか、無効なタイプの場合エラーをスロー
+   */
   async function processNotionRow(
     row: NotionPage,
     keyValuesArray: NotionKeyValue[],
@@ -95,11 +120,17 @@ export default function useNotion(props: useNotionProps) {
     })
   }
 
+  /**
+   * Notionデータベースからデータを取得する関数
+   * ページネーション対応で、全ページを再帰的に取得
+   * @param options オプション（次のカーソルと結果を格納する配列）
+   * @throws データ取得に失敗した場合エラーをスロー
+   */
   async function fetchNotion(options: {
     nextCursor?: string
     keyValuesArray: NotionKeyValue[]
   }) {
-    console.log('fetchNotion', props, options)
+    console.log('[useNotion] fetchNotion', props, options)
     // proxyUrlから末尾のスラッシュを削除
     const proxyUrl = process.env.PROXY_URL?.replace(/\/$/, '')
 
@@ -130,7 +161,7 @@ export default function useNotion(props: useNotionProps) {
     }
 
     const resJson = await res.json()
-    console.log(resJson)
+    console.log('[useNotion] resJson', resJson)
     const pages = resJson.results as NotionPage[]
 
     if (!pages) {

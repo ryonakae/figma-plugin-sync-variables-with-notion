@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * タブ内容コンポーネント
+ * タブパネル内の内容を表示するためのコンテナ
+ */
 import { Fragment, h } from 'preact'
 import type { ReactNode } from 'preact/compat'
 
@@ -11,23 +15,32 @@ import { useMount, useUnmount } from 'react-use'
 
 import useResizeWindow from '@/ui/hooks/useResizeWindow'
 
+/**
+ * タブアイテムコンポーネントのプロパティ
+ */
 type TabItemProps = {
+  /** コンテナの余白サイズ。'none'を指定すると余白なし */
   space?: ContainerSpace | 'none'
+  /** タブパネル内に表示する内容 */
   children: ReactNode
 }
 
+/**
+ * タブパネル内のコンテンツを表示するコンポーネント
+ * マウント時にウィンドウサイズの自動調整を行う
+ */
 export default function TabItem({ space = 'medium', children }: TabItemProps) {
   const { resizeWindow } = useResizeWindow()
 
   useMount(async () => {
-    console.log('TabItem useMount')
+    console.log('[TabItem] TabItem useMount')
 
     // ウインドウをリサイズ
     window.requestAnimationFrame(resizeWindow)
   })
 
   useUnmount(() => {
-    console.log('TabItem useUnmount')
+    console.log('[TabItem] TabItem useUnmount')
   })
 
   return (

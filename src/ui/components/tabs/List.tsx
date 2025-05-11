@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * 変数リスト表示タブのコンポーネント
+ * コレクション内の変数一覧を表示し、適用や詳細表示機能を提供
+ */
 import { Fragment, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 
@@ -12,15 +16,19 @@ import {
 } from '@create-figma-plugin/ui'
 import { useMount, useUnmount } from 'react-use'
 
+import DisplayModeDropdown from '@/ui/components/DisplayModeDropdown'
 import Empty from '@/ui/components/Empty'
 import FormItem from '@/ui/components/FormItem'
-import ListDisplayModeDropdown from '@/ui/components/ListDisplayModeDropdown'
 import TabItem from '@/ui/components/TabItem'
 import TargetCollectionDropdown from '@/ui/components/TargetCollectionDropdown'
 import VariableList from '@/ui/components/VariableList'
 import useCollection from '@/ui/hooks/useCollection'
 import useSettings from '@/ui/hooks/useSettings'
 
+/**
+ * 変数リストタブのメインコンポーネント
+ * コレクション選択と変数一覧表示を提供
+ */
 export default function List() {
   const { settings, tmpSettings, updateTmpSettings } = useSettings()
   const {
@@ -32,11 +40,17 @@ export default function List() {
   } = useCollection()
   const [variables, setVariables] = useState<VariableForUI[]>([])
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [isLibraryCollectionCached, setIsLibraryCollectionCached] =
+    useState(false)
 
+  /**
+   * 選択されたコレクションの変数を取得して表示する関数
+   * @param targetCollection 対象のコレクション
+   */
   async function updateVariables(
-    targetCollection: LocalVariableCollectionForUI | LibraryVariableCollection,
+    targetCollection: VariableCollectionForUI | LibraryVariableCollection,
   ) {
-    console.log('updateVariables', targetCollection)
+    console.log('[List] updateVariables', targetCollection)
 
     updateTmpSettings({
       loadingVariables: true,
@@ -50,8 +64,11 @@ export default function List() {
     if (isLocalCollection(targetCollection)) {
       newVariables = await getLocalVariables(targetCollection)
     } else {
-      newVariables = await getLibraryVariables(targetCollection)
+      const result = await getLibraryVariables(targetCollection)
+      newVariables = result.variablesForUI
+      setIsLibraryCollectionCached(result.cacheResult.success)
     }
+    console.log('[List] newVariables', newVariables, newVariables.length)
 
     // newVariablesを、resolvedTypeがstringのもの &
     // scopeにTEXT_CONTENTが含まれるのものだけに絞り込む
@@ -61,8 +78,11 @@ export default function List() {
         (variable.scopes.includes('ALL_SCOPES') ||
           variable.scopes.includes('TEXT_CONTENT')),
     )
-
-    console.log('newVariables', newVariables, newVariables.length)
+    console.log(
+      '[List] filtered newVariables',
+      newVariables,
+      newVariables.length,
+    )
 
     setVariables(newVariables)
 
@@ -94,11 +114,11 @@ export default function List() {
   }
 
   useMount(async () => {
-    console.log('List: mounted')
+    console.log('[List] mounted')
   })
 
   useUnmount(() => {
-    console.log('List: unmounted')
+    console.log('[List] unmounted')
   })
 
   useEffect(() => {
@@ -137,11 +157,20 @@ export default function List() {
               isLibraryCollection(settings.listTargetCollection) && (
                 <div className="flex h-6 items-center justify-between">
                   {tmpSettings.loadingVariables ? (
-                    <div>Updating...</div>
+                    <div className="text-text-secondary">Loading...</div>
                   ) : (
                     <Fragment>
-                      <div className="flex gap-1 text-text-secondary">
-                        <span>This collection is cached.</span>
+                      <div className="flex gap-1">
+                        {isLibraryCollectionCached ? (
+                          <span className="text-text-secondary">
+                            This library collection is cached.
+                          </span>
+                        ) : (
+                          <span className="text-text-danger">
+                            This library collection is not cached.
+                          </span>
+                        )}
+
                         <button
                           type="button"
                           className="text-text-link"
@@ -151,7 +180,7 @@ export default function List() {
                         </button>
 
                         <Modal
-                          title="Abaout caching"
+                          title="About library collection caching"
                           open={isDetailsOpen}
                           onCloseButtonClick={handleDetailsCloseClick}
                           onOverlayClick={handleDetailsCloseClick}
@@ -162,8 +191,7 @@ export default function List() {
                               When the target collection is a library
                               collection, this plugin caches the collection in
                               Client Storage.
-                            </p>
-                            <p>
+                              <br />
                               This is because retrieving library collections
                               with a large number of variables can take a
                               significant amount of time. Additionally, there's
@@ -172,6 +200,22 @@ export default function List() {
                             <p>
                               Clicking the Refresh button will clear the cache
                               and re-fetch the variables.
+                            </p>
+                            <p className="text-text-danger">
+                              For collections with an extremely large number of
+                              variables, caching may fail due to Figma's Client
+                              Storage limitations (5MB). In such cases, the
+                              plugin will need to fetch the collection each time
+                              it starts, which could potentially trigger Figma
+                              Plugin API rate limits.
+                            </p>
+                            <p className="text-text-danger">
+                              Note that while the plugin remains running,
+                              variables are kept in memory and no additional API
+                              calls are made. However, if you frequently restart
+                              the plugin, it will fetch all variables again with
+                              each restart, which increases the risk of hitting
+                              API rate limits.
                             </p>
                           </div>
                         </Modal>
@@ -187,7 +231,10 @@ export default function List() {
           </FormItem>
 
           <FormItem title="Display mode">
-            <ListDisplayModeDropdown />
+            <DisplayModeDropdown
+              targetCollection={settings.listTargetCollection}
+              variablesForUI={variables}
+            />
           </FormItem>
         </Stack>
 

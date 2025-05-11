@@ -1,4 +1,8 @@
 /** @jsx h */
+/**
+ * 変数リストアイテム用コピーボタンコンポーネント
+ * クリップボードへのコピー機能を提供
+ */
 import { type JSX, h } from 'preact'
 
 import { emit } from '@create-figma-plugin/utilities'
@@ -7,12 +11,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useCopyToClipboard } from 'react-use'
 import { twMerge } from 'tailwind-merge'
 
+/**
+ * コピーボタンコンポーネントのプロパティ
+ */
 type VariableListItemCopyButtonProps = {
+  /** コピーするテキスト */
   text: string
+  /** 親アイテムの選択状態 */
   selected: boolean
+  /** 追加のTailwind CSSクラス */
   className?: string
 }
 
+/**
+ * クリップボードへコピー機能を持つボタンコンポーネント
+ * コピー成功時に通知を表示
+ */
 export default function VariableListItemCopyButton({
   text,
   selected,
@@ -20,12 +34,16 @@ export default function VariableListItemCopyButton({
 }: VariableListItemCopyButtonProps) {
   const [_state, copyToClipboard] = useCopyToClipboard()
 
+  /**
+   * クリック時のハンドラ
+   * クリップボードにテキストをコピーし、通知を表示
+   */
   function onClick(event: JSX.TargetedMouseEvent<HTMLButtonElement>) {
     // 親要素へのバブリングを止める
     event.stopPropagation()
 
     copyToClipboard(text)
-    console.log('copied', text)
+    console.log('[VarListItemCopyBtn] copied', text)
 
     emit<NotifyFromUI>('NOTIFY_FROM_UI', {
       message: 'Copied to clipboard.',
